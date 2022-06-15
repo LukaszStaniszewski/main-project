@@ -1,0 +1,9 @@
+{
+    "navigation.home-link": "Strona główna",
+    "navigation.collections-link": "Kolekcje",
+    "navigation.my-collections-link": "Moje kolekcje",
+    "navigation.user-menu.profile": "Profil",
+    "navigation.user-menu.signIn": "Zaloguj się",
+    "navigation.user-menu.signUp": "Zarejestruj się",
+    "navigation.user-menu.logout": "Wyloguj się"
+}

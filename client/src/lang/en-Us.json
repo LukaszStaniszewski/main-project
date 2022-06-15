@@ -1,0 +1,11 @@
+{
+    
+        "navigation.home-link": "Home",
+        "navigation.collections-link": "Collections",
+        "navigation.my-collections-link": "My collections",
+        "navigation.user-menu.profile": "Profile",
+        "navigation.user-menu.signIn": "Sign in",
+        "navigation.user-menu.signUp": "Sign up",
+        "navigation.user-menu.logout": "Logout"
+    
+}

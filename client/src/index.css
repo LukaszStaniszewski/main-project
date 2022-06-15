@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+    html{
+        --color-primary: #0369a1;
+        --color-secondary: #0891b2;
+        --color-border-primary: #94a3b8;
+        --color-border-secondary: #4338ca;
+        --color-text-primary: #fafafa;
+    }
+    
+    html[data-theme="dark"] {
+      --color-primary:  #5eead4;
+      --color-secondary: #0284c7;
+    
+    }
+    /* :root{
+        --color-background-primary: 179, 255, 23;
+        --color-background-secondary: #0B294A;
+    }
+    
+    .theme-dark {
+      --color-background-primary:  235, 250, 204;
+      --color-background-secondary: #0284c7;
+    
+    } */
+  }
