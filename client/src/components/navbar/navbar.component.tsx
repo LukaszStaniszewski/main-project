@@ -99,9 +99,9 @@ const Navbar = () => {
                     </div>
 
 
-                    <div className="relative z-30" >
+                    <div className="relative z-30 whitespace-nowrap" >
                         <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
-                        <ul className={`${!isUserMenuOpen && "hidden" } menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
+                        <ul className={`${!isUserMenuOpen && "hidden" } min-w-max menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
                             <li>
                                 <NavLink to='/' className={({isActive}) => 
                                     isActive 

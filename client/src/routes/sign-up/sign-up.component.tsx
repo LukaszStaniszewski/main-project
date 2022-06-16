@@ -1,8 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from "react"
 import { Link } from "react-router-dom"
+import { FormattedMessage } from "react-intl"
+
 import FormInput from "../../components/form-input/form-input.componentx"
-import {ReactComponent as GitIconLight} from "../../assets/light-theme/git-logo.light.svg"
-import {ReactComponent as GoogleIconLight} from "../../assets/light-theme/google-logo.light.svg"
+import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
+
 
 const defaultFormFields = {
    email: '',
@@ -28,34 +30,40 @@ const SignUp = () => {
     <section className="relative  z-0">
          <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
          
-         <main className=" bg-secondary w-80vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
+         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
             <figure className="mt-2">
                <img src="https://i.ibb.co/BTWS1xQ/Screen-Shot-2022-06-16-at-13-12-20-PM.png" alt="sign-up-picture" />
             </figure>
            
             <section className="">
-               <p className="text-center text-xl font-bold ">Welcome</p>
-               <p className="text-center my-3">Join our community</p>
+               <p className="text-center text-xl font-bold ">
+                 <FormattedMessage
+                     id="authentication.signUp.messageOne"
+                     defaultMessage="Welcome"
+                 />
+               </p>
+               <p className="text-center text-lg mt-3 mb-5">
+                  <FormattedMessage
+                     id="authentication.signUp.messageTwo"
+                     defaultMessage="Join our community"
+                  />
+               </p>
                
-               <div className="flex justify-evenly">
-                  <button className="flex text-xl border-2 border-color-border-primary-m rounded-md py-1 px-2 items-center hover:bg-color-border-primary-m">
-                     <GitIconLight/>
-                     <span className="text-base ml-2">Login with GitHub</span>
-                  </button>
-                  <button className="flex text-xl border-2 border-color-border-primary-m hover:bg-color-border-primary-m rounded-md py-1 px-2 items-center">
-                     <GoogleIconLight/>
-                     <span className="text-base ml-2">Login with Google</span>
-                  </button>
-               </div>
+               <SocialMediaAuthentication/>
               
                <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                  <p className="text-center text-xs font-light mx-4 mb-0">OR USE YOUR EMAIL</p>
+                  <p className="text-center text-xs font-light mx-4 mb-0">
+                     <FormattedMessage
+                        id="authentication.message"
+                        defaultMessage="OR USE YOUR EMAIL"
+                     />
+                  </p>
                </div>
 
                <div>
                   <form onSubmit={handleSubmit} >
                      <FormInput
-                        label="Your Email"
+                        label="Email"
                         type="email"
                         name="email"
                         value={email}
@@ -82,18 +90,28 @@ const SignUp = () => {
                      />
                
                      <FormInput
-                        label="Confirm password"
+                        label="ConfirmPassword"
                         type="password"
                         name="confirmPassword"
                         value={confirmPassword}
                         onChange={handleChange}
                         required
                      />
-                     <button className="btn btn-block bg-color-secondary hover:bg-color-primary">Register</button>
+                     <button className="btn btn-block bg-color-secondary hover:bg-color-primary">
+                        <FormattedMessage
+                           id="authentication.button.register"
+                           defaultMessage="REGISTER"
+                        />
+                     </button>
                      
                   </form>
                   <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                     <Link to='/signin' className="text-center font-light text-xs mx-4 mb-0 hover:underline">DO YOU HAVE AN ACCOUNT?</Link>
+                     <Link to='/signin' className="text-center font-light text-xs mx-4 mb-0 hover:underline">
+                        <FormattedMessage
+                           id="authentication.link.signUp"
+                           defaultMessage=" DO YOU HAVE AN ACCOUNT?"
+                        />
+                     </Link>
                   </div>
                </div>
             </section>

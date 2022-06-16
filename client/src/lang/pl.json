@@ -1,9 +1,28 @@
 {
-    "navigation.home-link": "Strona główna",
-    "navigation.collections-link": "Kolekcje",
-    "navigation.my-collections-link": "Moje kolekcje",
-    "navigation.user-menu.profile": "Profil",
-    "navigation.user-menu.signIn": "Zaloguj się",
-    "navigation.user-menu.signUp": "Zarejestruj się",
-    "navigation.user-menu.logout": "Wyloguj się"
+   "navigation.home-link": "Strona główna",
+   "navigation.collections-link": "Kolekcje",
+   "navigation.my-collections-link": "Moje kolekcje",
+   "navigation.user-menu.profile": "Profil",
+   "navigation.user-menu.signIn": "Zaloguj się",
+   "navigation.user-menu.signUp": "Zarejestruj się",
+   "navigation.user-menu.logout": "Wyloguj się",
+
+
+   "authentication.signIn.messageOne": "Witaj z powrotem",
+   "authentication.signIn.messageTwo": "Dobrze widzieć Cię z powrotem",
+   "authentication.signUp.messageOne": "Witaj",
+   "authentication.signUp.messageTwo": "Dołącz do naszej społeczności",
+   "authentication.message": "LUB UŻYJ SWOJEGO EMAILA",
+   "authentication.email": "Adres Email",
+   "authentication.username": "Nazwa użytkownika",
+   "authentication.password": "Hasło",
+   "authentication.confirmpassword": "Powtórz hasło",
+   "authentication.button.register": "ZAREJESTRUJ SIĘ",
+   "authentication.button.signIn": "ZALOGUJ SIĘ",
+   "authentication.link.signIn": "STWÓRZ KONTO",
+   "authentication.link.signUp": "POSIADASZ KONTO?",
+
+   "socialMedia.github": "Zaloguj się z GitHub",
+   "socialMedia.google": "Zaloguj się z Google"
+    
 }

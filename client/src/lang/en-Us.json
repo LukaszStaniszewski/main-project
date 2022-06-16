@@ -1,11 +1,27 @@
 {
     
-        "navigation.home-link": "Home",
-        "navigation.collections-link": "Collections",
-        "navigation.my-collections-link": "My collections",
-        "navigation.user-menu.profile": "Profile",
-        "navigation.user-menu.signIn": "Sign in",
-        "navigation.user-menu.signUp": "Sign up",
-        "navigation.user-menu.logout": "Logout"
-    
+   "navigation.home-link": "Home",
+   "navigation.collections-link": "Collections",
+   "navigation.my-collections-link": "My collections",
+   "navigation.user-menu.profile": "Profile",
+   "navigation.user-menu.signIn": "Sign in",
+   "navigation.user-menu.signUp": "Sign up",
+   "navigation.user-menu.logout": "Logout",
+
+   "authentication.signIn.messageOne": "Welcome Back",
+   "authentication.signIn.messageTwo": "We are happy to see you back",
+   "authentication.signUp.messageOne": "Welcome",
+   "authentication.signUp.messageTwo": "Join our community",
+   "authentication.message": "OR USE YOUR EMAIL",
+   "authentication.email": "Your Email",
+   "authentication.name": "Username",
+   "authentication.password": "Password",
+   "authentication.confirmPassword": "Confirm password",
+   "authentication.button.register": "REGISTER",
+   "authentication.button.signIn": "SIGN IN",
+   "authentication.link.signIn": "CREATE AN ACCOUNT",
+
+   "socialMedia.github": "Login with GitHub",
+   "socialMedia.google": "Login with Google"
+
 }
