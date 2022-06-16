@@ -7,8 +7,12 @@
     html{
         --color-primary: #0369a1;
         --color-secondary: #0891b2;
+        --color-background-primary: #fafafa;
+        --color-background-secondary: #FFFFFF;
         --color-border-primary: #94a3b8;
+        --color-border-primary-m: #e2e8f0;
         --color-border-secondary: #4338ca;
+        
         --color-text-primary: #fafafa;
     }
     
@@ -27,4 +31,7 @@
       --color-background-secondary: #0284c7;
     
     } */
+  }
+  body {
+   background-color: var(--color-background-primary);
   }

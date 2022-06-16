@@ -39,35 +39,40 @@ module.exports = {
         '60vw': '60vw',
         '80vw': '80vw',
         '95vw': '95vw',
+        '100vw':'100vw',
         
         '5vh': '5vh',
         '10vh': '10vh',
         '20vh': '20vh',
         '40vh': '40vh',
         '60vh': '60vh',
+        '75vh': '75vh',
         '80vh': '80vh',
         '85vh': '85vh',
         '90vh': '90vh',
         '95vh': '95vh',
+        '100vh':'100vh',
+
 
       },
       colors: {
         'color-primary' : 'var(--color-primary)',
         'color-secondary' : 'var(--color-secondary)',
+        'color-tertiary' : 'var(--color-background-secondary)',
         'color-border-primary' : 'var(--color-border-primary)',
+        'color-border-primary-m' : 'var(--color-border-primary-m)',
         'color-border-secondary' : 'var(--color-border-secondary)',
       },
       border: {
-        'primary' : 'var(--color-border-primary)'
+        'primary' : 'var(--color-border-primary)',
+        "secondary" : "var(--color-border-secondary)"
       },
       textColor: {
         'primary': 'var(--color-text-primary)'
       },
       backgroundColor: {
-        skin: {
-           'background-primary' : 'var(--color-background-primary)',
-           'background-secondary' : 'var(--color-background-secondary)',
-        }
+         'primary' : 'var(--color-background-primary)',
+         'secondary' : 'var(--color-background-secondary)',
       }
     },
   },

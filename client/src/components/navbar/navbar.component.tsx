@@ -2,17 +2,17 @@ import React, { MouseEventHandler, MouseEvent, ChangeEvent, useState, Fragment }
 import { FormattedMessage } from "react-intl"
 
 import {Link, NavLink, Outlet} from "react-router-dom"
-import {ReactComponent as MoonIcon} from "../utils/moon-icon.svg"
-import {ReactComponent as SunIcon} from "../utils/sun-icon.svg"
-import {ReactComponent as UserIcon} from "../utils/user-icon.svg"
+import {ReactComponent as MoonIcon} from "../../assets/moon-icon.svg"
+import {ReactComponent as SunIcon} from "../../assets/sun-icon.svg"
+import {ReactComponent as UserIcon} from "../../assets/user-icon.svg"
 
 const languageList = {
     Polski: "PL",
-    English: "EN"
+    English: "EN",
 }
 
 const Navbar = () => {
-    const [isMenuOpen, setMenu] = useState(false)
+    const [isUserMenuOpen, setUserMenu] = useState(false)
     const [isLangMenuOpen, setLangMenu] = useState(false)
 
     const [language, setLanguage] = useState(languageList['English'])
@@ -24,7 +24,7 @@ const Navbar = () => {
     }
 
     const languageSwitchHandler =(event: MouseEvent<HTMLLIElement>) : void => {
-        //@ts-ignore
+         //@ts-ignore
         const language = event.target.innerText
         //@ts-ignore
         setLanguage(languageList[language])
@@ -32,13 +32,13 @@ const Navbar = () => {
     }
 
     const userMenuToggleHandler = () : void => {
-        setMenu(!isMenuOpen)
         setLangMenu(false)
+        setUserMenu(!isUserMenuOpen)
     }
 
     const langMenuTogglehHandler = (event : ChangeEvent<HTMLInputElement>) : void => {
         const isChecked = event.target.checked
-        setMenu(false)
+        setUserMenu(false)
         setLangMenu(isChecked)
     }
  
@@ -48,10 +48,10 @@ const Navbar = () => {
                 // <nav className="bg-gradient-to-l from-purple-700 via-purpśle-600 to-purple-700 h-20 p-3">
                 // <nav className="bg-gradient-to-r from-sky-700 to-cyan-600 h-32 p-3">
    <Fragment>
-        <nav className="bg-gradient-to-r from-color-primary to-color-secondary h-30 pt-4 pb-2 px-7 ">
+        <nav className="bg-gradient-to-r from-color-primary to-color-secondary h-30 pt-4 pb-6">
     
             {/* top side */}
-            <section className="flex items-center justify-between w-100vw border-b border-color-border-primary px-2 mb-4">
+            <section className="flex items-center justify-between w-100vw border-b border-color-border-primary px-9 mb-4">
          
                 <div>
                     <Link className="text-primary p-3 b rounded-md hover:bg-color-secondary" to='/'>
@@ -78,14 +78,14 @@ const Navbar = () => {
     
                 <div className="flex items-center pb-4">
         
-                    <label className="swap swap-rotate">
-                        <input type="checkbox" className="hidden" onChange={themeSwitchHandler}/>
+                    <label className="swap swap-rotate ">
+                        <input type="checkbox" className="" onChange={themeSwitchHandler}/>
                         <SunIcon/>
                         <MoonIcon/>
                     </label>
                     
                     {/* <button className="px-10 text-primary" >language</button> */}
-                    <div className="relative">
+                    <div className="relative z-30">
                         <label className="swap px-10 text-primary">
                             <input className="hidden" type="checkbox" onChange={langMenuTogglehHandler} checked={isLangMenuOpen} />
                             <div className="swap-off">{`${language} ▼`}</div>
@@ -99,9 +99,9 @@ const Navbar = () => {
                     </div>
 
 
-                    <div className="relative" >
+                    <div className="relative z-30" >
                         <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
-                        <ul className={`${!isMenuOpen && "hidden" } menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
+                        <ul className={`${!isUserMenuOpen && "hidden" } menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
                             <li>
                                 <NavLink to='/' className={({isActive}) => 
                                     isActive 
