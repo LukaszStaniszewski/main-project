@@ -6,6 +6,7 @@ import getErrorMessage from "../utils/getErrorMessage";
 export const createUser = async (input: IUserCredentials) => {
    try {
       const user = await UserModel.create(input)
+      console.log(user)
       return omit(user.toJSON(), "password");
    } catch(error) {
       throw new Error(getErrorMessage(error))
@@ -20,4 +21,17 @@ export const deleteUsers = async(usersArray : UpdateUserOrUsers) => {
    } catch(error) {
       throw new Error(getErrorMessage(error))
    }  
- }
+}
+
+export const updateUsers = async(usersArray: UpdateUserOrUsers) => {
+   try {
+       await Promise.all(usersArray.map(userToUpdate => {
+
+         return UserModel.findByIdAndUpdate(userToUpdate._id, userToUpdate);
+        
+       }))
+       return true
+   } catch(error) {
+      throw new Error(getErrorMessage(error))
+   }
+}

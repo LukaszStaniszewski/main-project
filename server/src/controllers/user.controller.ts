@@ -1,12 +1,13 @@
 import {Request, Response} from "express"
 
-import { createUser, deleteUsers } from "../services/user.service"
+import { createUser, deleteUsers, updateUsers } from "../services/user.service"
 import getErrorMessage from "../utils/getErrorMessage"
-import { IUserCredentials } from "../models/user.model"
+import { IUserCredentials, UpdateUserOrUsers } from "../models/user.model"
 import logger from "../utils/logger"
 
 
 export const registerUser = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+   console.log(req.body)
    try {
       const user = await createUser(req.body)
       res.json(user);
@@ -16,12 +17,22 @@ export const registerUser = async (req: Request<{}, {}, IUserCredentials>, res: 
    }
 }
 
-export const deleteUserOrUsers = async (req: Request, res: Response) => {
+export const deleteUserOrUsers = async (req: Request<{}, {}, UpdateUserOrUsers>, res: Response) => {
    try {
       await deleteUsers(req.body)
-      res.json({message: 'User has been deleted'})
+      res.status(200).json({message: 'User has been deleted'})
    } catch (error) {
       logger.error(getErrorMessage(error))
       res.sendStatus(404)
+   }
+}
+
+export const updateUserOrUsers = async (req: Request<{}, {}, UpdateUserOrUsers>, res: Response) => {
+   try {
+       const isUpdated = await updateUsers(req.body)
+       res.status(200).json({message: "Users has been updated"})
+   } catch (error) {
+      logger.error(getErrorMessage(error))
+      res.sendStatus(406)
    }
 }
