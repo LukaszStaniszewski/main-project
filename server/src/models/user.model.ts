@@ -1,8 +1,6 @@
-import {Schema, model, Types} from "mongoose";
+import {Schema, model, Types, Model} from "mongoose";
 import bcrypt from "bcrypt"
 import dayjs from "dayjs";
-
-
 
 export interface IUserCredentials {
    name: string,
@@ -10,23 +8,25 @@ export interface IUserCredentials {
    password: string,
 }
 
-
-
 export interface IUserDocument extends IUserCredentials {
    _id: Types.ObjectId,
    status: string,
    isAdmin: boolean,
    createdAt: string,
    lastLogin: string,
-   comparePassword: (plaintextPassword: string) => Promise<boolean>
 }
 
-export type UpdateUserOrUsers = IUserDocument[]
+export interface IUserMethods {
+   comparePasswords(plaintextPassword: string): Promise<boolean>,
+   updateLastLogin(email: string): Promise<boolean>
+}
 
-const userSchema = new Schema({
+export type UserModel = Model<IUserDocument, {}, IUserMethods>
+
+const userSchema = new Schema<IUserDocument>({
    name: {
       type: String,
-      required: [true, 'Name must be uqniue and cannot be blank'],
+      required: true,
       unique: true
    },
    email: {
@@ -53,7 +53,7 @@ const userSchema = new Schema({
     },
     lastLogin: {
       type: String,
-      default: () => dayjs().format("DD-MM-YYYY HH:mm:ss"),
+      default: dayjs().format("DD-MM-YYYY HH:mm:ss"),
     },
 })
 
@@ -69,5 +69,14 @@ userSchema.methods.comparePasswords = async function(plaintextPassword: string):
    return await bcrypt.compare(plaintextPassword, this.password).catch(e => false)
 }
 
-const UserModel = model<IUserDocument>("User", userSchema)
-export default UserModel;
+userSchema.methods.updateLastLogin = async function(email: string): Promise<boolean> {
+   // this.lastLogin = dayjs().format("DD-MM-YYYY HH:mm:ss")
+   await User.findByIdAndUpdate(this._id, {lastLogin: dayjs().format("DD-MM-YYYY HH:mm:ss")})
+   // return true
+   console.log("updateLastLogin hit")
+   return true
+}
+
+
+const User = model<IUserDocument, UserModel>("User", userSchema)
+export default User;

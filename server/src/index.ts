@@ -7,6 +7,8 @@ import cors from "cors"
 import getErrorMessage from "./utils/getErrorMessage";
 import logger from "./utils/logger"
 import userRouter from "./routes/user.route"
+import sessionRouter from "./routes/session.route";
+import deserialaizeUser from "./middleware/deserialaizeUser"
 
 mongoose.connect(process.env.MONGO_URL_CLOUD as string).
 catch(error => logger.error(error));
@@ -21,8 +23,13 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
+app.use(deserialaizeUser) 
+
 
 app.use("/api/user", userRouter)
+app.use("/api/session", sessionRouter)
+
+
 
 const PORT = 8000;
 
