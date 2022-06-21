@@ -28,8 +28,9 @@ api.interceptors.request.use( (req) => {
 // export const deleteSession = () => api.delete('/api/session', options)
 
 export const User = {
-   signIn: (userCredentials:IUserFormValues): Promise<ITokens> => api.post("/api/session", userCredentials, options),
+   signIn: (userCredentials:IUserFormValues): AxiosPromise => api.post("/api/session", userCredentials, options),
    signUp: (userCredentials:IUserFormValues): Promise<ICurrentUser> => api.post("/api/user/register", userCredentials, options),
+   logout: () : AxiosPromise => api.delete("api/session")
 }
 
 const options = {

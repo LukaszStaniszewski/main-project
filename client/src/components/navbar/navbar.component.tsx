@@ -1,10 +1,13 @@
-import React, { MouseEventHandler, MouseEvent, ChangeEvent, useState, Fragment } from 'react'
+import React, { useEffect, MouseEvent, ChangeEvent, useState, Fragment } from 'react'
 import { FormattedMessage } from "react-intl"
-
 import {Link, NavLink, Outlet} from "react-router-dom"
+import { useDispatch } from "react-redux"
+
 import {ReactComponent as MoonIcon} from "../../assets/moon-icon.svg"
 import {ReactComponent as SunIcon} from "../../assets/sun-icon.svg"
 import {ReactComponent as UserIcon} from "../../assets/user-icon.svg"
+import { decode as decodeToken } from "../../utils/userToken.utils"
+import { setCurrentUser } from "../../store/user/user.action"
 
 const languageList = {
     Polski: "PL",
@@ -12,10 +15,21 @@ const languageList = {
 }
 
 const Navbar = () => {
-    const [isUserMenuOpen, setUserMenu] = useState(false)
-    const [isLangMenuOpen, setLangMenu] = useState(false)
+   const [isUserMenuOpen, setUserMenu] = useState(false)
+   const [isLangMenuOpen, setLangMenu] = useState(false)
 
-    const [language, setLanguage] = useState(languageList['English'])
+   const [language, setLanguage] = useState(languageList['English'])
+
+   const dispatch = useDispatch()
+
+   useEffect(() => {
+   
+      const token = JSON.parse(localStorage.getItem("token") as string)
+      const user = decodeToken(token.accessToken)
+      if(user) {
+         dispatch(setCurrentUser(user))
+      }
+   },[])
 
     const themeSwitchHandler = (event : ChangeEvent<HTMLInputElement>) : void => {
         const isChecked = event.target.checked

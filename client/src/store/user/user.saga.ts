@@ -1,49 +1,45 @@
-import {takeLatest, put, all} from "typed-redux-saga"
-import * as Effects from "typed-redux-saga"
-
-
-import { signInSuccess, signInStart, signInFailure, SignInStart } from "./user.action"
+import {takeLatest, put, all, call} from "typed-redux-saga/macro"
+import { signInSuccess, signInFailure, SignInStart, logOutSuccess, logOutFailure,} from "./user.action"
 import { USER_ACTION_TYPES, } from "./user.types"
-import { decodeToken } from "../../utils/userToken.utils"
+import { decode as decodeToken } from "../../utils/userToken.utils"
 import {User} from "../../api/axios-instance.api"
-import { StrictEffect } from "redux-saga/effects"
-import { AxiosResponse } from "axios"
 
-const call: any = Effects.call;
-
-// function* signInWithEmail(payload : IUserLoginCredentials) {
-//    try {
-//      const authenticate = yield* call(api.signIn(payload))
-//      localStorage.setItem('token', JSON.stringify(authenticate.data))
-     
-//    } catch (error) {
-      
-//    }
-// }
-
-function* signInWithEmail({payload: payload}: SignInStart) {
+function* signInWithEmail({payload: credentials}: SignInStart) {
  
    try {
-     const authenticate = yield* call(User.signIn(payload))
-   //   const authenticate = yield* User.signIn(payload)
-   console.log("authenticate", authenticate)
-     localStorage.setItem('token', JSON.stringify(authenticate.data))
-     const user = decodeToken()
-     console.log("userDecoded", user)
+     const {data, status} = yield* call(User.signIn, credentials)
+     localStorage.setItem('token', JSON.stringify(data))
+
+     const user = decodeToken(data.accessToken)
      if(user) {
-        yield put(signInSuccess(user))
+        yield* put(signInSuccess(user))
      }
    } catch (error) {
       yield* put(signInFailure(error as Error))
    }
 }
 
+function* logOut() {
+   try {
+      const repsonse = yield* call(User.logout)
+      localStorage.removeItem("token")
+      yield put(logOutSuccess())
+   } catch(error) {
+      yield* put(logOutFailure(error as Error))
+   }
+}
+
+export function* onLogOut() {
+   yield* takeLatest(USER_ACTION_TYPES.LOG_OUT_START, logOut)
+}
+
 export function* onEmailSignInStart() {
-   yield takeLatest(USER_ACTION_TYPES.SIGN_IN_START, signInWithEmail)
+   yield* takeLatest(USER_ACTION_TYPES.SIGN_IN_START, signInWithEmail)
 }
 
 export function* userSagas() {
    yield all([
       call(onEmailSignInStart),
+      call(onLogOut)
    ]);
 }

@@ -1,11 +1,12 @@
-import {FormEvent, ChangeEvent, useState} from 'react'
-import { Link } from "react-router-dom"
+import {FormEvent, ChangeEvent, useState, useEffect} from 'react'
+import { Link, useNavigate } from "react-router-dom"
 import { FormattedMessage } from "react-intl"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signInStart } from "../../store/user/user.action"
+import { selectCurrentUser } from "../../store/user/user.selector"
 
 const defaultFormFields = {
    email: '',
@@ -16,11 +17,19 @@ const SignIn = () => {
    const [formFields, setFormFields] = useState(defaultFormFields)
    const {email,password,} = formFields
    const dispatch = useDispatch()
+   const currentUser = useSelector(selectCurrentUser)
+   const navigate = useNavigate()
 
+   useEffect(() => {
+      if(currentUser) {
+         navigate("/")
+      }   
+   },[])
+ 
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
-
+      navigate("/")
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

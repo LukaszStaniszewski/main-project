@@ -1,10 +1,11 @@
-import {decode }from "jsonwebtoken"
-// import { ICurrentUser } from "../store/user/user.types"
 
-export const decodeToken = (): any => {
+import { ICurrentUser } from "../store/user/user.types"
+import { decodeToken } from "react-jwt";
 
-   const token = localStorage.getItem('token')
-   console.log("token", token)
-   if(token && typeof token === "string") return decode(token, {json: true})
-   localStorage.removeItem("token")
+export const decode = (token: string): ICurrentUser | undefined => {
+
+   const decoded: ICurrentUser | null = decodeToken(token)
+   console.log("decoded", decoded)
+   if(decoded) return decoded
+   throw new Error("invalid token")
 }
