@@ -1,9 +1,11 @@
 import {FormEvent, ChangeEvent, useState} from 'react'
 import { Link } from "react-router-dom"
 import { FormattedMessage } from "react-intl"
+import { useDispatch } from "react-redux"
 
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
+import { signInStart } from "../../store/user/user.action"
 
 const defaultFormFields = {
    email: '',
@@ -13,9 +15,12 @@ const defaultFormFields = {
 const SignIn = () => {
    const [formFields, setFormFields] = useState(defaultFormFields)
    const {email,password,} = formFields
+   const dispatch = useDispatch()
 
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      dispatch(signInStart(formFields))
+
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

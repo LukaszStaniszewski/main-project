@@ -1,4 +1,4 @@
-import { all, call } from 'typed-redux-saga/macro';
+import { all, call } from 'typed-redux-saga';
 
 import { userSagas } from './user/user.saga';
 

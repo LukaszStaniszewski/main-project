@@ -24,7 +24,7 @@ const call: any = Effects.call;
 function* signInWithEmail({payload: payload}: SignInStart) {
  
    try {
-     const authenticate: AxiosResponse = yield call(User.signIn(payload))
+     const authenticate = yield* call(User.signIn(payload))
    //   const authenticate = yield* User.signIn(payload)
    console.log("authenticate", authenticate)
      localStorage.setItem('token', JSON.stringify(authenticate.data))
