@@ -13,7 +13,7 @@ const USER_INITIAL_STATE: IUserState = {
    error: null,
 }
 
-export const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
+const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
 
    switch(action.type) {
       case USER_ACTION_TYPES.SIGN_IN_START:

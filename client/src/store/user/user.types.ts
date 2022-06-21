@@ -13,3 +13,9 @@ export interface ICurrentUser {
    lastLogin: string,
    sessionId: string,
 }
+
+export interface IUserFormValues {
+   email: string,
+   password: string,
+   name?: string,
+}
