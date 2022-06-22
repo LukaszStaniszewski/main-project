@@ -1,9 +1,12 @@
 import { useState, ChangeEvent, FormEvent } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FormattedMessage } from "react-intl"
+import { useDispatch, useSelector } from "react-redux"
 
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
+import { signUpStart } from "../../store/user/user.action"
+import { selectErrorMessage } from "../../store/user/user.selector"
 
 
 const defaultFormFields = {
@@ -16,9 +19,21 @@ const defaultFormFields = {
 const SignUp = () => {
    const [userCredentials, setUserCredentials] = useState(defaultFormFields)
    const {email, name, password, confirmPassword} = userCredentials
+   const navigate = useNavigate()
 
+   const dispatch = useDispatch()
+   const error = useSelector(selectErrorMessage)
+
+   
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
+      if(password !== confirmPassword) return alert("passwords don't match") 
+      dispatch(signUpStart({email, name, password}))
+      navigate("/")
+      if(error) {
+         return alert(error.message)
+      }
+    
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

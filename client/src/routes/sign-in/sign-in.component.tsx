@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signInStart } from "../../store/user/user.action"
-import { selectCurrentUser } from "../../store/user/user.selector"
+import { selectCurrentUser, selectErrorMessage } from "../../store/user/user.selector"
 
 const defaultFormFields = {
    email: '',
@@ -18,8 +18,9 @@ const SignIn = () => {
    const {email,password,} = formFields
    const dispatch = useDispatch()
    const currentUser = useSelector(selectCurrentUser)
+   const error = useSelector(selectErrorMessage)
    const navigate = useNavigate()
-
+   
    useEffect(() => {
       if(currentUser) {
          navigate("/")
@@ -29,6 +30,9 @@ const SignIn = () => {
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
+      if(error){
+         return alert(error.message)
+      }
       navigate("/")
    }
 

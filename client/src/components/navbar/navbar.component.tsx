@@ -1,13 +1,14 @@
 import React, { useEffect, MouseEvent, ChangeEvent, useState, Fragment } from 'react'
 import { FormattedMessage } from "react-intl"
-import {Link, NavLink, Outlet} from "react-router-dom"
-import { useDispatch } from "react-redux"
+import {Link, NavLink, Outlet, useNavigate} from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 
 import {ReactComponent as MoonIcon} from "../../assets/moon-icon.svg"
 import {ReactComponent as SunIcon} from "../../assets/sun-icon.svg"
 import {ReactComponent as UserIcon} from "../../assets/user-icon.svg"
 import { decode as decodeToken } from "../../utils/userToken.utils"
-import { setCurrentUser } from "../../store/user/user.action"
+import { setCurrentUser, logOutStart } from "../../store/user/user.action"
+import { selectCurrentUser } from "../../store/user/user.selector"
 
 const languageList = {
     Polski: "PL",
@@ -21,15 +22,28 @@ const Navbar = () => {
    const [language, setLanguage] = useState(languageList['English'])
 
    const dispatch = useDispatch()
+   const currentUser = useSelector(selectCurrentUser)
+   const navigate = useNavigate()
 
    useEffect(() => {
    
       const token = JSON.parse(localStorage.getItem("token") as string)
-      const user = decodeToken(token.accessToken)
-      if(user) {
-         dispatch(setCurrentUser(user))
+      if(token) {
+         const user = decodeToken(token.accessToken)
+         
+         if(user) {
+            dispatch(setCurrentUser(user))
+         }
       }
+      
    },[])
+
+   const redirectToSignIn = () => navigate("/signin")
+
+   const logoutHandler = () => {
+      dispatch(logOutStart())
+      setUserMenu(false)
+   }
 
     const themeSwitchHandler = (event : ChangeEvent<HTMLInputElement>) : void => {
         const isChecked = event.target.checked
@@ -114,7 +128,10 @@ const Navbar = () => {
 
 
                     <div className="relative z-30 whitespace-nowrap" >
-                        <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
+                        {currentUser 
+                        ?  <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
+                        :  <button className="btn bg-color-primary border-none hover:bg-fuchsia-800" onClick={redirectToSignIn}>Sign In</button>
+                        }
                         <ul className={`${!isUserMenuOpen && "hidden" } min-w-max menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
                             <li>
                                 <NavLink to='/' className={({isActive}) => 
@@ -153,7 +170,7 @@ const Navbar = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <button>
+                                <button onClick={logoutHandler}>
                                     <FormattedMessage 
                                         id="navigation.user-menu.logout"
                                         defaultMessage="Logout"

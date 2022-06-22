@@ -1,10 +1,18 @@
 import { USER_ACTION_TYPES, ICurrentUser} from "./user.types"
 import { UserAction } from "./user.action"
 
+export interface IError {
+   response: {
+      data: {
+         message: string
+      }
+   }
+}
+
 export interface IUserState {
    currentUser: ICurrentUser | null,
    isLoading: boolean,
-   error: Error | null
+   error: IError | null
 }
 
 const USER_INITIAL_STATE: IUserState = {
@@ -19,26 +27,29 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
       case USER_ACTION_TYPES.SIGN_IN_START:
          return {
             ...state,
-            isLoading: true
+            isLoading: true,
+            error: null,
          }
-      case USER_ACTION_TYPES.SIGN_IN_SUCCESS:
+      case USER_ACTION_TYPES.AUTHENTICATION_SUCCESS:
          return {
             ...state,
             currentUser: action.payload,
-            isLoading: false
+            isLoading: false,
+            error: null,
          }
       case USER_ACTION_TYPES.LOG_OUT_SUCCESS:
          return {
             ...state,
             currentUser: null,
+            error: null,
          }
       case USER_ACTION_TYPES.SET_CURRENT_USER:
          return {
             ...state,
             currentUser: action.payload
          }
-      case USER_ACTION_TYPES.SIGN_IN_FAILURE,
-            USER_ACTION_TYPES.LOG_OUT_FAILURE:
+      case USER_ACTION_TYPES.AUTHENTICATION_FAILURE:
+          
          return {
             ...state,
             error: action.payload,
