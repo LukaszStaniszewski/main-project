@@ -15,7 +15,25 @@ export type LogOutFailure= ActionWithPayload<USER_ACTION_TYPES.LOG_OUT_FAILURE, 
 
 export type SetCurrentUser = ActionWithPayload<USER_ACTION_TYPES.SET_CURRENT_USER, ICurrentUser>
 
-export type UserAction = AuthenticationFailure | AuthenticationSuccess | SignInStart | LogOutStart | LogOutSuccess | LogOutFailure | SetCurrentUser
+export type GetUsersStart = Action<USER_ACTION_TYPES.GET_USERS_START>
+export type GetUsersSuccess = ActionWithPayload<USER_ACTION_TYPES.GET_USERS_SUCCESS, ICurrentUser[]>
+export type GetUsersFailure = ActionWithPayload<USER_ACTION_TYPES.GET_USERS_FAILURE, AxiosError>
+
+export type UserAction = AuthenticationFailure | AuthenticationSuccess | SignInStart | LogOutStart | LogOutSuccess | LogOutFailure | SetCurrentUser| GetUsersStart| GetUsersSuccess| GetUsersFailure
+
+export const getUsersStart = () :GetUsersStart =>({
+   type: USER_ACTION_TYPES.GET_USERS_START
+})
+
+export const getUsersSuccess = (users: ICurrentUser[]) :GetUsersSuccess =>({
+   type: USER_ACTION_TYPES.GET_USERS_SUCCESS,
+   payload: users
+})
+
+export const getUsersFailure = (error: AxiosError) :GetUsersFailure =>({
+   type: USER_ACTION_TYPES.GET_USERS_FAILURE,
+   payload: error
+})
 
 export const setCurrentUser = (user: ICurrentUser) : SetCurrentUser => ({
    type: USER_ACTION_TYPES.SET_CURRENT_USER,

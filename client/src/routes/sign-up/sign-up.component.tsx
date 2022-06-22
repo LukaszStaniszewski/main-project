@@ -42,7 +42,7 @@ const SignUp = () => {
    }
 
   return (
-    <section className="relative  z-0">
+    <section className="relative z-0">
          <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
          
          <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">

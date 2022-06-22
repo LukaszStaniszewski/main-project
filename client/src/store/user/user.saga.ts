@@ -1,8 +1,8 @@
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
-import { authenticationSuccess, authenticationFailure, SignInStart, logOutSuccess, logOutFailure, SignUpStart} from "./user.action"
+import { authenticationSuccess, authenticationFailure, SignInStart, logOutSuccess, logOutFailure, SignUpStart, GetUsersStart, getUsersSuccess, getUsersFailure} from "./user.action"
 import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser} from "./user.types"
 import { decode as decodeToken } from "../../utils/userToken.utils"
-import {API_URL, postRequest, deleteRequest, ITokens} from "../../api/axios-instance.api"
+import {API_URL, postRequest, deleteRequest, ITokens, getRequest} from "../../api/axios-instance.api"
 import axios,{ AxiosError}  from "axios"
 
 
@@ -34,7 +34,7 @@ function* logOut() {
       const {status} = yield* call(deleteRequest, API_URL.LOG_OUT)
       if(status === 200) {
          localStorage.removeItem("token")
-         yield put(logOutSuccess())
+         yield* put(logOutSuccess())
       }
      
    } catch(error) {
@@ -42,15 +42,29 @@ function* logOut() {
    }
 }
 
-export function* onLogOut() {
+function* getUsers() {
+   try {
+      const repsonse = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS)
+      yield* put(getUsersSuccess(repsonse.data))
+   } catch (error) {
+      yield* put(getUsersFailure(error as AxiosError))
+   }
+}
+
+
+function* onGetUsers() {
+   yield* takeLatest(USER_ACTION_TYPES.GET_USERS_START, getUsers)
+}
+
+function* onLogOut() {
    yield* takeLatest(USER_ACTION_TYPES.LOG_OUT_START, logOut)
 }
 
-export function* onEmailSignUpStart() {
+function* onEmailSignUpStart() {
    yield* takeLatest(USER_ACTION_TYPES.SIGN_UP_START, signUpWithEmail)
 }
 
-export function* onEmailSignInStart() {
+function* onEmailSignInStart() {
    yield* takeLatest(USER_ACTION_TYPES.SIGN_IN_START, signInWithEmail)
 }
 
@@ -59,5 +73,6 @@ export function* userSagas() {
       call(onEmailSignInStart),
       call(onLogOut),
       call(onEmailSignUpStart),
+      call(onGetUsers)
    ]);
 }

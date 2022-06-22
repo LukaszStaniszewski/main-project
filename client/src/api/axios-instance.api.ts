@@ -20,7 +20,8 @@ api.interceptors.request.use( (req) => {
 export enum API_URL {
    SIGN_IN = "/api/session",
    SIGN_UP = "/api/user/register",
-   LOG_OUT = "/api/session"
+   LOG_OUT = "/api/session",
+   GET_USERS = "/api/user",
 }
 // export const fetchUsers = () => api.get('/users')
 // export const deleteUsers = <T> (usersToDelete: T) => api.post('/users', usersToDelete, options)
