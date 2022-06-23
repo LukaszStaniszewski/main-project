@@ -1,11 +1,15 @@
 import {useEffect} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
-import UserTable from "../../components/user-table/userTable.component"
 import { getUsersStart } from "../../store/user/user.action"
+import { selectUserReducer, selectUsers } from "../../store/user/user.selector"
 
 const AdminPage = () => {
    const dispatch = useDispatch()
+   const {isLoading, users} = useSelector(selectUserReducer)
+
+   
+
    useEffect(() => {
       dispatch(getUsersStart())
    }, [])
@@ -13,7 +17,7 @@ const AdminPage = () => {
    return (
       <section className="relative z-0">
       <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
-      <main className="w-80vw m-auto h-60vh bg-secondary pt-6 pb-4 px-4 ">
+      <main className="w-80vw m-auto h-60vh bg-secondary pt-6 pb-4 px-4 overflow-auto ">
          <div className="flex justify-around">
             <div>
                <p>Users</p>
@@ -32,7 +36,7 @@ const AdminPage = () => {
                <p>12</p>
             </div>
          </div>
-         <UserTable/>
+      
       </main>
    </section>
    )
