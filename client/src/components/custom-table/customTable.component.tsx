@@ -1,40 +1,39 @@
-import React, { useEffect, ChangeEvent, useState} from 'react'
+import{ useState,} from 'react'
 
-import { ICurrentUser } from "../../store/user/user.types"
+import TableRows from "./table-rows/tableRows.component"
+import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
-
-interface ITableRows {
-   rows: ICurrentUser[],
-   checkboxesOpen?: boolean,
-}
-
-const CustomTable =  ({rows = [], checkboxesOpen = false}: ITableRows) => {
-   const columns: ITableRows | string[] = Object.keys(rows[0])
-
+const CustomTable =  ({rows = [], checkboxesOpen = false, setSelectedItems}: ICustomTable) => {
+   const columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
+   
+   const [checkbox, setCheckbox] = useState(false)
    const [sortedBy, setSortedBy] = useState({
       column: columns[0],
       ascending: true
    })
- 
-   const sort = (rows: []) => {
+
+   const selectRowsHandler = () => {
+      setCheckbox(!checkbox)
+   }
+  
+   const sort = (rows: Rows) => {
       const {column, ascending} = sortedBy
       return rows.sort((a,b) => {
 
-         if(a[column] > b[column]) {
+         if(a[column].toString() > b[column].toString()) {
             return ascending ? -1 : 1;
          }
-         if(b[column] > a[column]) {
+         if(b[column].toString() > a[column].toString()) {
             return ascending ? 1: -1;
          }
          return 0
       })
    }
  
-
    return (
    <div className="overlow-x-auto">
-     {checkboxesOpen && <input className="checkbox" type="checkbox"/>}
-      {/* <button className="w-4 ml-4" onClick={() => filterUsers("name")}> filter names</button> */}
+     {checkboxesOpen && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
+
       <table className="table w-full bg-secondary table-normal">
          <thead>
             <tr className="text-center">
@@ -60,21 +59,17 @@ const CustomTable =  ({rows = [], checkboxesOpen = false}: ITableRows) => {
             </tr>
          </thead>
          <tbody>
-            
-            {//@ts-ignore
-            sort(rows).map((row, index )=> (
-                  //@ts-ignore
-            <tr key={index}>
-              
-              {checkboxesOpen && <input className="checkbox" type="checkbox" name={`index`} />}
-               {  //@ts-ignore
-               columns.map((column, index) => 
-                   <td key={index}> 
-                     {row[column]}</td>
-                  )
-               }
-            </tr>
-            ))}
+            {
+               sort(rows).map(row=> (
+               <TableRows
+                  key={row._id} 
+                  row={row} 
+                  columns={columns} 
+                  mainCheckbox={checkbox} 
+                  setSelectedItems={setSelectedItems} 
+                  checkboxesOpen={checkboxesOpen}/>
+               ))
+            }
          </tbody>
       </table>
    </div>
