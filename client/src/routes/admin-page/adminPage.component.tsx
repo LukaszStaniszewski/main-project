@@ -1,14 +1,17 @@
-import {useEffect} from 'react'
+import {useEffect, useState, ChangeEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
+import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart } from "../../store/user/user.action"
 import { selectUserReducer, selectUsers } from "../../store/user/user.selector"
 
 const AdminPage = () => {
+   const [checkbox, setCheckbox] = useState(false)
    const dispatch = useDispatch()
    const {isLoading, users} = useSelector(selectUserReducer)
 
-   
+
+   const checkRowsHandler = (event: ChangeEvent<HTMLInputElement>) => setCheckbox(event.target.checked)
 
    useEffect(() => {
       dispatch(getUsersStart())
@@ -36,7 +39,10 @@ const AdminPage = () => {
                <p>12</p>
             </div>
          </div>
-      
+         {isLoading
+         ? <div>Loading....</div>
+         :<CustomTable rows={users} checkboxesOpen={true}/>
+         }
       </main>
    </section>
    )
