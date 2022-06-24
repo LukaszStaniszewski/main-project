@@ -1,5 +1,5 @@
 import { USER_ACTION_TYPES, ICurrentUser} from "./user.types"
-import { UserAction } from "./user.action"
+import { UserAction } from "./user.types"
 
 export interface IError {
    response: {
@@ -28,6 +28,9 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
    switch(action.type) {
       case USER_ACTION_TYPES.SIGN_IN_START:
       case USER_ACTION_TYPES.GET_USERS_START:
+      case USER_ACTION_TYPES.DELETE_USERS_START:
+      // case USER_ACTION_TYPES.UPDATE_USERS_START:
+      case USER_ACTION_TYPES.LOG_OUT_START:
          return {
             ...state,
             isLoading: true,
@@ -40,13 +43,21 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             isLoading: false,
             error: null,
          }
+      // case USER_ACTION_TYPES.UPDATE_USERS_SUCCESS:
+      //    return {
+      //       ...state,
+      //       isLoading: false,
+      //       error:false
+      //    }
       case USER_ACTION_TYPES.LOG_OUT_SUCCESS:
          return {
             ...state,
             currentUser: null,
+            isLoading: false,
             error: null,
          }
       case USER_ACTION_TYPES.GET_USERS_SUCCESS:
+      case USER_ACTION_TYPES.SET_USERS:
          return {
             ...state,
             isLoading: false,
@@ -59,8 +70,10 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             currentUser: action.payload
          }
       case USER_ACTION_TYPES.AUTHENTICATION_FAILURE:
+      case USER_ACTION_TYPES.LOG_OUT_FAILURE:
       case USER_ACTION_TYPES.GET_USERS_FAILURE:
       case USER_ACTION_TYPES.LOG_OUT_FAILURE:   
+      case USER_ACTION_TYPES.UPDATE_USERS_FAILURE:
          return {
             ...state,
             error: action.payload,

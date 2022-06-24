@@ -1,52 +1,35 @@
-import {useEffect, useState, ChangeEvent} from 'react'
+import {useEffect, useState,MouseEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 
 import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart } from "../../store/user/user.action"
-import { selectUserReducer, selectUsers } from "../../store/user/user.selector"
+import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
+import { useUpdateUsers } from "../../hooks/local-database/updateUsers.hook"
+
 
 const AdminPage = () => {
-   const [valueToUpdate, setValueToUpdate] = useState({})
-   const dispatch = useDispatch()
    const {isLoading, users} = useSelector(selectUserReducer)
-   // const [usersToUpdate, setSelectedUsers] = useState()
    const [usersToUpdate, setSelectedUsers] = useState<ICurrentUser[]>(users)
+   const dispatch = useDispatch()
+   const [setValuesToUpdate] = useUpdateUsers()
 
-   console.log("usersToUpdate", usersToUpdate)
-
-   // interface IUpdateItems<T, D, C> {
-   //    itemsToUpdate: [_id: string]
-   //    items: T[],
-   //    value: object
-   // }
-   interface IUpdateItems {
-   _id: string 
-   [key: string]: any
-   }
-   const updateUsers = () => {
-      changeItemsValue(users, usersToUpdate, valueToUpdate)
-   }
-
-   function changeItemsValue(items: ICurrentUser[], itemsToUpdate: ICurrentUser[], value: object): ICurrentUser[];
    
-   function changeItemsValue(items: IUpdateItems[], itemsToUpdate: IUpdateItems[], value: object){
-      const keyToUpdate =  Object.keys(value).join("")
-      if(!itemsToUpdate) return
-      for(let i = 0; i < items.length; i++) {
-        for(let j = 0; j< itemsToUpdate.length; j++) {
-          if(items[i]._id === itemsToUpdate[j]._id) {
-            items[i][keyToUpdate] = value
-          }
-        }
-      }
-      return [...items]
-   }
-
-
    useEffect(() => {
       dispatch(getUsersStart())
    }, [])
+
+   useEffect(() => {
+     
+   },[usersToUpdate])
+
+
+  const updateUsers = (event : MouseEvent<HTMLButtonElement>) => {
+     //@ts-ignore
+     const value = event.target.name
+     //@ts-ignore
+     setValuesToUpdate({users, usersToUpdate, value: {status: value}})
+   }
 
    return (
       <section className="relative z-0">
@@ -70,6 +53,8 @@ const AdminPage = () => {
                <p>12</p>
             </div>
          </div>
+         <button name="blocked" onClick={updateUsers}>block user</button>
+         <button name="active" onClick={updateUsers}>unblock user</button>
          {isLoading
          ? <div>Loading....</div>
          // change name checkboxesOpen to admin mode

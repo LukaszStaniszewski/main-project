@@ -19,9 +19,11 @@ api.interceptors.request.use( (req) => {
 
 export enum API_URL {
    SIGN_IN = "/api/session",
-   SIGN_UP = "/api/user/register",
    LOG_OUT = "/api/session",
+   SIGN_UP = "/api/user/register",
    GET_USERS = "/api/user",
+   UPDATE_USERS = "/api/user",
+   DELETE_USERS = "/api/user/delete"
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, options)
