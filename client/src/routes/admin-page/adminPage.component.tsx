@@ -5,30 +5,28 @@ import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart } from "../../store/user/user.action"
 import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
-import { useUpdateUsers } from "../../hooks/local-database/updateUsers.hook"
-
+import useUpdateUsers from "../../hooks/client-server/updateUsers.hook"
+import useDeleteUsers from "../../hooks/client-server/deleteUsers.hook"
 
 const AdminPage = () => {
    const {isLoading, users} = useSelector(selectUserReducer)
    const [usersToUpdate, setSelectedUsers] = useState<ICurrentUser[]>(users)
    const dispatch = useDispatch()
-   const [setValuesToUpdate] = useUpdateUsers()
+   const [updateUsers] = useUpdateUsers()
+   const [deleteUsers] = useDeleteUsers()
 
-   
    useEffect(() => {
       dispatch(getUsersStart())
    }, [])
 
-   useEffect(() => {
-     
-   },[usersToUpdate])
 
+  const updateSelectedUsers = (event : MouseEvent<HTMLButtonElement>) => {
+     const value = event.currentTarget.name
+     updateUsers(users, usersToUpdate, {status: value})
+   }
 
-  const updateUsers = (event : MouseEvent<HTMLButtonElement>) => {
-     //@ts-ignore
-     const value = event.target.name
-     //@ts-ignore
-     setValuesToUpdate({users, usersToUpdate, value: {status: value}})
+   const deleteSelectedUsers = () => {
+      deleteUsers(users, usersToUpdate)
    }
 
    return (
@@ -53,8 +51,9 @@ const AdminPage = () => {
                <p>12</p>
             </div>
          </div>
-         <button name="blocked" onClick={updateUsers}>block user</button>
-         <button name="active" onClick={updateUsers}>unblock user</button>
+         <button name="blocked" onClick={updateSelectedUsers}>block user</button>
+         <button name="active" onClick={updateSelectedUsers}>unblock user</button>
+         <button  onClick={deleteSelectedUsers}>delete user</button>
          {isLoading
          ? <div>Loading....</div>
          // change name checkboxesOpen to admin mode
