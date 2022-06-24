@@ -31,29 +31,30 @@ const CustomTable =  ({rows = [], checkboxesOpen = false, setSelectedItems}: ICu
    }
  
    return (
-   <div className="overlow-x-auto">
-     {checkboxesOpen && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
+   <div className="overlow-auto">
 
       <table className="table w-full bg-secondary table-normal">
          <thead>
-            <tr className="text-center">
-               {checkboxesOpen && <th></th>}
+            <tr>
+               <th>
+                  {checkboxesOpen && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
+               </th>
                {  
-                  columns.map((column, index) => 
-                  <th  key={index}>
-                     <div className="flex items-center gap-2 cursor-pointer" 
-                        onClick={() => setSortedBy(prevState => ({
-                        column,
-                        ascending: !prevState.ascending
-                     }))}>
-                        <div >{column}</div>
-                        {sortedBy.column === column && (
-                           sortedBy.ascending
-                           ? <div>▲</div>
-                           : <div>▼</div>
-                        )}
-                     </div>
-                  </th>
+               columns.map((column, index) => 
+               <th key={index}>
+                  <div className="flex items-center gap-2 cursor-pointer" 
+                     onClick={() => setSortedBy(prevState => ({
+                     column,
+                     ascending: !prevState.ascending
+                  }))}>
+                     <div >{column}</div>
+                     {sortedBy.column === column && (
+                        sortedBy.ascending
+                        ? <div>▲</div>
+                        : <div>▼</div>
+                     )}
+                  </div>
+               </th>
                   )   
                }
             </tr>

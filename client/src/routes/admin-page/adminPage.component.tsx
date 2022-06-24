@@ -7,14 +7,42 @@ import { selectUserReducer, selectUsers } from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
 
 const AdminPage = () => {
-   const [checkbox, setCheckbox] = useState(false)
+   const [valueToUpdate, setValueToUpdate] = useState({})
    const dispatch = useDispatch()
    const {isLoading, users} = useSelector(selectUserReducer)
    // const [usersToUpdate, setSelectedUsers] = useState()
    const [usersToUpdate, setSelectedUsers] = useState<ICurrentUser[]>(users)
 
    console.log("usersToUpdate", usersToUpdate)
-   const checkRowsHandler = (event: ChangeEvent<HTMLInputElement>) => setCheckbox(event.target.checked)
+
+   // interface IUpdateItems<T, D, C> {
+   //    itemsToUpdate: [_id: string]
+   //    items: T[],
+   //    value: object
+   // }
+   interface IUpdateItems {
+   _id: string 
+   [key: string]: any
+   }
+   const updateUsers = () => {
+      changeItemsValue(users, usersToUpdate, valueToUpdate)
+   }
+
+   function changeItemsValue(items: ICurrentUser[], itemsToUpdate: ICurrentUser[], value: object): ICurrentUser[];
+   
+   function changeItemsValue(items: IUpdateItems[], itemsToUpdate: IUpdateItems[], value: object){
+      const keyToUpdate =  Object.keys(value).join("")
+      if(!itemsToUpdate) return
+      for(let i = 0; i < items.length; i++) {
+        for(let j = 0; j< itemsToUpdate.length; j++) {
+          if(items[i]._id === itemsToUpdate[j]._id) {
+            items[i][keyToUpdate] = value
+          }
+        }
+      }
+      return [...items]
+   }
+
 
    useEffect(() => {
       dispatch(getUsersStart())
@@ -23,7 +51,7 @@ const AdminPage = () => {
    return (
       <section className="relative z-0">
       <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
-      <main className="w-80vw m-auto h-60vh bg-secondary pt-6 pb-4 px-4 overflow-auto ">
+      <main className="w-80vw m-auto h-60vh bg-secondary pt-6 pb-4 px-4">
          <div className="flex justify-around">
             <div>
                <p>Users</p>
@@ -45,7 +73,11 @@ const AdminPage = () => {
          {isLoading
          ? <div>Loading....</div>
          // change name checkboxesOpen to admin mode
-         :<CustomTable rows={users} checkboxesOpen={true} setSelectedItems={setSelectedUsers}/>
+         :<CustomTable 
+            rows={users} 
+            checkboxesOpen={true} 
+            setSelectedItems={setSelectedUsers}
+         />
          }
       </main>
    </section>

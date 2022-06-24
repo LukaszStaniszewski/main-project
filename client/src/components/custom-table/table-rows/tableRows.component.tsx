@@ -16,7 +16,6 @@ const TableRows = ({row, columns, mainCheckbox, setSelectedItems, checkboxesOpen
    }
 
    const addUsersToUpdate = (checkbox: boolean) => {
-      console.log("hit")
       if(!setSelectedItems) return
       if(!checkbox) return removeFromUpdating()
       setSelectedItems((prevState) => [...new Set([...prevState, row])])
@@ -29,7 +28,9 @@ const TableRows = ({row, columns, mainCheckbox, setSelectedItems, checkboxesOpen
 
   return (
       <tr>
-         {checkboxesOpen && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
+         <td>
+            {checkboxesOpen && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
+         </td>
          { 
          columns.map((column, index) => 
                <td key={index}>{row[column].toString()}</td> 
