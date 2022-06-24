@@ -1,5 +1,6 @@
 import {useEffect, useState,MouseEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart } from "../../store/user/user.action"
@@ -9,11 +10,16 @@ import useUpdateUsers from "../../hooks/client-server/updateUsers.hook"
 import useDeleteUsers from "../../hooks/client-server/deleteUsers.hook"
 
 const AdminPage = () => {
-   const {isLoading, users} = useSelector(selectUserReducer)
+   const {isLoading, users, currentUser} = useSelector(selectUserReducer)
    const [usersToUpdate, setSelectedUsers] = useState<ICurrentUser[]>(users)
    const dispatch = useDispatch()
+   const navigate = useNavigate()
    const [updateUsers] = useUpdateUsers()
    const [deleteUsers] = useDeleteUsers()
+
+   useEffect(() => {
+      if(currentUser && currentUser?.role !== "admin") return navigate("/")
+   }, [currentUser])
 
    useEffect(() => {
       dispatch(getUsersStart())
@@ -21,11 +27,14 @@ const AdminPage = () => {
 
 
   const updateSelectedUsers = (event : MouseEvent<HTMLButtonElement>) => {
-     const value = event.currentTarget.name
-     updateUsers(users, usersToUpdate, {status: value})
+     const value = event.currentTarget.name?.split("_")
+   //   console.log( {[value[0]]: value[1]})
+     updateUsers(users, usersToUpdate, {[value[0]]: value[1]})
    }
+   // join = array to string, spl
 
    const deleteSelectedUsers = () => {
+
       deleteUsers(users, usersToUpdate)
    }
 
@@ -51,9 +60,13 @@ const AdminPage = () => {
                <p>12</p>
             </div>
          </div>
-         <button name="blocked" onClick={updateSelectedUsers}>block user</button>
-         <button name="active" onClick={updateSelectedUsers}>unblock user</button>
-         <button  onClick={deleteSelectedUsers}>delete user</button>
+         <div className="flex gap-10">
+            <button name="status_blocked" onClick={updateSelectedUsers}>block user</button>
+            <button name="status_active" onClick={updateSelectedUsers}>unblock user</button>
+            <button name="role_user" onClick={updateSelectedUsers}>set role to user</button>
+            <button name="role_admin" onClick={updateSelectedUsers}>set role to admin</button>
+            <button  onClick={deleteSelectedUsers}>delete user</button>
+         </div>
          {isLoading
          ? <div>Loading....</div>
          // change name checkboxesOpen to admin mode

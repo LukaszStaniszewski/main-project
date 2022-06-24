@@ -1,5 +1,5 @@
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
-import axios,{ AxiosError, AxiosPromise}  from "axios"
+import{ AxiosError}  from "axios"
 
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
@@ -17,6 +17,7 @@ function* Authenticate(credentials: IUserFormValues, url:string) {
          yield* put(action.authenticationSuccess(user))
       }
     } catch (error) {
+      console.log("error", error)
       yield* put(action.authenticationFailure(error as AxiosError))
    }
 }

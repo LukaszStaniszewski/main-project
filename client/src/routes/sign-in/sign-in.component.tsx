@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signInStart } from "../../store/user/user.action"
-import { selectCurrentUser, selectErrorMessage } from "../../store/user/user.selector"
+import { selectErrorMessage,selectUserReducer } from "../../store/user/user.selector"
+import e from "express"
 
 const defaultFormFields = {
    email: '',
@@ -17,8 +18,8 @@ const SignIn = () => {
    const [formFields, setFormFields] = useState(defaultFormFields)
    const {email,password,} = formFields
    const dispatch = useDispatch()
-   const currentUser = useSelector(selectCurrentUser)
    const error = useSelector(selectErrorMessage)
+   const {currentUser, isLoading} = useSelector(selectUserReducer)
    const navigate = useNavigate()
    
    useEffect(() => {
@@ -30,10 +31,13 @@ const SignIn = () => {
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
+      
       if(error){
          return alert(error.message)
-      }
-      navigate("/")
+      } 
+      !isLoading && navigate("/")
+      
+      
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -59,14 +59,14 @@ export type UserAction =
 AuthenticationFailure | AuthenticationSuccess | SignInStart | LogOutStart | 
 LogOutSuccess | LogOutFailure | SetCurrentUser| GetUsersStart| GetUsersSuccess| 
 GetUsersFailure | DeleteUsersStart | UpdateUsersStart | UpdateUsersFailure |
-UpdateUsersSuccess | SetUsers
+UpdateUsersSuccess | SetUsers | SignUpStart
 
 export interface ICurrentUser {
    _id: string,
    name: string,
    status: string,
    email: string,
-   isAdmin: boolean,
+   role: string,
    lastLogin: string,
    sessionId: string,
 }

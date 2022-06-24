@@ -27,6 +27,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
 
    switch(action.type) {
       case USER_ACTION_TYPES.SIGN_IN_START:
+      case USER_ACTION_TYPES.SIGN_UP_START:
       case USER_ACTION_TYPES.GET_USERS_START:
       case USER_ACTION_TYPES.LOG_OUT_START:
          return {
@@ -64,7 +65,6 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
       case USER_ACTION_TYPES.AUTHENTICATION_FAILURE:
       case USER_ACTION_TYPES.LOG_OUT_FAILURE:
       case USER_ACTION_TYPES.GET_USERS_FAILURE:
-      case USER_ACTION_TYPES.LOG_OUT_FAILURE:   
       case USER_ACTION_TYPES.UPDATE_USERS_FAILURE:
          return {
             ...state,
