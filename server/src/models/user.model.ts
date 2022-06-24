@@ -11,7 +11,7 @@ export interface IUserCredentials {
 export interface IUserDocument extends IUserCredentials {
    _id: Types.ObjectId,
    status: string,
-   isAdmin: boolean,
+   role: string,
    createdAt: string,
    lastLogin: string,
 }
@@ -42,9 +42,9 @@ const userSchema = new Schema<IUserDocument>({
       type: String,
       default: "active"
    },
-   isAdmin: {
-      type: Boolean,
-      default: false,
+   role: {
+      type: String,
+      default: "user",
    },
    createdAt: {
       type: String,
@@ -70,10 +70,7 @@ userSchema.methods.comparePasswords = async function(plaintextPassword: string):
 }
 
 userSchema.methods.updateLastLogin = async function(email: string): Promise<boolean> {
-   // this.lastLogin = dayjs().format("DD-MM-YYYY HH:mm:ss")
    await User.findByIdAndUpdate(this._id, {lastLogin: dayjs().format("DD-MM-YYYY HH:mm:ss")})
-   // return true
-   console.log("updateLastLogin hit")
    return true
 }
 

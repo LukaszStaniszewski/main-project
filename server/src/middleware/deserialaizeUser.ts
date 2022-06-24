@@ -15,7 +15,7 @@ const deserialaizeUser = async (req: Request, res: Response, next: NextFunction)
    
    if( decoded?.status === "blocked") {
       await updateSession({name: decoded._id}, {valid: false})
-      return res.status(403).send("Your account has been blocked")
+      return res.status(403).send({message: "Your account has been blocked"})
    }
    
    if(decoded) {
@@ -35,8 +35,9 @@ const deserialaizeUser = async (req: Request, res: Response, next: NextFunction)
          // res.locals.user = result.decoded
          return next()
       }
+   
    }
-   next()
+   res.sendStatus(403)
 }
 
 export default deserialaizeUser

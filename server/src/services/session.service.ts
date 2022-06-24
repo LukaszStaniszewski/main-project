@@ -6,15 +6,17 @@ import SessionModel, {ISessionDocument} from "../models/session.model"
 import { findUser } from "./user.service"
 import { verifyToken, signJwt } from "../utils/jtw.utils"
 import getErrorMessage from "../utils/getErrorMessage"
+import { Values_TO_Omit } from "../config/constants.config"
 import * as key from "../config/keyes"
 
 export const authorization = async ({email, password}: {email: string, password: string}) => {
   const user = await findUser({email})
   if(!user) return false
   const isPasswordValid = await user.comparePasswords(password)
-  if(isPasswordValid) return false
+  if(!isPasswordValid) return false
   await user.updateLastLogin(email)
-  return omit(user.toJSON(), 'password')
+
+  return omit(user.toJSON(), ...Values_TO_Omit.USER_LOGGED_IN)
 }
 
 export const createSession = async (userId : Types.ObjectId) => {
@@ -44,10 +46,9 @@ export const updateUsersSession = async (usersArray: Array<IUserDocument> , upda
 
 export const reIssueAccessToken = async (refreshToken: string) => {
    const {decoded} = verifyToken(refreshToken, key.publicRefreshKey);
-   // @ts-ignore
-   // @ts-ignore
+
    if (!decoded || !decoded.sessionId) return false
-   //@ts-ignore
+
    const session = await SessionModel.findById(decoded.sessionId)
 
    if(!session || !session.valid) return false

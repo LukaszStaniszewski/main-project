@@ -1,11 +1,12 @@
 import { Router } from "express";
 
-import { registerUser, deleteUserOrUsers, updateUserOrUsers } from "../controllers/user.controller";
+import {deleteUserOrUsers, updateUserOrUsers, sendUsers, registerAndSignIn} from "../controllers/user.controller";
 
 const userRouter = Router()
 
-userRouter.post("/register", registerUser)
+userRouter.post("/register", registerAndSignIn)
 userRouter.post("/delete",  deleteUserOrUsers)
-userRouter.patch("/patch",  updateUserOrUsers)
+userRouter.patch("/",  updateUserOrUsers)
+userRouter.get("/", sendUsers)
 
 export default userRouter

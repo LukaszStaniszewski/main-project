@@ -9,9 +9,8 @@ import * as key from "../config/keyes"
 
 export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
    const user = await authorization(req.body)
-   console.log("user", user)
-   if(!user) return res.sendStatus(401)
-   if(user.status === "blocked") return res.sendStatus(406)
+   if(!user) return res.status(401).send({message: "Invalid credentials"})
+   if(user.status === "blocked") return res.status(403).send({message: "Your account has been blocked"})
    const session = await createSession(user._id)
 
    const accessToken = signJwt({...user, sessionId: session._id}, key.privateAccessKey, "60s") // 60s
