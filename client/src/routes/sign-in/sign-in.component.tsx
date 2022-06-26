@@ -7,7 +7,6 @@ import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signInStart } from "../../store/user/user.action"
 import { selectErrorMessage,selectUserReducer } from "../../store/user/user.selector"
-import e from "express"
 
 const defaultFormFields = {
    email: '',
@@ -18,8 +17,8 @@ const SignIn = () => {
    const [formFields, setFormFields] = useState(defaultFormFields)
    const {email,password,} = formFields
    const dispatch = useDispatch()
-   const error = useSelector(selectErrorMessage)
    const {currentUser, isLoading} = useSelector(selectUserReducer)
+   const error = useSelector(selectErrorMessage)
    const navigate = useNavigate()
    
    useEffect(() => {
@@ -28,16 +27,16 @@ const SignIn = () => {
       }   
    },[])
  
-   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
-      
-      if(error){
-         return alert(error.message)
-      } 
-      !isLoading && navigate("/")
-      
-      
+      if(!isLoading) {
+         if(error){
+            return alert(error.message)
+         }  else {
+            navigate("/")
+         }
+      }
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,15 +50,7 @@ const SignIn = () => {
          
          <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
             <figure className="mt-2">
-               {/* <img src="https://i.ibb.co/K6Dw3Yb/Screen-Shot-2022-06-16-at-17-44-22-PM.png" alt="login-picture" /> */}
-                {/* <img src="https://images.unsplash.com/photo-1590593162201-f67611a18b87?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=860&q=80" alt="" /> */}
                 <img src="https://i.ibb.co/c2X3Vj5/Screen-Shot-2022-06-16-at-20-45-15-PM.png" alt="" />
-               {/* <img src="https://images.unsplash.com/photo-1629683555749-893ad794d910?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=824&q=80" alt="" /> */}
-               {/* <img src="https://images.unsplash.com/photo-1652911366117-cbbab4ed43f1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=683&q=80s" alt="" /> */}
-               {/* <img src="https://images.unsplash.com/photo-1626272406318-11e56e35dbea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="" /> */}
-               {/* <img src="https://images.unsplash.com/photo-1486520299386-6d106b22014b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1769&q=80" alt="" /> */}
-               {/* <img src="https://images.unsplash.com/photo-1516981879613-9f5da904015f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80" alt="" /> */}
-
             </figure>
            
             <section className="">

@@ -6,7 +6,7 @@ export type Row = ICurrentUser
 
 interface ITableAdmin{
    setSelectedItems?: React.Dispatch<React.SetStateAction<ICurrentUser[]>>
-   checkboxesOpen?: boolean,
+   checkboxesAvaible?: boolean,
 }
 
 export interface ICustomTable extends ITableAdmin {
@@ -16,6 +16,6 @@ export interface ICustomTable extends ITableAdmin {
 export interface ITableRows extends ITableAdmin {
    row: Row,
    columns: Columns
-   mainCheckbox: boolean,
+   selectAll: boolean,
 }
 

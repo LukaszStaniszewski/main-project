@@ -30,12 +30,10 @@ const Navbar = () => {
       const token = JSON.parse(localStorage.getItem("token") as string)
       if(token) {
          const user = decodeToken(token.accessToken)
-         
          if(user) {
             dispatch(setCurrentUser(user))
          }
       }
-      
    },[])
 
    const redirectToSignIn = () => navigate("/signin")

@@ -9,6 +9,7 @@ import * as key from "../config/keyes"
 
 export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
    const user = await authorization(req.body)
+   console.log("user", user)
    if(!user) return res.status(401).send({message: "Invalid credentials"})
    if(user.status === "blocked") return res.status(403).send({message: "Your account has been blocked"})
    const session = await createSession(user._id)
@@ -28,7 +29,6 @@ export const getUserSessions= async (req: Request, res: Response<ISessionDocumen
 }
 
 export const deleteSessions = async (req: Request, res: Response) => {
-   console.log("deleteSessions", res.locals.user)
 
    const sessionId = res.locals.user.sessionId
    await updateSession({_id: sessionId}, {valid: false})

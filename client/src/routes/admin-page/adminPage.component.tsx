@@ -18,7 +18,7 @@ const AdminPage = () => {
    const [deleteUsers] = useDeleteUsers()
 
    useEffect(() => {
-      if(currentUser && currentUser?.role !== "admin") return navigate("/")
+      if(currentUser?.role !== "admin") return navigate("/")
    }, [currentUser])
 
    useEffect(() => {
@@ -27,14 +27,13 @@ const AdminPage = () => {
 
 
   const updateSelectedUsers = (event : MouseEvent<HTMLButtonElement>) => {
-     const value = event.currentTarget.name?.split("_")
-   //   console.log( {[value[0]]: value[1]})
-     updateUsers(users, usersToUpdate, {[value[0]]: value[1]})
+     const propertyToUpdate = event.currentTarget.value.split("_")
+     const keyToUpdate = propertyToUpdate[0]
+     const valueToUpdate = propertyToUpdate[1]
+     updateUsers(users, usersToUpdate, {[keyToUpdate]: valueToUpdate})
    }
-   // join = array to string, spl
 
    const deleteSelectedUsers = () => {
-
       deleteUsers(users, usersToUpdate)
    }
 
@@ -61,18 +60,17 @@ const AdminPage = () => {
             </div>
          </div>
          <div className="flex gap-10">
-            <button name="status_blocked" onClick={updateSelectedUsers}>block user</button>
-            <button name="status_active" onClick={updateSelectedUsers}>unblock user</button>
-            <button name="role_user" onClick={updateSelectedUsers}>set role to user</button>
-            <button name="role_admin" onClick={updateSelectedUsers}>set role to admin</button>
+            <button value="status_blocked" onClick={updateSelectedUsers}>block user</button>
+            <button value="status_active" onClick={updateSelectedUsers}>unblock user</button>
+            <button value="role_user" onClick={updateSelectedUsers}>set role to user</button>
+            <button value="role_admin" onClick={updateSelectedUsers}>set role to admin</button>
             <button  onClick={deleteSelectedUsers}>delete user</button>
          </div>
          {isLoading
          ? <div>Loading....</div>
-         // change name checkboxesOpen to admin mode
          :<CustomTable 
             rows={users} 
-            checkboxesOpen={true} 
+            checkboxesAvaible={true} 
             setSelectedItems={setSelectedUsers}
          />
          }

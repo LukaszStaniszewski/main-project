@@ -15,9 +15,9 @@ export const createUser = async (input: IUserCredentials) => {
    }
 }
 
-export const deleteUsers = async(usersArray : Array<IUserDocument>) => {
+export const deleteUsers = async(users : Array<IUserDocument>) => {
    try{
-      const user = await User.deleteMany(...usersArray)
+      const user = await User.deleteMany(...users)
       if(user.deletedCount === 0) throw new Error(getErrorMessage("User wasn't deleted"))
       return true
    } catch(error) {
@@ -25,9 +25,9 @@ export const deleteUsers = async(usersArray : Array<IUserDocument>) => {
    }  
 }
 
-export const updateUsers = async(usersArray: Array<IUserDocument>) => {
+export const updateUsers = async(users: Array<IUserDocument>) => {
    try {
-       await Promise.all(usersArray.map(userToUpdate => {
+       await Promise.all(users.map(userToUpdate => {
          return User.findByIdAndUpdate(userToUpdate._id, userToUpdate);
        }))
        return true

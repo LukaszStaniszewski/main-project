@@ -3,7 +3,7 @@ import{ useState,} from 'react'
 import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
-const CustomTable =  ({rows = [], checkboxesOpen = false, setSelectedItems}: ICustomTable) => {
+const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
    const columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
    
    const [checkbox, setCheckbox] = useState(false)
@@ -37,7 +37,7 @@ const CustomTable =  ({rows = [], checkboxesOpen = false, setSelectedItems}: ICu
          <thead>
             <tr>
                <th>
-                  {checkboxesOpen && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
+                  {checkboxesAvaible && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
                </th>
                {  
                columns.map((column, index) => 
@@ -66,9 +66,9 @@ const CustomTable =  ({rows = [], checkboxesOpen = false, setSelectedItems}: ICu
                   key={row._id} 
                   row={row} 
                   columns={columns} 
-                  mainCheckbox={checkbox} 
+                  selectAll={checkbox} 
                   setSelectedItems={setSelectedItems} 
-                  checkboxesOpen={checkboxesOpen}/>
+                  checkboxesAvaible={checkboxesAvaible}/>
                ))
             }
          </tbody>

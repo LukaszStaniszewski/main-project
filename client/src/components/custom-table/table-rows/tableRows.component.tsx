@@ -1,18 +1,18 @@
 import {useState, ChangeEvent, useEffect} from 'react'
 import { ITableRows } from "../table-types/table-types"
 
-const TableRows = ({row, columns, mainCheckbox, setSelectedItems, checkboxesOpen}: ITableRows) => {
+const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible}: ITableRows) => {
    const [checkbox, setCheckbox] = useState(false)
 
    useEffect(() => {
-      setCheckbox(mainCheckbox)
-      addUsersToUpdate(mainCheckbox)
-   }, [mainCheckbox])
+      setCheckbox(selectAll)
+      addUsersToUpdate(selectAll)
+   }, [selectAll])
   
    const checkBoxHandler = (event : ChangeEvent<HTMLInputElement>) => {
-      const rowChecked = event.target.checked
-      setCheckbox((prevState) => prevState === mainCheckbox ? rowChecked : mainCheckbox)
-      addUsersToUpdate(rowChecked)
+      const selectOne = event.target.checked
+      setCheckbox((prevState) => prevState === selectAll ? selectOne : selectAll)
+      addUsersToUpdate(selectOne)
    }
 
    const addUsersToUpdate = (checkbox: boolean) => {
@@ -29,11 +29,11 @@ const TableRows = ({row, columns, mainCheckbox, setSelectedItems, checkboxesOpen
   return (
       <tr>
          <td>
-            {checkboxesOpen && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
+            {checkboxesAvaible && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
          </td>
          { 
          columns.map((column, index) => 
-               <td key={index}>{row[column].toString()}</td> 
+               <td key={index}>{row[column]}</td> 
             )
          }
       </tr>

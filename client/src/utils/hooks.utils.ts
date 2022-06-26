@@ -7,22 +7,22 @@ interface IUpdateItems {
 
 type Items = ICurrentUser[]
 
-export const changeItemsValue = (items: Items, itemsToUpdate: IUpdateItems[], value: object) =>{
+export const changeItemsValue = (items: Items, itemsToUpdate: IUpdateItems[], value: object): Items =>{
    const keyToUpdate =  Object.keys(value).join("")
    const valueToUpdate =  Object.values(value).join("")
 
-   for(let i = 0; i < items.length; i++) {
-      for(let j = 0; j< itemsToUpdate.length; j++) {
-         if(items[i]._id === itemsToUpdate[j]._id) {
+   for(let item = 0; item < items.length; item++) {
+      for(let itemToUpdate = 0; itemToUpdate < itemsToUpdate.length; itemToUpdate++) {
+         if(items[item]._id === itemsToUpdate[itemToUpdate]._id) {
          //@ts-ignore
-            items[i][keyToUpdate] = valueToUpdate
+            items[item][keyToUpdate] = valueToUpdate
          }
       }
    }
    return [...items]
 }
 
-export const deleteItems = (items: Items, itemsToDelete: IUpdateItems[]) => {
+export const deleteItems = (items: Items, itemsToDelete: IUpdateItems[]): Items => {
    if(!items || !items.length) throw new Error ("there are no items")
    return items.filter(item => {
      return !itemsToDelete.some(itemToDelete => {
