@@ -84,7 +84,8 @@ export const authenticationSuccess = (user: ICurrentUser) : type.AuthenticationS
    payload: user 
  })
 
-export const authenticationFailure = (error: AxiosError) : type.AuthenticationFailure => ({
+ //@ts-ignore
+export const authenticationFailure = (error) : type.AuthenticationFailure => ({
    type: USER_ACTION_TYPES.AUTHENTICATION_FAILURE,
    payload: error
 })

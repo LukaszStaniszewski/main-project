@@ -1,30 +1,28 @@
-import {takeLatest, put, all, call} from "typed-redux-saga/macro"
+import {takeLatest, put, all, call, putResolve, retry, take, spawn, actionChannel, debounce, takeEvery} from "typed-redux-saga/macro"
 import{ AxiosError}  from "axios"
 
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
-import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart} from "./user.types"
+import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, AuthenticationFailure} from "./user.types"
 import * as action from "./user.action"
 
 
-function* Authenticate(credentials: IUserFormValues, url:string) {
+function* Authenticate(credentials:IUserFormValues,url:string) {
    try {
       const {data} = yield* call(postRequest<ITokens>, url, credentials)
       localStorage.setItem('token', JSON.stringify(data))
 
-      const user = decodeToken(data.accessToken)
-      if(user) {
-         yield* put(action.authenticationSuccess(user))
-      }
+      yield* put(action.authenticationSuccess(decodeToken(data.accessToken)))
+      
     } catch (error) {
-      console.log("error", error)
-      yield* put(action.authenticationFailure(error as AxiosError))
+      yield* put(action.authenticationFailure(error))
    }
 }
 
 function* signInWithEmail({payload: credentials}: SignInStart) {
    yield* Authenticate(credentials, API_URL.SIGN_IN)
 }
+
 
 function* signUpWithEmail({payload: credentials}: SignUpStart) {
   yield* Authenticate(credentials, API_URL.SIGN_UP)
@@ -54,7 +52,6 @@ function* logOut() {
          localStorage.removeItem("token")
          yield* put(action.logOutSuccess())
       }
-     
    } catch(error) {
       yield* put(action.logOutFailure(error as AxiosError))
    }

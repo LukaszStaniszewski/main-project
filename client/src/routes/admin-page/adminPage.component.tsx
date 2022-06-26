@@ -1,9 +1,10 @@
 import {useEffect, useState,MouseEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { FormattedMessage } from "react-intl"
 
 import CustomTable from "../../components/custom-table/customTable.component"
-import { getUsersStart } from "../../store/user/user.action"
+import { getUsersStart, logOutStart } from "../../store/user/user.action"
 import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
 import useUpdateUsers from "../../hooks/client-server/updateUsers.hook"
@@ -18,23 +19,33 @@ const AdminPage = () => {
    const [deleteUsers] = useDeleteUsers()
 
    useEffect(() => {
-      if(currentUser?.role !== "admin") return navigate("/")
-   }, [currentUser])
+      if((!isLoading) && (!currentUser || currentUser?.role !== "admin")) return navigate("/")
+   }, [])
 
    useEffect(() => {
       dispatch(getUsersStart())
    }, [])
-
 
   const updateSelectedUsers = (event : MouseEvent<HTMLButtonElement>) => {
      const propertyToUpdate = event.currentTarget.value.split("_")
      const keyToUpdate = propertyToUpdate[0]
      const valueToUpdate = propertyToUpdate[1]
      updateUsers(users, usersToUpdate, {[keyToUpdate]: valueToUpdate})
+     logoutIfSelected()
    }
 
    const deleteSelectedUsers = () => {
       deleteUsers(users, usersToUpdate)
+      logoutIfSelected()
+   }
+
+   const logoutIfSelected = () => {
+      const isExisting = usersToUpdate.find(userToUpdate => userToUpdate._id === currentUser?._id)
+      if(isExisting) {
+        dispatch(logOutStart())
+        navigate("/")
+      }
+      return
    }
 
    return (

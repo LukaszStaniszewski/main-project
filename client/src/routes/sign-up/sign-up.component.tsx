@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signUpStart } from "../../store/user/user.action"
-import { selectErrorMessage } from "../../store/user/user.selector"
+import { selectErrorMessage, selectLoadingState } from "../../store/user/user.selector"
 
 
 const defaultFormFields = {
@@ -23,17 +23,14 @@ const SignUp = () => {
 
    const dispatch = useDispatch()
    const error = useSelector(selectErrorMessage)
+   const isLoading = useSelector(selectLoadingState)
 
    
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       if(password !== confirmPassword) return alert("passwords don't match") 
       dispatch(signUpStart({email, name, password}))
-      navigate("/")
-      if(error) {
-         return alert(error.message)
-      }
-    
+      !isLoading && !error && navigate("/")
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signInStart } from "../../store/user/user.action"
-import { selectErrorMessage,selectUserReducer } from "../../store/user/user.selector"
+import { selectErrorMessage} from "../../store/user/user.selector"
+import {selectUserReducer} from "../../store/user/user.selector"
 
 const defaultFormFields = {
    email: '',
@@ -18,8 +19,8 @@ const SignIn = () => {
    const {email,password,} = formFields
    const dispatch = useDispatch()
    const {currentUser, isLoading} = useSelector(selectUserReducer)
-   const error = useSelector(selectErrorMessage)
    const navigate = useNavigate()
+   const error = useSelector(selectErrorMessage)
    
    useEffect(() => {
       if(currentUser) {
@@ -30,13 +31,10 @@ const SignIn = () => {
    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
-      if(!isLoading) {
-         if(error){
-            return alert(error.message)
-         }  else {
-            navigate("/")
-         }
-      }
+      console.log("error", error)
+
+      !isLoading && error && navigate('/')
+
    }
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +50,9 @@ const SignIn = () => {
             <figure className="mt-2">
                 <img src="https://i.ibb.co/c2X3Vj5/Screen-Shot-2022-06-16-at-20-45-15-PM.png" alt="" />
             </figure>
-           
+
             <section className="">
+               {!isLoading &&<h1>{error}</h1>}
                <p className="text-center text-xl font-bold ">
                   <FormattedMessage 
                      id="authentication.signIn.messageOne"

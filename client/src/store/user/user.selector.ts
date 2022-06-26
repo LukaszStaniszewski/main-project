@@ -1,7 +1,6 @@
 import {createSelector} from "reselect"
 import { IUserState } from "./user.reducer"
 import { AppState } from "../root-reducer"
-import { error } from "console"
 
 export const selectUserReducer = (state: AppState) : IUserState => state.userData
 
@@ -12,10 +11,16 @@ export const selectCurrentUser = createSelector(
 
 export const selectErrorMessage = createSelector(
    selectUserReducer,
-   (state) => state.error?.response.data
+   (state) => state.error?.response.data.message
 )
 
 export const selectUsers = createSelector(
    selectUserReducer,
    (state) => state.users
 )
+
+export const selectLoadingState = createSelector(
+   selectUserReducer,
+  (state) => state.isLoading
+)
+

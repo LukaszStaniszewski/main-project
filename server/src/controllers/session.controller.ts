@@ -2,16 +2,17 @@ import {Request, Response} from "express"
 
 import { IUserCredentials } from "../models/user.model"
 import { ISessionDocument } from "../models/session.model"
-import { authorization, createSession, findSession, updateSession} from "../services/session.service"
+import { authentication, createSession, findSession, updateSession} from "../services/session.service"
 import { signJwt } from "../utils/jtw.utils"
 import * as key from "../config/keyes"
+import { ErrorMessages } from "../config/constants.config"
 
 
 export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
-   const user = await authorization(req.body)
+   const user = await authentication(req.body)
    console.log("user", user)
-   if(!user) return res.status(401).send({message: "Invalid credentials"})
-   if(user.status === "blocked") return res.status(403).send({message: "Your account has been blocked"})
+   if(!user) return res.status(401).send({message: ErrorMessages.NOT_AUTHENTICATED})
+   if(user.status === "blocked") return res.status(403).send({message: ErrorMessages.ACCOUNT_HAS_BLOCKED_STATUS})
    const session = await createSession(user._id)
 
    const accessToken = signJwt({...user, sessionId: session._id}, key.privateAccessKey, "60s") // 60s
@@ -29,10 +30,8 @@ export const getUserSessions= async (req: Request, res: Response<ISessionDocumen
 }
 
 export const deleteSessions = async (req: Request, res: Response) => {
-
    const sessionId = res.locals.user.sessionId
    await updateSession({_id: sessionId}, {valid: false})
-   console.log("uSession")
    return res.send({
       accessToken: null,
       refreshToken: null,

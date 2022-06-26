@@ -18,9 +18,9 @@ export interface IUserState {
 
 const USER_INITIAL_STATE: IUserState = {
    currentUser: null,
+   error: null,
    users: [],
    isLoading: true,
-   error: null,
 }
 
 const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
@@ -33,14 +33,14 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
          return {
             ...state,
             isLoading: true,
-            error: null,
+        
          }
       case USER_ACTION_TYPES.AUTHENTICATION_SUCCESS:
          return {
             ...state,
             currentUser: action.payload,
             isLoading: false,
-            error: null,
+  
          }
       case USER_ACTION_TYPES.LOG_OUT_SUCCESS:
          return {
@@ -55,7 +55,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             ...state,
             isLoading: false,
             users: action.payload,
-            error: null,
+     
          }
       case USER_ACTION_TYPES.SET_CURRENT_USER:
          return {

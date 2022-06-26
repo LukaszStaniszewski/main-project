@@ -9,7 +9,7 @@ import getErrorMessage from "../utils/getErrorMessage"
 import { Values_TO_Omit } from "../config/constants.config"
 import * as key from "../config/keyes"
 
-export const authorization = async ({email, password}: {email: string, password: string}) => {
+export const authentication = async ({email, password}: {email: string, password: string}) => {
   const user = await findUser({email})
   if(!user) return false
   const isPasswordValid = await user.comparePasswords(password)
