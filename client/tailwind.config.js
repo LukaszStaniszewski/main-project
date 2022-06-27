@@ -38,6 +38,7 @@ module.exports = {
         '50vw': '50vw',
         '60vw': '60vw',
         '80vw': '80vw',
+        '90vw': '90vw',
         '95vw': '95vw',
         '100vw':'100vw',
         
@@ -75,6 +76,9 @@ module.exports = {
          'secondary' : 'var(--color-background-secondary)',
       }
     },
+    container: {
+      center: true
+    }
   },
 
   plugins: [

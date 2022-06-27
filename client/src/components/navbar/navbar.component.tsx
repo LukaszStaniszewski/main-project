@@ -44,6 +44,8 @@ const Navbar = () => {
       dispatch(setLanguage(initialValue))
    }, [])
 
+   // const redicrectToUserPage = () => navigate()
+
    const redirectToSignIn = () => navigate("/signin")
 
    const logoutHandler = () => {
@@ -63,7 +65,6 @@ const Navbar = () => {
       const languageKey: "Polski" | "English" = event.currentTarget.innerText
       setLangMenu(false)
       dispatch(setLanguage(languageList[languageKey]))
-      // localStorage.setItem("language", JSON.stringify(languageList[languageKey]))
       saveUserSetting("language", languageList[languageKey])
    }
 
@@ -107,7 +108,7 @@ const Navbar = () => {
                          />
                     </Link> 
 
-                    <Link className="text-primary" to="/">
+                    <Link className="text-primary" to={`/user/${currentUser?.name}`}>
                         <FormattedMessage 
                             id="navigation.my-collections-link"
                             defaultMessage="My collections"
