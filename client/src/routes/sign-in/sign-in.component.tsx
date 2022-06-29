@@ -84,6 +84,7 @@ const SignIn = () => {
                         name="email"
                         value={email}
                         onChange={handleChange}
+                        componentName="authentication"
                         required
                      />
                
@@ -93,6 +94,7 @@ const SignIn = () => {
                         name="password"
                         value={password}
                         onChange={handleChange}
+                        componentName="authentication"
                         required
                      />
                      <button className="btn btn-block bg-color-secondary hover:bg-color-primary">

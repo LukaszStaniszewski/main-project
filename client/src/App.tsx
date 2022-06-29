@@ -21,7 +21,7 @@ function App() {
                <Route path="/signup" element={<SignUp/>}/>
                <Route path="/signin" element={<SignIn/>}/>
                <Route path="/admin" element={<AdminPage/>}/>
-               <Route path="/user*" element={<UserPage/>}/>
+               <Route path="/user/*" element={<UserPage/>}/>
                <Route path="/new" element={<CreateCollection/>}/>
             </Route>
          </Routes>
