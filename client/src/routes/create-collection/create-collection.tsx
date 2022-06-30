@@ -46,7 +46,8 @@ const CreateCollection = () => {
 
       <main className="w-90vw m-auto bg-secondary grid grid-cols-2 gap-x-10 p-3 min-h-max relative content-start"  >
          <div className="flex justify-between col-start-1 col-end-3 pb-3 border-b-2">
-            <button className="btn btn-sm">ADD TAGS</button>
+          
+            <div></div>
             {/* <button className="btn btn-sm">ADD IMAGE</button> */}
             
             {/* <ul className="steps text-sm w-2/3">

@@ -34,6 +34,9 @@ module.exports = {
         '5vw': '5vw',
         '10vw': '10vw',
         '20vw': '20vw',
+        '29vw': '29vw',
+        '30vw': '30vw',
+        '33vw': '33vw',
         '40vw': '40vw',
         '50vw': '50vw',
         '60vw': '60vw',
@@ -45,8 +48,11 @@ module.exports = {
         '5vh': '5vh',
         '10vh': '10vh',
         '20vh': '20vh',
+        '30vh': '30vh',
         '40vh': '40vh',
+        '50vh': '50vh',
         '60vh': '60vh',
+        '70vh': '70vh',
         '75vh': '75vh',
         '80vh': '80vh',
         '85vh': '85vh',
@@ -54,7 +60,10 @@ module.exports = {
         '95vh': '95vh',
         '100vh':'100vh',
 
-
+         "100%" : "100%",
+         "90%" : "90%",
+         "80%" : "80%",
+         "70%" : "70%",
       },
       colors: {
         'color-primary' : 'var(--color-primary)',

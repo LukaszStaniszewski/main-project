@@ -52,10 +52,10 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
       setItemFields(addedFields)
    }, [addedFields])
 
-   const addOrRemoveAllFields =() => {
-      if(addedFields.length) return removeFields()
-      addAllFields()
-   }
+   // const addOrRemoveAllFields =() => {
+   //    if(addedFields.length) return removeFields()
+   //    addAllFields()
+   // }
 
    const addAllFields = () => {
       setAddedFields(() => 
@@ -73,35 +73,48 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
       )
    }
 
-   if(!topic) return <div>Choose a topic to see possible item fields</div>
+   if(!topic) return <div className="h-30vh text-center col-start-1 col-end-3 text-xl mt-20">Choose a topic to see possible item fields</div>
   return (
    <Fragment>
-      {/* <div className="text-center">ADD Item To Collection</div> */}
-      <div className="col-start-1 col-end-3 flex justify-between mt-4  items-center">
-         {/* save Item
-            add all fields
-            remove all fields
-         */}
-          <div className="w-2/5">
-             <FormInput
-                  label="item name"
-                  componentName="createCollection"
-                  required
-               />
-          </div>
-          <button className="min-w-auto w-32 h-8 bg-green-600 rounded text-2xl hover:bg-red-600 text-white"
-            onClick={addOrRemoveAllFields}
-          >
-             &#11138;
-         </button>
-         <div className="w-2/5">
-            <FormInput
-               label="id"
-               componentName="createCollection"
-               required
-            />
+      <div className=" border-b col-start-1 col-end-3 mt-4 grid grid-cols-2 gap-4 justify-items-center">
+          <div className="col-start-1 col-end-2 flex items-center gap-10 with-33vw max-w-33vw">
+                  <FormInput 
+                     label="item name"
+                     componentName="createCollection"
+                     required
+                  />
+             
+                  <FormInput
+                     label="id"
+                     componentName="createCollection"
+                     required
+                  />
+          
+             
          </div>
-         {/* <button className="btn btn-sm bg-green-600">Save item</button> */}
+        <div className="col-start-2 col-end-3 w-33vw flex max-w-[80%] justify-center items-center ">
+           
+              
+                   <button className="w-32 h-8 bg-red-300 text-2xl  rounded-l-full hover:bg-red-500 text-white hover:flex-grow transition-all duration-200 ease-in-out "
+                     onClick={removeFields}
+                   >
+                      &#8594;
+                  </button>
+                  <button className="w-32 h-8 bg-green-300 text-2xl  rounded-r-full hover:bg-green-500 text-white hover:flex-grow transition-all duration-200 ease-in-out "
+                     onClick={addAllFields}
+                   >
+                     &#8592;
+                  </button>
+              
+           
+        </div>
+        
+         <div className="col-start-3 col-end-4 flex items-center justify-end gap-10 w-29vw">
+               <button className="btn btn-sm">ADD TAGS</button>
+               <button className="btn btn-sm bg-green-600">Save item</button>
+          
+         </div>
+
       </div>
       
       <div className="col-start-1 col-end-2" >

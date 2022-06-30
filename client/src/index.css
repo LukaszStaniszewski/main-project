@@ -34,11 +34,11 @@
 }
 
 
-@layer utilities {
+/* @layer utilities {
    .placeholder-style::placeholder {
       padding-left: 20px
    }
- }
+ } */
   body {
    background-color: var(--color-background-primary);
   }
