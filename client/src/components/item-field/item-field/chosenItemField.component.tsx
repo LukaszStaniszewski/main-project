@@ -1,19 +1,26 @@
-import{useState} from 'react'
+import{useState, ChangeEvent} from 'react'
 import DatePicker from "react-datepicker";
-import {MinusIcon} from "@heroicons/react/solid"
+import {MinusIcon} from "@heroicons/react/outline"
 import {motion, useAnimation, AnimatePresence, useIsPresent} from "framer-motion"
-import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
+import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
 
 import {IItemField} from "./baseItemField.component"
 
 const ChosenItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) => {
    const {name, isAdded, valueType} = baseField
    const [startDate, setStartDate] = useState<Date>();
+   const [fieldValues, setFieldValues] = useState({});
    const isPresent = useIsPresent()
    const controls = useAnimation()
 
-   const moveFieldHandler =async () => {
 
+   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
+      const {name, value} = event.target
+      setFieldValues(prevState => ({...prevState, [name]: value}))
+   }
+
+   console.log(fieldValues)
+   const moveFieldHandler =async () => {
       await startAnimation()
 
       setAddedFields(prevValue =>  prevValue.filter(field => field.name !== name))
@@ -24,15 +31,13 @@ const ChosenItemField = ({baseField, setAddedFields, setBaseFields}: IItemField)
       await  controls.start({
          opacity: 0,
          transition: {
-            type:"spring",  
-            stiffness: 70, 
-            duration: 0.3
+            type:"tween",  
          }
       })
    }
    
   return (
-   <AnimatePresence exitBeforeEnter  >
+   <AnimatePresence >
       {isPresent &&
       <motion.div 
          animate={controls}
@@ -48,19 +53,41 @@ const ChosenItemField = ({baseField, setAddedFields, setBaseFields}: IItemField)
                {
                isAdded && valueType === "string" &&
                <input 
-                  className=" text-gray-700  border-none focus:ring-transparent  py-2 px-4 block w-full appearance-none" 
-                  placeholder="type here" 
+                  className=" text-gray-700 placeholder-style  border-none focus:ring-transparent  py-2 px-4 block w-full appearance-none" 
+                  placeholder="&#9998;"
+                    //@ts-ignore
+                  value={fieldValues.name}
+                  name={name}
+                  onChange={handleChange}
                   type="text"
+                  />
+               }
+                {
+               isAdded && valueType === "number" &&
+               <input 
+                  className=" text-gray-700  border-none focus:ring-transparent  py-2 px-4 block w-full appearance-none" 
+                  placeholder="&#9998;" 
+                  type="number"
+                  //@ts-ignore
+                  value={fieldValues.name}
+                  name={name}
+                  onChange={handleChange}
                   />
                }
                {
                isAdded && valueType === "boolean" && 
-               <input className="checkbox" type="checkbox"  />
+               <input 
+                  className="checkbox" 
+                  type="checkbox"
+                  value={name}
+                  name={name}
+                  onChange={handleChange}
+                />
                } 
                {
                isAdded && valueType === "object" && 
                <div>
-                  <DatePicker placeholderText="choose date" className="focus:ring-transparent outline-none border-none bg-transparent"
+                  <DatePicker placeholderText="&#128467;" className="focus:ring-transparent outline-none border-none bg-transparent"
                      selected={startDate} 
                      onChange={(date:Date) => setStartDate(date)}
                      closeOnScroll={true}

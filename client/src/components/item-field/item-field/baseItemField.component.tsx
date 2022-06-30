@@ -1,9 +1,9 @@
 import {Dispatch, SetStateAction} from 'react'
 import { PlusIcon} from "@heroicons/react/solid"
 import {motion, useAnimation, AnimatePresence, useIsPresent} from "framer-motion"
-import "../../../node_modules/react-datepicker/dist/react-datepicker.css"
+import "../../../../node_modules/react-datepicker/dist/react-datepicker.css"
 
-import {IBaseField} from "../../routes/create-collection/create-collection"
+import { IBaseField } from "../createItem.component"
 
 export interface IItemField {
    baseField: IBaseField,
@@ -25,18 +25,24 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
    }
 
    const startAnimation = async () => {
-      await  controls.start({
-         opacity: 0,
-         transition: {
-            type:"spring",  
-            stiffness: 70, 
-            duration: 0.3
-         }
-      })
+     await controls.start({
+      //    opacity: 0,
+      //    transition: {
+      //       type:"spring",  
+      //       stiffness: 70, 
+      //       duration: 0.2
+      //    }
+      // })
+      opacity: 0,
+      transition: {
+         type:"tween"
+      
+      }
+   })
    }
    
   return (
-   <AnimatePresence exitBeforeEnter >
+   <AnimatePresence  >
       {isPresent &&
       <motion.div
          key={name}
@@ -51,7 +57,7 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
             <div className="my-auto">{name}</div>
          </div>
       </motion.div>
-}
+      }
    </AnimatePresence>
   )
 }

@@ -63,6 +63,7 @@ module.exports = {
         'color-border-primary' : 'var(--color-border-primary)',
         'color-border-primary-m' : 'var(--color-border-primary-m)',
         'color-border-secondary' : 'var(--color-border-secondary)',
+        'gradient-primary':"bg-gradient-to-r from-color-primary to-color-secondary"
       },
       border: {
         'primary' : 'var(--color-border-primary)',
@@ -74,7 +75,10 @@ module.exports = {
       backgroundColor: {
          'primary' : 'var(--color-background-primary)',
          'secondary' : 'var(--color-background-secondary)',
-      }
+
+
+      },
+     
     },
     container: {
       center: true

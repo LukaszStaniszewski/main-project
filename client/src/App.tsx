@@ -14,7 +14,7 @@ function App() {
 
 
   return (
-    <div className="w-screen h-screen  h-max-100vh w-max-100vw box-border">
+    <div className="w-screen min-h-screen  w-max-100vw box-border">
       <LangProvider>
          <Routes>
             <Route path="/" element={<Navbar/>}>

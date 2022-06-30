@@ -1,71 +1,77 @@
-import {useState, useEffect} from 'react'
+import {Fragment, useState, ChangeEvent} from 'react'
+import { CloudUploadIcon } from "@heroicons/react/outline"
+import { Dialog, Transition } from "@headlessui/react"
+import { PencilIcon } from "@heroicons/react/outline"
 
-import { Topics, COLLECTIONS_MOCKUP, ICollectionTopics } from "./MOCKUP_DATA"
+import { Topics, ICollectionTopics } from "./MOCKUP_DATA"
+import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
-import ItemFields from "../../components/item-field/baseItemField.component"
-import ChosenItemField from "../../components/item-field/chosenItemField.component"
+import CreateItem from "../../components/item-field/createItem.component"
+import TextArea from "../../components/text-area/textArea.component"
+import { IBaseField } from "../../components/item-field/createItem.component"
 
-export interface IBaseField {
-   name: keyof ICollectionTopics[keyof ICollectionTopics],
-   valueType: string | number | boolean | Date,
-   isAdded?: boolean 
+const defaultFormFields = {
+   name: ""
 }
 
+export type Topic = keyof ICollectionTopics
+
 const CreateCollection = () => {
-   const [topic, setTopic] = useState<keyof ICollectionTopics>()
-   const [baseFields, setBaseFields] = useState<IBaseField[]>([])
-   const [addedFields, setAddedFields] = useState<IBaseField[]>([])
+   const [topic, setTopic] = useState<Topic>()
+   const [collectionFields, setCollectionFields] = useState(defaultFormFields)
+   const [itemFields, setItemFields] = useState<IBaseField[]>()
+   const {name} = collectionFields
+   let [isOpen, setIsOpen] = useState(false)
 
-   useEffect(() => {
-      if(!topic) return
-
-      const itemFields  = Object.keys(COLLECTIONS_MOCKUP[topic]) as Array<keyof ICollectionTopics[typeof topic]>
+   const handleSubmit = () => {
       
-      const baseFields =  itemFields.map(name => {
-            if(COLLECTIONS_MOCKUP[topic][name].hasOwnProperty("isAdded")){
-               return {name, valueType: typeof COLLECTIONS_MOCKUP[topic][name]}
-            } 
-            else {
-               return {name, isAdded: false, valueType: typeof COLLECTIONS_MOCKUP[topic][name]}
-            }
-         })
-      setBaseFields(baseFields)
+   }
 
-   }, [topic])
-
+   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
+      const {name, value} = event.target
+      setCollectionFields(prevState => ({...prevState, [name]: value}))
+   }
+   function closeModal() {
+      setIsOpen(false)
+    }
+  
+    function openModal() {
+      setIsOpen(true)
+    }
+  
   return (
    <section className=" relative z-0 overflow-auto" >
-      <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
-      <main className="w-90vw m-auto bg-secondary grid grid-cols-2 gap-x-10 p-3 relative"  >
+      <HeaderExtension/>
+
+      <main className="w-90vw m-auto bg-secondary grid grid-cols-2 gap-x-10 p-3 min-h-max relative content-start"  >
+         <div className="flex justify-between col-start-1 col-end-3 pb-3 border-b-2">
+            <button className="btn btn-sm">ADD TAGS</button>
+            {/* <button className="btn btn-sm">ADD IMAGE</button> */}
+            
+            {/* <ul className="steps text-sm w-2/3">
+               <li className="step step-info ">Choose Topic</li>
+               <li className="step step-info">Add Item</li>
+            </ul> */}
+            <h1 className="text-2xl pb-1">Create Collection</h1>
+            <button className="btn btn-sm" type="submit">DONE!</button>
+         </div>
        
-         <div className="col-start-1 col-end-2 flex items-center">
+         <div className="col-start-1 col-end-2  ">
             <div className="w-full">
                <FormInput
                   label="collection name"
                   componentName="createCollection"
+                  value={name}
+                  onChange={handleChange}
+                  name="name"
                   required
                />
-           </div>
-         </div>
-         <div className="col-start-2 col-end-3 flex items-center">
-            <div className="w-full">
-               {/* @ts-ignore */}
-               <SelectElement setTopic={setTopic} data={Topics}/>
             </div>
-         </div>
-   
-
-         <div className="col-start-1 col-end-2" >
-            {/* <TextArea/> */}
             <div className="max-w-xl">
-               <label    className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+               <label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
                   <span className="flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
-                           stroke="currentColor" strokeWidth="2">
-                           <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                        <CloudUploadIcon className="w-1/12"/>
                         <span className="font-medium text-gray-600">
                            Drop files to Attach, or
                            <span className="text-blue-600 underline"> browse</span>
@@ -74,44 +80,47 @@ const CreateCollection = () => {
                   <input type="file" name="file_upload" className="hidden"/>
                </label>
             </div>
-            {
-               addedFields.map((baseField, i )=> 
-               <ChosenItemField
-                  key={i}
-                  baseField={baseField}
-                  setAddedFields = {setAddedFields}
-                  setBaseFields = {setBaseFields}
-               />
-               
-             
-               )
-            }
          </div>
 
          <div className="col-start-2 col-end-3">
-            <FormInput
-               label="id"
-               componentName="createCollection"
-               required
-            />
-            <FormInput
-               label="item name"
-               componentName="createCollection"
-               required
-            />
-            {
-               baseFields.map((baseField, i )=> 
-               <ItemFields
-                  key={i}
-                  setBaseFields = {setBaseFields}
-                  baseField={baseField}
-                  setAddedFields = {setAddedFields}
-               />
-               )
-            }
+            <div className="w-full">
+               <SelectElement setTopic={setTopic} data={Topics}/>
+            </div>
+            <button className="flex gap-3 border w-full my-5 p-4 cursor-pointer" onClick={openModal}>
+               <span className="whitespace-nowrap">
+                  Write a description 
+               </span> 
+               <PencilIcon className="w-6"/>
+            </button>
+            <Transition appear show={isOpen} as={Fragment}>
+               <Dialog onClose={closeModal} className="relative z-50 ">
+                  <div className="fixed inset-0 flex items-center justify-center p-4">
+                     <Dialog.Panel className="w-full max-w-max rounded bg-gradient-to-r from-sky-500 to-cyan-500 p-4">
+                     <TextArea
+                        buttonText="add description"
+                        textAreaText="Write a description..."
+                     />
+                     </Dialog.Panel>
+                  </div>
+               </Dialog>
+            </Transition>
+
+
+           {!collectionFields && <button className="btn btn-sm bg-green-600">Save item</button>}
          </div>
+   
+
+        
+            {/* <TextArea/> */}
+ 
+         <CreateItem 
+            topic={topic}
+            setItemFields = {setItemFields}
+         />
+
       
       </main>
+
    </section>
   )
 }
