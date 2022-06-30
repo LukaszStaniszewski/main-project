@@ -114,10 +114,12 @@ const CreateCollection = () => {
         
             {/* <TextArea/> */}
  
-         <CreateItem 
-            topic={topic}
-            setItemFields = {setItemFields}
-         />
+         <div className="col-start-1 col-end-3 h-70vh">
+            <CreateItem 
+               topic={topic}
+               setItemFields = {setItemFields}
+            />
+         </div>
 
       
       </main>
