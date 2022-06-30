@@ -7,9 +7,9 @@ import { Topics, ICollectionTopics } from "./MOCKUP_DATA"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
-import CreateItem from "../../components/item-field/createItem.component"
+import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
-import { IBaseField } from "../../components/item-field/createItem.component"
+import { IBaseField } from "../../components/create-item/createItem.component"
 
 const defaultFormFields = {
    name: ""
