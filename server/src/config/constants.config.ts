@@ -13,3 +13,5 @@ export enum ErrorMessages {
    USER_DELETION_FAILURE = "User/s weren't deleted",
    USER_UPDATE_FAILURE = "User/s weren't updated",
 }
+
+export const CollectionTopics = ["books", "clothes", "music", "movies", "painting", "sculpture", "banknot", "postard"] as const

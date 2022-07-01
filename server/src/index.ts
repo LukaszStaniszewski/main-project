@@ -4,11 +4,12 @@ dotenv.config({debug: true});
 import mongoose from "mongoose"
 import cors from "cors"
 
-import getErrorMessage from "./utils/getErrorMessage";
 import logger from "./utils/logger"
 import userRouter from "./routes/user.route"
 import sessionRouter from "./routes/session.route";
 import deserialaizeUser from "./middleware/deserialaizeUser"
+import collectionRouter from "./routes/collection.route";
+import itemRouter from "./routes/item.collection.route";
 
 mongoose.connect(process.env.MONGO_URL_CLOUD as string).
 catch(error => logger.error(error));
@@ -23,11 +24,13 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
-app.use(deserialaizeUser) 
+// app.use(deserialaizeUser) 
 
 
 app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)
+app.use("/api/collection", collectionRouter)
+app.use("/api/item", itemRouter)
 
 
 
