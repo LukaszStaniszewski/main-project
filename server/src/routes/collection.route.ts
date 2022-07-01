@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { createCollectionHandler, sendCollectionWithItemsByUser, getCollectionWithItems } from "../controllers/collection.controler";
+import { deleteCollectionsHandler, createCollectionHandler, getCollectionsWithItemsPinnedToUser, getCollectionWithItems, getCollectionsPinnedToUser } from "../controllers/collection.controler";
 
 const collectionRouter = Router()
 
 collectionRouter.post("/new", createCollectionHandler)
-collectionRouter.post("/", sendCollectionWithItemsByUser)
 collectionRouter.get("/", getCollectionWithItems)
+collectionRouter.post("/user", getCollectionsWithItemsPinnedToUser)
+// collectionRouter.post("/user", getCollectionsPinnedToUser)
+collectionRouter.delete('/user', deleteCollectionsHandler)
 
 export default collectionRouter

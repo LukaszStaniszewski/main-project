@@ -2,7 +2,12 @@ import { Schema, model, Types } from "mongoose";
 import dayjs from "dayjs";
 
 import { IUserDocument } from "./user.model";
+import { IItemDocument } from "./item.model";
 import { CollectionTopics } from "../config/constants.config";
+
+export interface IAppendItemsToCollections extends ICreateItemCollection {
+   items?: IItemDocument[]
+}
 
 
 export interface ICreateItemCollection {

@@ -24,15 +24,13 @@ const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
-// app.use(deserialaizeUser) 
+app.use(deserialaizeUser) 
 
 
 app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)
 app.use("/api/collection", collectionRouter)
 app.use("/api/item", itemRouter)
-
-
 
 const PORT = 8000;
 
