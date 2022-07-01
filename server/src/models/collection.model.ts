@@ -2,15 +2,12 @@ import { Schema, model, Types } from "mongoose";
 import dayjs from "dayjs";
 
 import { IUserDocument } from "./user.model";
-import { IItemDocument } from "./item.model";
+import { CollectionTopics } from "../config/constants.config";
 
-export interface ICollectionsWithItems {
-   
-}
 
 export interface ICreateItemCollection {
    name: string,
-   topic: string,
+   topic: CollectionTopics,
    description: string,
    owner: {
       _id: IUserDocument["_id"],
@@ -22,6 +19,7 @@ export interface IItemCollectionDocument extends ICreateItemCollection {
    _id: Types.ObjectId,
    createdAt: string,
    updatedAt: string,
+   
 }
 
 const userCollectionSchema = new Schema<IItemCollectionDocument>({

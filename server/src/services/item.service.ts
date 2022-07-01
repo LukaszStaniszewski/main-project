@@ -5,7 +5,9 @@ import getErrorMessage from "../utils/getErrorMessage"
 
 export const createItem = async (input: ICreateItem):Promise<IItemDocument> => {
    try{
-      const item = ItemModel.create(input)
+      console.log("input",input)
+      const item = await ItemModel.create(input)
+      console.log("item",item)
       return item
    } catch (error) {
       throw new Error(getErrorMessage(error))
@@ -20,9 +22,9 @@ export const deleteItem = () => {
 
 }
 
-export const findItems = async (itemCollectionId: IItemCollectionDocument["_id"]): Promise<IItemDocument[]> => {
+export const findItems = async (collectionId: IItemCollectionDocument["_id"]): Promise<IItemDocument[]> => {
    try {
-      return await ItemModel.find({itemCollection: itemCollectionId})
+      return await ItemModel.find({collectionId: collectionId})
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
@@ -32,7 +34,7 @@ export const findAllItems = async (collections : IItemCollectionDocument[]): Pro
    try {
       // return await ItemModel.find({itemCollection: itemCollectionId})
       const items =  await Promise.all(collections.map(collection => {
-        const item = ItemModel.findOne({itemCollection: collection._id})
+        const item = ItemModel.findOne({collectionId: collection._id})
         return item
       }))
       if(!items) throw new Error("collection and items not found")

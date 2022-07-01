@@ -14,4 +14,5 @@ export enum ErrorMessages {
    USER_UPDATE_FAILURE = "User/s weren't updated",
 }
 
-export const CollectionTopics = ["books", "clothes", "music", "movies", "painting", "sculpture", "banknot", "postard"] as const
+const collectionTopics = ["books", "clothes", "music", "movies", "painting", "sculpture", "banknot", "postard"] as const
+export type CollectionTopics = typeof collectionTopics[number]

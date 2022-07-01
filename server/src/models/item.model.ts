@@ -2,15 +2,14 @@ import { Schema, model } from "mongoose";
 import dayjs from "dayjs";
 
 import {IItemCollectionDocument} from "./collection.model"
-import { CollectionTopics } from "../config/constants.config";
-
-
 
 export interface ICreateItem {
+   id: string,
    name: string,
    tags: string[],
-   itemCollection: IItemCollectionDocument["_id"],
-   optionalFields?: IOptionalFields  
+   collectionId: IItemCollectionDocument["_id"],
+   topic: IItemCollectionDocument["topic"],
+   optionalFields?: OptionalFields  
 }
 
 export interface IItemDocument extends ICreateItem {
@@ -18,81 +17,35 @@ export interface IItemDocument extends ICreateItem {
    updatedAt: string,
 }
 
-interface IOptionalFields {
-   books: {[key:string]: any},
-   clothes: {[key:string]: any},
-   music: {[key:string]: any},
-   movies: {[key:string]: any},
-   painting: {[key:string]: any},
-   sculpture:{[key:string]: any},
-   banknot:{[key:string]: any},
-   postard:{[key:string]: any},
-}
+type OptionalFields = {[key:string]: string | number | Date}
 
-const booksSchema = new Schema({}, {strict: false, _id:false})
-const clothesSchema = new Schema({}, {strict: false, _id:false})
-const musicSchema = new Schema({}, {strict: false, _id:false})
-const moviesSchema = new Schema({}, {strict: false,  _id:false})
-const paintingSchema = new Schema({}, {strict: false, _id:false})
-const sculptureSchema = new Schema({}, {strict: false, _id:false})
-const bankotSchema = new Schema({}, {strict: false, _id:false})
-const postardSchema = new Schema({}, {strict: false, _id:false})
-
-
-const optionalFieldsByTopicSchema = new Schema<IOptionalFields>({
-   books: booksSchema,
-      // author: String,
-      // description: String,
-      // language: String,
-      // translations: String,
-      // pages: Number,
-      // salePrice: Number,
-      // "Publication date of first edition": Date,
-      // "Publication date": Date,
-      // "Purchase date": Date,
-      //  isDamaged: Boolean,
-      //  "First owner": Boolean,
-      //  "Limited edition": Boolean,
-      //  image: String,
-      //  notes: String,
-  
-   clothes: clothesSchema,
-
-  
-   music: musicSchema,
-
-  
-   movies: moviesSchema,
-
- 
-   painting: paintingSchema,
-
-
-   sculpture: sculptureSchema,
-
- 
-   banknot: bankotSchema,
-
-
-   postard: postardSchema,
-
-   
-}, {_id:false})
+const optionalField= new Schema({}, {strict: false, _id:false})
 
 const itemSchema = new Schema<IItemDocument>({
+   id: {
+      type: String,
+      required: true, 
+      unique: true,
+   },
    name: {
       type: String,
-      required: true,
+      required: [true, "name is required"]
    },
    tags: [{
       type: String,
-      required: true
+      required: [true, "tags are required"]
    }],
-      itemCollection: {
+   collectionId: {
       type: Schema.Types.ObjectId,
       ref: "Collection",
-      required: true,
+      required: [true, "itemCollection is required"]
    },
+   topic: {
+      type: Schema.Types.String,
+      ref: "Collection",
+      required: [true, "topic is required"]
+   },
+ 
    createdAt: {
       type: String,
       default: dayjs().format("DD-MM-YYYY HH:mm:ss"),
@@ -102,7 +55,10 @@ const itemSchema = new Schema<IItemDocument>({
       type: String,
       default: dayjs().format("DD-MM-YYYY HH:mm:ss"),
    },
-   optionalFields: optionalFieldsByTopicSchema
+   optionalFields:{  
+      type: Object,
+      of: optionalField
+   },
 })
 
 const ItemModel = model<IItemDocument>("Item", itemSchema);
