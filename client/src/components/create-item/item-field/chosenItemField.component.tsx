@@ -30,9 +30,9 @@ const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, 
       } else if(valueType === "function") {
          setStartDate(date)
          value = date
-      } else if(valueType === "string") {
+      } else  
          value = event?.target.value
-      }
+      
       setFieldValues(prevState => ({...prevState, [fieldName]: value}))
       setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [fieldName]: value}}))
    }
