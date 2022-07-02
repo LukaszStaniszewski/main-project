@@ -3,42 +3,33 @@ import { PlusIcon} from "@heroicons/react/solid"
 import {motion, useAnimation, AnimatePresence, useIsPresent} from "framer-motion"
 import "../../../../node_modules/react-datepicker/dist/react-datepicker.css"
 
-import { IBaseField } from "../createItem.component"
+import { IOptionalField } from "../item-types/itemTypes"
 
-export interface IItemField {
-   baseField: IBaseField,
-   setAddedFields: Dispatch<SetStateAction<IBaseField[]>>
-   setBaseFields: Dispatch<SetStateAction<IBaseField[]>>
+export interface IOptionalFieldComponent {
+   baseField: IOptionalField,
+   setChosenOptionalFields: Dispatch<SetStateAction<IOptionalField[]>>
+   setOptionalFields: Dispatch<SetStateAction<IOptionalField[]>>
 }
            
-const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) => {
+const OptionalField = ({baseField, setChosenOptionalFields, setOptionalFields}: IOptionalFieldComponent) => {
   const {fieldName, isAdded} = baseField
   const isPresent = useIsPresent()
    const controls = useAnimation()
    
    const moveFieldHandler = async () => {
-
    await startAnimation()
 
-   setAddedFields(prevValue => [...prevValue, {...baseField, isAdded: true}])
-   setBaseFields(prevValue => prevValue.filter(field => field.fieldName !== fieldName))
+   setChosenOptionalFields(prevValue => [...prevValue, {...baseField, isAdded: true}])
+   setOptionalFields(prevValue => prevValue.filter(field => field.fieldName !== fieldName))
    }
 
    const startAnimation = async () => {
      await controls.start({
-      //    opacity: 0,
-      //    transition: {
-      //       type:"spring",  
-      //       stiffness: 70, 
-      //       duration: 0.2
-      //    }
-      // })
       opacity: 0,
-      transition: {
-         type:"tween"
-      
-      }
-   })
+         transition: {
+            type:"tween"
+         }
+      })
    }
    
   return (
@@ -62,4 +53,4 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
   )
 }
 
-export default BaseItemField
+export default OptionalField

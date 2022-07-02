@@ -9,7 +9,7 @@ import userRouter from "./routes/user.route"
 import sessionRouter from "./routes/session.route";
 import deserialaizeUser from "./middleware/deserialaizeUser"
 import collectionRouter from "./routes/collection.route";
-import itemRouter from "./routes/item.collection.route";
+import itemRouter from "./routes/item.route";
 
 mongoose.connect(process.env.MONGO_URL_CLOUD as string).
 catch(error => logger.error(error));

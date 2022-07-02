@@ -1,96 +1,96 @@
 import { Fragment, useState, useEffect, Dispatch, SetStateAction, MouseEvent, ChangeEvent} from 'react'
 import { Reorder } from "framer-motion"
 
-import { COLLECTIONS_MOCKUP, ICollectionTopics } from "../../routes/create-collection/MOCKUP_DATA"
-import { Topic } from "../../routes/create-collection/create-collection"
+import { CollectionTopic } from "../../routes/create-collection/create-collection"
 import FormInput from "../form-input/form-input.componentx"
-import ChosenItemField, {fieldValues} from "./item-field/chosenItemField.component"
-import BaseItemField from "./item-field/baseItemField.component"
+import ChosenItemField from "./item-field/chosenItemField.component"
+import OptionalField from "./item-field/optionalField.component"
+import { IOptionalField, ItemKey, IItemData, COLLECTIONS_MOCKUP, OptionalItemData } from "./item-types/itemTypes"
 
-export interface IItem {
-   id: string,
-   name: string,
-   tags: string[],
-   optional: UserInputFields
+
+interface ICreateItemComponent {
+   collectionTopic: CollectionTopic
+   setItemData: Dispatch<SetStateAction<IItemData>>
 }
 
-export interface IBaseField {
-   fieldName: ItemKey,
-   valueType: string | number | boolean | Date,
-   isAdded?: boolean 
+const defaultUserInputData = {
+   id: "",
+   name: "",
+   tags: [""],
 }
 
-interface ICreateItem {
-   topic: Topic
-   setItemFields: Dispatch<SetStateAction<IItem | undefined>>
-}
-export type ItemKey = keyof ICollectionTopics[keyof ICollectionTopics]
-
-export type UserInputFields = ICollectionTopics[Topic]
-
-const CreateItem = ({topic, setItemFields}: ICreateItem) => {
-   const [baseFields, setBaseFields] = useState<IBaseField[]>([])
-   const [addedFields, setAddedFields] = useState<IBaseField[]>([])
-               //@ts-ignore
-   const [userInputData, setUserInputData] = useState<IItem>("")
+const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
+   const [optionalFields, setOptionalFields] = useState<IOptionalField[]>([])
+   const [chosenOptionalFields, setChosenOptionalFields] = useState<IOptionalField[]>([])
+           
+   const [userInputData, setUserInputData] = useState<IItemData>(defaultUserInputData)
    
    const getCollectionKeyes = () => {
-      if(!topic) return
-       const collectionKeys  = Object.keys(COLLECTIONS_MOCKUP[topic]) as Array<ItemKey>
+      if(!collectionTopic) return
+       const collectionKeys  = Object.keys(COLLECTIONS_MOCKUP[collectionTopic]) as Array<ItemKey>
        return collectionKeys
    }
 
    const getBaseFields = () => {
       const collectionKeys = getCollectionKeyes()
-      if(!collectionKeys || !topic) return []
+      if(!collectionKeys || !collectionTopic) return []
       return collectionKeys.map(fieldName => {
-         return {fieldName, isAdded: false, valueType: typeof COLLECTIONS_MOCKUP[topic][fieldName]}
+         return {fieldName, isAdded: false, valueType: typeof COLLECTIONS_MOCKUP[collectionTopic][fieldName]}
       })
    }
 
    useEffect(() => {
-      const baseFields = getBaseFields()
-      setBaseFields(baseFields)
-      setAddedFields([])
-   }, [topic])
-   // useEffect(() => {
-   //    setAddedFields(prevValue => prevValue.map(field => {
-   //       //@ts-ignore
-   //       return {...field, value: userInputData[field.fieldName]}
-
-   //    }))
-   // },[userInputData])
-
+      const optionalFields = getBaseFields()
+      setOptionalFields(optionalFields)
+      setChosenOptionalFields([])
+   }, [collectionTopic])
+   
    const addAllFields = () => {
-      if(!baseFields.length) return
+      if(!optionalFields.length) return
       const upToDateBaseFields =  getBaseFields()
-      setAddedFields(() => 
+      setChosenOptionalFields(() => 
          upToDateBaseFields.map(value => ({...value, isAdded: true}))
       )
-      setBaseFields(() => 
-         baseFields.filter(value => value === null)
+      setOptionalFields(() => 
+         optionalFields.filter(value => value === null)
       )
    }
 
    const removeFields =  () => {
-      setBaseFields(() => getBaseFields())
-      setAddedFields(() => 
-         addedFields.filter(value => value === null)
+      setOptionalFields(() => getBaseFields())
+      setChosenOptionalFields(() => 
+         chosenOptionalFields.filter(value => value === null)
       )
+      setUserInputData(defaultUserInputData)
    }
 
-   console.log("userInputData", userInputData)
    const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-      // @ts-ignore
      setUserInputData(prevState => ({...prevState, [name]: value}))
    }
    const saveItemHandler = () => {
-      if(userInputData)
-      setItemFields(userInputData)
+      if(!userInputData?.id || !userInputData?.name) return alert("name and id are required")
+      removeFalsyValues()
+      setItemData(userInputData)
+      resetFields()
    }
-
    
+   const removeFalsyValues = () => {
+      if(!userInputData.optional) return
+      const keyes =  Object.keys(userInputData.optional) as Array<keyof OptionalItemData>
+      keyes.forEach((key) => {
+         if(userInputData.optional && !userInputData.optional[key]) {
+            //@ts-ignore
+            delete userInputData.optional[key]
+         }
+      })
+   }
+   
+   const resetFields = () => {
+      setUserInputData(defaultUserInputData)
+      setChosenOptionalFields([])
+      setOptionalFields(getBaseFields())
+   }
   return (
    <Fragment>
       <div className=" border-b col-start-1 col-end-3 mt-4 grid grid-cols-2 gap-x-4 ">
@@ -99,17 +99,14 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
                label="item name"
                componentName="createCollection"
                onChange={handleChange}
-               //@ts-ignore
                value={userInputData.name}
                name="name"
                required
             />
-         
             <FormInput
                label="id"
                componentName="createCollection"
                onChange={handleChange}
-               //@ts-ignore
                value={userInputData.id}
                name="id"
                required
@@ -142,18 +139,18 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
       
       <div className="grid grid-cols-2  gap-x-10  ">
          <div className="col-start-1 col-end-2" >
-            <Reorder.Group axis="y" values={addedFields} onReorder={setAddedFields}>
+            <Reorder.Group axis="y" values={chosenOptionalFields} onReorder={setChosenOptionalFields}>
                {
-                  addedFields.map((baseField, index)=> 
+                  chosenOptionalFields.map((baseField, index)=> 
                      <Reorder.Item key={index} value={baseField}>
                         <ChosenItemField
                            key={baseField.fieldName}
                            baseField={baseField}
-                           setAddedFields = {setAddedFields}
-                           setBaseFields = {setBaseFields}
-               //@ts-ignore
+                           setChosenOptionalFields = {setChosenOptionalFields}
+                           setOptionalFields = {setOptionalFields}
+        
                            setUserInputData= {setUserInputData}
-                           topic = {topic}
+                           collectionTopic = {collectionTopic}
                         />
                      </Reorder.Item>
                   )
@@ -162,15 +159,15 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
          </div>
          
          <div className="col-start-2 col-end-3 ">
-            <Reorder.Group axis="y" values={baseFields} onReorder={setBaseFields}>
+            <Reorder.Group axis="y" values={optionalFields} onReorder={setOptionalFields}>
                {
-                  baseFields.map((baseField, index)=> 
+                  optionalFields.map((baseField, index)=> 
                      <Reorder.Item key={index} value={baseField}>
-                     <BaseItemField
+                     <OptionalField
                         key={baseField.fieldName}
-                        setBaseFields = {setBaseFields}
+                        setOptionalFields = {setOptionalFields}
                         baseField={baseField}
-                        setAddedFields = {setAddedFields}
+                        setChosenOptionalFields = {setChosenOptionalFields}
                      />
                      </Reorder.Item>
                   )

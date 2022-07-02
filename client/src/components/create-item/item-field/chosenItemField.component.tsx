@@ -1,69 +1,51 @@
-import{useState, ChangeEvent, Dispatch, SetStateAction, useEffect} from 'react'
+import{useState, ChangeEvent, Dispatch, SetStateAction} from 'react'
 import DatePicker from "react-datepicker";
 import {MinusIcon} from "@heroicons/react/outline"
 import {motion, useAnimation, AnimatePresence, useIsPresent} from "framer-motion"
 import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
 
-import {IItemField} from "./baseItemField.component"
-import {ItemKey, UserInputFields} from "../createItem.component"
-import {Topic} from "../../../routes/create-collection/create-collection"
-import { COLLECTIONS_MOCKUP, ICollectionTopics } from "../../../routes/create-collection/MOCKUP_DATA"
+import {IOptionalFieldComponent} from "./optionalField.component"
+import {OptionalItemData, IItemData, IOptionalField, COLLECTIONS_MOCKUP, CollectionTopic} from "../item-types/itemTypes"
 
-interface IChosenItemField extends IItemField {
-   setUserInputData:  Dispatch<SetStateAction<UserInputFields | undefined>>,
-
-   topic: Topic
+interface IChosenItemField extends IOptionalFieldComponent {
+   setUserInputData:  Dispatch<SetStateAction<IItemData>>,
+   setChosenOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
+   setOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
+   collectionTopic: CollectionTopic
 }
 export type fieldValues<Type> = {[Property in keyof Type]: string; };
    
-const ChosenItemField = ({baseField, setAddedFields, setUserInputData, setBaseFields, topic}: IChosenItemField) => {
+const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, setOptionalFields, collectionTopic}: IChosenItemField) => {
                    
    const {fieldName, isAdded, valueType} = baseField
    const [startDate, setStartDate] = useState<Date>();
-   const [fieldValue, setFieldValues] = useState<UserInputFields>(COLLECTIONS_MOCKUP[topic]);
+   const [fieldValue, setFieldValues] = useState<OptionalItemData>(COLLECTIONS_MOCKUP[collectionTopic]);
    const isPresent = useIsPresent()
    const controls = useAnimation()
 
-   const setDateHandler = (date:any) => {
-          setStartDate(date)
-           // @ts-ignore
-         setFieldValues(prevState => ({...prevState, [fieldName]: date}))
- // @ts-ignore
-          setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [fieldName]: date}}))
-   }
-
-   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
-      const name = event.target.name
-       // @ts-ignore
-      let value;
+   const handleChange = (event?:ChangeEvent<HTMLInputElement>, date? : Date) => {
+      let value:any;
       if(valueType === "boolean") {
-         value = event.target.checked
-      } else {
-         value = event.target.value
+         value = event?.target.checked.toString()
+      } else if(valueType === "function") {
+         setStartDate(date)
+         value = date
+      } else if(valueType === "string") {
+         value = event?.target.value
       }
-     
-      // @ts-ignore
-      setFieldValues(prevState => ({...prevState, [name]: value}))
-      // @ts-ignore
-     setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [name]: value}}))
+      setFieldValues(prevState => ({...prevState, [fieldName]: value}))
+      setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [fieldName]: value}}))
    }
-
 
    const moveFieldHandler =async () => {
       await startAnimation()
 
-      setAddedFields(prevValue =>  prevValue.filter(field => field.fieldName !== fieldName))
-      setBaseFields(prevValue => [{...baseField, isAdded: false}, ...prevValue, ]) 
-      //@ts-ignore
-      setUserInputData(prevState =>  prevState.optional[fieldName] === fieldValue[fieldName] ? {...prevState, optional: {...prevState.optional ,[fieldName]: null}}: prevState)
-      //@ts-ignore
+      setChosenOptionalFields(prevValue =>  prevValue.filter(field => field.fieldName !== fieldName))
+      setOptionalFields(prevValue => [{...baseField, isAdded: false}, ...prevValue, ]) 
+
+      setUserInputData(prevState => prevState.optional&& prevState.optional[fieldName] === fieldValue[fieldName] ? {...prevState, optional: {...prevState.optional ,[fieldName]: ""}}: prevState)
+
    }
-   // useEffect(() => {
-   //    if(isAdded) return
-   //    console.log("hit")
-   //    //@ts-ignore
-   //    setUserInputData(prevState => prevState[fieldName] === fieldValue[fieldName] ? {...prevState, [fieldName]: ""}: prevState)
-   // }, [baseField])
 
    const startAnimation = async () => {
       await  controls.start({
@@ -93,9 +75,6 @@ const ChosenItemField = ({baseField, setAddedFields, setUserInputData, setBaseFi
                <input 
                   className=" text-gray-700 placeholder-style  border-none focus:ring-transparent  py-2 px-4 block w-full appearance-none" 
                   placeholder="&#9998;"
-
-                  //@ts-ignore
-                  value={fieldValue.name}
                   name={fieldName}
                   onChange={handleChange}
                   type="text"
@@ -107,8 +86,6 @@ const ChosenItemField = ({baseField, setAddedFields, setUserInputData, setBaseFi
                   className=" text-gray-700  border-none focus:ring-transparent  py-2 px-4 block w-full appearance-none" 
                   placeholder="&#9998;" 
                   type="number"
-                  //@ts-ignore
-                  value={fieldValue.name}
                   name={fieldName}
                   onChange={handleChange}
                   />
@@ -118,8 +95,6 @@ const ChosenItemField = ({baseField, setAddedFields, setUserInputData, setBaseFi
                <input 
                   className="checkbox" 
                   type="checkbox"
-                  //@ts-ignore
-
                   name={fieldName}
                   onChange={handleChange}
                 />
@@ -130,9 +105,8 @@ const ChosenItemField = ({baseField, setAddedFields, setUserInputData, setBaseFi
                   <DatePicker placeholderText="&#128467;" className="focus:ring-transparent outline-none border-none bg-transparent"
                      selected={startDate} 
                      name={fieldName}
-                     // onChange={(date:Date) => setStartDate(date)}
-                     // @ts-ignore
-                     onChange={(date) => setDateHandler(date)}
+                  //@ts-ignore
+                     onChange={(date) => handleChange({}, date)}
                      closeOnScroll={true}
                />
             </div>

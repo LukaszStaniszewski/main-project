@@ -7,6 +7,6 @@ collectionRouter.post("/new", createCollectionHandler)
 collectionRouter.get("/", getCollectionWithItems)
 collectionRouter.post("/user", getCollectionsWithItemsPinnedToUser)
 // collectionRouter.post("/user", getCollectionsPinnedToUser)
-collectionRouter.delete('/user', deleteCollectionsHandler)
+collectionRouter.delete('/delete', deleteCollectionsHandler)
 
 export default collectionRouter

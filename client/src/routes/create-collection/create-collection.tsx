@@ -9,22 +9,27 @@ import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
 import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
-import { IItem, UserInputFields } from "../../components/create-item/createItem.component"
+import { IItemData } from "../../components/create-item/item-types/itemTypes"
 
 const defaultFormFields = {
    name: ""
 }
+const defaultItemData = {
+   id: "",
+   name: "",
+   tags: [""],
+}
 
-export type Topic = keyof ICollectionTopics
-
+export type CollectionTopic = keyof ICollectionTopics
 
 const CreateCollection = () => {
-   const [topic, setTopic] = useState<Topic>()
+   const [collectionTopic, setCollectionTopic] = useState<CollectionTopic>()
    const [collectionFields, setCollectionFields] = useState(defaultFormFields)
-   const [itemFields, setItemFields] = useState<IItem>()
+   const [itemData, setItemData] = useState<IItemData>(defaultItemData)
    const {name} = collectionFields
    let [isOpen, setIsOpen] = useState(false)
-   console.log(itemFields)
+   console.log(itemData)
+   
    const handleSubmit = () => {
       
    }
@@ -86,7 +91,7 @@ const CreateCollection = () => {
 
          <div className="col-start-2 col-end-3">
             <div className="w-full">
-               <SelectElement setTopic={setTopic} data={Topics}/>
+               <SelectElement setTopic={setCollectionTopic} data={Topics}/>
             </div>
             <button className="flex gap-3 border w-full my-5 p-4 cursor-pointer" onClick={openModal}>
                <span className="whitespace-nowrap">
@@ -117,11 +122,11 @@ const CreateCollection = () => {
    
    
    
-         {topic
+         {collectionTopic
             ?  <div className="col-start-1 col-end-3 h-70vh">
                   <CreateItem 
-                     topic={topic}
-                     setItemFields = {setItemFields}
+                     collectionTopic={collectionTopic}
+                     setItemData = {setItemData}
                   />
                </div> 
             : <div className="h-30vh text-center col-start-1 col-end-3 text-xl mt-20">Choose a topic to see possible item fields</div>
