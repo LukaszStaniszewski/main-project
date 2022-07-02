@@ -1,28 +1,39 @@
-import { Fragment, useState, useEffect, Dispatch, SetStateAction} from 'react'
+import { Fragment, useState, useEffect, Dispatch, SetStateAction, MouseEvent, ChangeEvent} from 'react'
 import { Reorder } from "framer-motion"
 
 import { COLLECTIONS_MOCKUP, ICollectionTopics } from "../../routes/create-collection/MOCKUP_DATA"
 import { Topic } from "../../routes/create-collection/create-collection"
 import FormInput from "../form-input/form-input.componentx"
-import ChosenItemField from "./item-field/chosenItemField.component"
+import ChosenItemField, {fieldValues} from "./item-field/chosenItemField.component"
 import BaseItemField from "./item-field/baseItemField.component"
 
+export interface IItem {
+   id: string,
+   name: string,
+   tags: string[],
+   optional: UserInputFields
+}
+
 export interface IBaseField {
-   name: ItemKey,
+   fieldName: ItemKey,
    valueType: string | number | boolean | Date,
    isAdded?: boolean 
 }
 
 interface ICreateItem {
-   topic: Topic | undefined
-   setItemFields: Dispatch<SetStateAction<IBaseField[] | undefined>>
+   topic: Topic
+   setItemFields: Dispatch<SetStateAction<IItem | undefined>>
 }
-type ItemKey = keyof ICollectionTopics[keyof ICollectionTopics]
+export type ItemKey = keyof ICollectionTopics[keyof ICollectionTopics]
+
+export type UserInputFields = ICollectionTopics[Topic]
 
 const CreateItem = ({topic, setItemFields}: ICreateItem) => {
    const [baseFields, setBaseFields] = useState<IBaseField[]>([])
    const [addedFields, setAddedFields] = useState<IBaseField[]>([])
-
+               //@ts-ignore
+   const [userInputData, setUserInputData] = useState<IItem>("")
+   
    const getCollectionKeyes = () => {
       if(!topic) return
        const collectionKeys  = Object.keys(COLLECTIONS_MOCKUP[topic]) as Array<ItemKey>
@@ -32,13 +43,8 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
    const getBaseFields = () => {
       const collectionKeys = getCollectionKeyes()
       if(!collectionKeys || !topic) return []
-      return collectionKeys.map(name => {
-         if(COLLECTIONS_MOCKUP[topic][name].hasOwnProperty("isAdded")){
-            return {name, valueType: typeof COLLECTIONS_MOCKUP[topic][name]}
-         } 
-         else {
-            return {name, isAdded: false, valueType: typeof COLLECTIONS_MOCKUP[topic][name]}
-         }
+      return collectionKeys.map(fieldName => {
+         return {fieldName, isAdded: false, valueType: typeof COLLECTIONS_MOCKUP[topic][fieldName]}
       })
    }
 
@@ -47,12 +53,14 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
       setBaseFields(baseFields)
       setAddedFields([])
    }, [topic])
+   // useEffect(() => {
+   //    setAddedFields(prevValue => prevValue.map(field => {
+   //       //@ts-ignore
+   //       return {...field, value: userInputData[field.fieldName]}
 
-   useEffect(() => {
-      setItemFields(addedFields)
-   }, [addedFields])
+   //    }))
+   // },[userInputData])
 
-   
    const addAllFields = () => {
       if(!baseFields.length) return
       const upToDateBaseFields =  getBaseFields()
@@ -71,9 +79,17 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
       )
    }
 
-   if(!topic) {
-      return <div className="h-30vh text-center col-start-1 col-end-3 text-xl mt-20">Choose a topic to see possible item fields</div>
-   } 
+   console.log("userInputData", userInputData)
+   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
+      const {name, value} = event.target
+      // @ts-ignore
+     setUserInputData(prevState => ({...prevState, [name]: value}))
+   }
+   const saveItemHandler = () => {
+      if(userInputData)
+      setItemFields(userInputData)
+   }
+
    
   return (
    <Fragment>
@@ -82,12 +98,20 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
             <FormInput 
                label="item name"
                componentName="createCollection"
+               onChange={handleChange}
+               //@ts-ignore
+               value={userInputData.name}
+               name="name"
                required
             />
          
             <FormInput
                label="id"
                componentName="createCollection"
+               onChange={handleChange}
+               //@ts-ignore
+               value={userInputData.id}
+               name="id"
                required
             />
          </div>
@@ -108,23 +132,28 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
         
          <div className="col-start-3 col-end-4 flex items-center justify-end gap-10 w-29vw">
                <button className="btn btn-sm">ADD TAGS</button>
-               <button className="btn btn-sm bg-green-600">Save item</button>
+               <button className="btn btn-sm bg-green-600"
+                  onClick={saveItemHandler}
+               >Save item</button>
           
          </div>
 
       </div>
       
-      <div className="grid grid-cols-2 overflow-auto gap-x-10  max-h-60vh">
+      <div className="grid grid-cols-2  gap-x-10  ">
          <div className="col-start-1 col-end-2" >
             <Reorder.Group axis="y" values={addedFields} onReorder={setAddedFields}>
                {
-                  addedFields.map(baseField=> 
-                     <Reorder.Item key={baseField.name} value={baseField}>
+                  addedFields.map((baseField, index)=> 
+                     <Reorder.Item key={index} value={baseField}>
                         <ChosenItemField
-                           key={baseField.name}
+                           key={baseField.fieldName}
                            baseField={baseField}
                            setAddedFields = {setAddedFields}
                            setBaseFields = {setBaseFields}
+               //@ts-ignore
+                           setUserInputData= {setUserInputData}
+                           topic = {topic}
                         />
                      </Reorder.Item>
                   )
@@ -135,10 +164,10 @@ const CreateItem = ({topic, setItemFields}: ICreateItem) => {
          <div className="col-start-2 col-end-3 ">
             <Reorder.Group axis="y" values={baseFields} onReorder={setBaseFields}>
                {
-                  baseFields.map(baseField=> 
-                     <Reorder.Item key={baseField.name} value={baseField}>
+                  baseFields.map((baseField, index)=> 
+                     <Reorder.Item key={index} value={baseField}>
                      <BaseItemField
-                        key={baseField.name}
+                        key={baseField.fieldName}
                         setBaseFields = {setBaseFields}
                         baseField={baseField}
                         setAddedFields = {setAddedFields}

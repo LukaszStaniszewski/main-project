@@ -12,7 +12,7 @@ export interface IItemField {
 }
            
 const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) => {
-  const {name, isAdded} = baseField
+  const {fieldName, isAdded} = baseField
   const isPresent = useIsPresent()
    const controls = useAnimation()
    
@@ -21,7 +21,7 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
    await startAnimation()
 
    setAddedFields(prevValue => [...prevValue, {...baseField, isAdded: true}])
-   setBaseFields(prevValue => prevValue.filter(field => field.name !== name))
+   setBaseFields(prevValue => prevValue.filter(field => field.fieldName !== fieldName))
    }
 
    const startAnimation = async () => {
@@ -45,7 +45,7 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
    <AnimatePresence  >
       {isPresent &&
       <motion.div
-         key={name}
+         key={fieldName}
          animate={controls}
       >
          <div className="mt-4 flex border border-gray-300 whitespace-nowrap rounded h-10 relative">
@@ -54,7 +54,7 @@ const BaseItemField = ({baseField, setAddedFields, setBaseFields}: IItemField) =
                   !isAdded && <div className="w-5  text-green-600 "><PlusIcon/></div>
                }
             </div>
-            <div className="my-auto">{name}</div>
+            <div className="my-auto">{fieldName}</div>
          </div>
       </motion.div>
       }

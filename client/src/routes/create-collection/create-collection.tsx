@@ -9,7 +9,7 @@ import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
 import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
-import { IBaseField } from "../../components/create-item/createItem.component"
+import { IItem, UserInputFields } from "../../components/create-item/createItem.component"
 
 const defaultFormFields = {
    name: ""
@@ -17,13 +17,14 @@ const defaultFormFields = {
 
 export type Topic = keyof ICollectionTopics
 
+
 const CreateCollection = () => {
    const [topic, setTopic] = useState<Topic>()
    const [collectionFields, setCollectionFields] = useState(defaultFormFields)
-   const [itemFields, setItemFields] = useState<IBaseField[]>()
+   const [itemFields, setItemFields] = useState<IItem>()
    const {name} = collectionFields
    let [isOpen, setIsOpen] = useState(false)
-
+   console.log(itemFields)
    const handleSubmit = () => {
       
    }
@@ -113,14 +114,18 @@ const CreateCollection = () => {
 
         
             {/* <TextArea/> */}
- 
-         <div className="col-start-1 col-end-3 h-70vh">
-            <CreateItem 
-               topic={topic}
-               setItemFields = {setItemFields}
-            />
-         </div>
-
+   
+   
+   
+         {topic
+            ?  <div className="col-start-1 col-end-3 h-70vh">
+                  <CreateItem 
+                     topic={topic}
+                     setItemFields = {setItemFields}
+                  />
+               </div> 
+            : <div className="h-30vh text-center col-start-1 col-end-3 text-xl mt-20">Choose a topic to see possible item fields</div>
+         }
       
       </main>
 

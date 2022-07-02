@@ -1,5 +1,4 @@
-import axios, {AxiosResponse, AxiosRequestTransformer, AxiosPromise} from 'axios'
-import { IUserFormValues, ICurrentUser } from "../store/user/user.types"
+import axios, {AxiosPromise} from 'axios'
 export const api = axios.create({baseURL : "http://localhost:8000"})
 // process.env.REACT_APP_BASE_API_URL
 api.defaults.headers.post['Content-Type'] = 'application/json'
@@ -23,7 +22,13 @@ export enum API_URL {
    SIGN_UP = "/api/user/register",
    GET_USERS = "/api/user",
    UPDATE_USERS = "/api/user",
-   DELETE_USERS = "/api/user/delete"
+   DELETE_USERS = "/api/user/delete",
+   CREATE_COLLECTION = "api/collection/new",
+   DETE_COLLECTION = "api/collection/delete",
+   GET_COLLECTIONS_WITH_ITEMS = "api/collection",
+   GET_COLLECTIONS_WITH_ITEMS_BY_USER = "api/collection/user",
+   CREATE_ITEM = "api/item/new",
+   DELETE_ITEM ="api/item/delete"
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, options)

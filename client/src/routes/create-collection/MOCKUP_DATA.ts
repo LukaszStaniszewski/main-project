@@ -1,41 +1,41 @@
-export const Topics = ["Books", "Postard", "Painting", "Sculpture", "Banknot", "Clothing/Dress/Costume", "Music", "Movies"] as const
+export const Topics = ["books", "postard", "painting", "sculpture", "banknot", "clothing", "music", "movies"] as const
 
 export const COLLECTIONS_MOCKUP = {
-   Books: {
+   books: {
       author: "",
       langauge: "",
       translation: "",
       description: "",
       pages: 1,
       SalePrice: 1,
-     "Publication date of first edition": new Date(),
-     "Publication date": new Date(),
-     "Purchase date": new Date(),
+     "Publication date of first edition": Date,
+     "Publication date": Date,
+     "Purchase date": Date,
       isDamaged: false,
       "First owner": false,
       "Limited edition": false,
       image: "",
       notes: "",
    },
-   Postard: {
+   postard: {
       author: "",
    },
-   Painting: {
+   painting: {
       author: "",
    },
-   Sculpture: {
+   sculpture: {
       author: "",
    },
-   Banknot: {
+   banknot: {
       author: "",
    },
-   "Clothing/Dress/Costume": {
+   clothing: {
       author: "",
    },
-   Music: {
+   music: {
       author: "",
    },
-   Movies: {
+   movies: {
       author: "",
    },
 
