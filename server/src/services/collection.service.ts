@@ -3,10 +3,13 @@ import {IItemDocument} from "../models/item.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
+import { uploadImage, getFileUrl } from "../utils/imageKit.utils"
 
-export const createCollection = async (input : ICreateItemCollection): Promise<IItemCollectionDocument> => {
+export const createCollection = async ({body, image }: {body: ICreateItemCollection, image: Buffer}): Promise<IItemCollectionDocument> => {
    try {
-      const collection = await CollectionModel.create(input)
+      //@ts-ignore
+      const {url, fileId} = uploadImage(image, body.name)
+      const collection = await CollectionModel.create({...body, image: {url: url, imageId: fileId}})
       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
@@ -61,3 +64,4 @@ export const deleteCollections = async (userId : IUserDocument["_id"]) => {
       throw new Error(getErrorMessage(error))
    }
 }
+

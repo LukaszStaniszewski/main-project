@@ -2,21 +2,30 @@ import{ Request, Response } from "express"
 
 import { ICreateItemCollection } from "../models/collection.model"
 import { IUserDocument } from "../models/user.model"
-import { findCollectionsByUser, findAllCollections, createCollection, appendItemsToCollections, deleteCollections } from "../services/collection.service"
+import { findCollectionsByUser,
+         findAllCollections,
+         createCollection,
+         appendItemsToCollections,
+         deleteCollections,
+       
+} from "../services/collection.service"
 import { findItems} from "../services/item.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
-// import {uploadFile} from "../utils/amazon-s3/aws.utils"
+import { uploadImage, getFileUrl } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
-   console.log("file", req.file);
-   console.log("body", req.body);
-   //@ts-ignore
+   const uploadedImage= req.file?.buffer
+
    try {
+      let imageUrl;
+      if(uploadedImage) {
+       
+      }
       const isTopicExisting = collectionTopics.find(topic => topic === req.body.topic)
       if(!isTopicExisting) return res.status(401).send({message: ErrorMessage.COLLECTION_TOPIC_ERROR})
    //@ts-ignore
-      const colletion = await createCollection({...req.body, image: image})
+      const colletion = await createCollection({body: req.body, image: uploadedImage})
       res.json({colletion})
    } catch (error) {
       res.sendStatus(400)
@@ -24,12 +33,17 @@ export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCo
 }
 
 export const uploadImageHandler = async (req: Request, res:Response) => {
-   console.log(req.file);
-   const file = req.file
-   // const result = await uploadFile(file)
-   // console.log("result", result)
-   res.status(200)
-  
+   console.log("hit")
+   const uploadedImage = req.file?.buffer
+   const collectionId = "cos"
+   if(!uploadedImage) return
+   try {
+      //@ts-ignore
+      const image = await uploadImage(uploadedImage, collectionId)
+      res.status(200).json({image})
+   } catch {
+      res.sendStatus(400)
+   }
 }
 
 
