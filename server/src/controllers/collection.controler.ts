@@ -5,7 +5,7 @@ import { IUserDocument } from "../models/user.model"
 import { findCollectionsByUser, findAllCollections, createCollection, appendItemsToCollections, deleteCollections } from "../services/collection.service"
 import { findItems} from "../services/item.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
-import {uploadFile} from "../utils/amazon-s3/aws.utils"
+// import {uploadFile} from "../utils/amazon-s3/aws.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
@@ -26,8 +26,8 @@ export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCo
 export const uploadImageHandler = async (req: Request, res:Response) => {
    console.log(req.file);
    const file = req.file
-   const result = await uploadFile(file)
-   console.log("result", result)
+   // const result = await uploadFile(file)
+   // console.log("result", result)
    res.status(200)
   
 }
