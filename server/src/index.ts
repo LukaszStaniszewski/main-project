@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 dotenv.config({debug: true});
 import mongoose from "mongoose"
 import cors from "cors"
+import bodyParser from "body-parser";
 
 import logger from "./utils/logger"
 import userRouter from "./routes/user.route"
@@ -20,11 +21,10 @@ db.on('error', error => new Error(error))
 db.once('open', () => logger.info('🔓 MongoDB connected 🔓'))
 
 const app = express()
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
-app.use(deserialaizeUser) 
+// app.use(deserialaizeUser) 
 
 
 app.use("/api/user", userRouter)

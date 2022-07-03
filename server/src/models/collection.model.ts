@@ -17,7 +17,8 @@ export interface ICreateItemCollection {
    owner: {
       _id: IUserDocument["_id"],
       name: IUserDocument["name"]
-   }
+   },
+   image?: File
 }
 
 export interface IItemCollectionDocument extends ICreateItemCollection {
@@ -40,16 +41,21 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
       type: String,
       required: true
    },
+   image: {
+      data: Buffer,
+      contentType: String
+   },
+   // image: String,
    owner: {
       _id: {
          type: Schema.Types.ObjectId,
          ref: "User",
-         required: true
+         // required: true
       },
       name: {
          type: Schema.Types.String,
          ref: "User",
-         required: true
+         // required: true
       },
    },
    createdAt: {

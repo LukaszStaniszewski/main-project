@@ -5,17 +5,33 @@ import { IUserDocument } from "../models/user.model"
 import { findCollectionsByUser, findAllCollections, createCollection, appendItemsToCollections, deleteCollections } from "../services/collection.service"
 import { findItems} from "../services/item.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
+import {uploadFile} from "../utils/amazon-s3/aws.utils"
+
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
+   console.log("file", req.file);
+   console.log("body", req.body);
+   //@ts-ignore
    try {
       const isTopicExisting = collectionTopics.find(topic => topic === req.body.topic)
       if(!isTopicExisting) return res.status(401).send({message: ErrorMessage.COLLECTION_TOPIC_ERROR})
-      const colletion = await createCollection(req.body)
+   //@ts-ignore
+      const colletion = await createCollection({...req.body, image: image})
       res.json({colletion})
    } catch (error) {
       res.sendStatus(400)
    }
 }
+
+export const uploadImageHandler = async (req: Request, res:Response) => {
+   console.log(req.file);
+   const file = req.file
+   const result = await uploadFile(file)
+   console.log("result", result)
+   res.status(200)
+  
+}
+
 
 export const getCollectionsPinnedToUser = async (req:Request, res: Response) => {
    // const params = req.params._id
