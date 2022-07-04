@@ -15,17 +15,19 @@ import { uploadImage, findFile } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
-   const uploadedImage= req.file?.buffer
+   console.log("hit")
 
+   const uploadedImage= req.file?.buffer
+console.log("hit")
    try {
-      let imageUrl;
-      if(uploadedImage) {
-       
-      }
       const isTopicExisting = collectionTopics.find(topic => topic === req.body.topic)
       if(!isTopicExisting) return res.status(401).send({message: ErrorMessage.COLLECTION_TOPIC_ERROR})
-   //@ts-ignore
-      const colletion = await createCollection({body: req.body, image: uploadedImage})
+      
+      if(uploadedImage) {
+         const colletion = await createCollection({body: req.body, image: uploadedImage})
+         return res.json({colletion})
+      }
+      const colletion = await createCollection({body: req.body})
       res.json({colletion})
    } catch (error) {
       res.sendStatus(400)
@@ -34,12 +36,15 @@ export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCo
 
 export const uploadImageHandler = async (req: Request, res:Response) => {
    console.log("hit")
+   console.log(req.file)
+   console.log(req.body)
    const uploadedImage = req.file?.buffer
    const collectionId = "cos"
    if(!uploadedImage) return
    try {
       //@ts-ignore
       const image = await uploadImage(uploadedImage, collectionId)
+      console.log("image", image)
       res.status(200).json({image})
    } catch {
       res.sendStatus(400)

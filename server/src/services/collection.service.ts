@@ -5,7 +5,7 @@ import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
 import { uploadImage, findFile } from "../utils/imageKit.utils"
 
-export const createCollection = async ({body, image }: {body: ICreateItemCollection, image: Buffer}): Promise<IItemCollectionDocument> => {
+export const createCollection = async ({body, image }: {body: ICreateItemCollection, image?: Buffer}): Promise<IItemCollectionDocument> => {
    try {
       //@ts-ignore
       const {url, fileId} = uploadImage(image, body.name)

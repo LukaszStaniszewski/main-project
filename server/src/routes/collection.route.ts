@@ -7,7 +7,7 @@ import upload from "../middleware/uploadImage.middleware";
 
 const collectionRouter = Router()
 
-collectionRouter.post("/new", upload, createCollectionHandler)
+collectionRouter.post("/new",  createCollectionHandler)
 collectionRouter.post("/image", upload, uploadImageHandler)
 collectionRouter.get("/", getCollectionWithItems)
 collectionRouter.post("/user", getCollectionsWithItemsPinnedToUser)

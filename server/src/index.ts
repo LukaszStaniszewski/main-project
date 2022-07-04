@@ -25,7 +25,10 @@ db.once('open', () => logger.info('🔓 MongoDB connected 🔓'))
 const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
-app.use(cors())
+app.use(cors({
+   methods: ["GET", "POST", "PATCH", "DELETE"],
+  credentials: false,
+}))
 // app.use(deserialaizeUser) 
 
 app.use("/api/user", userRouter)

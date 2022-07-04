@@ -28,7 +28,8 @@ export enum API_URL {
    GET_COLLECTIONS_WITH_ITEMS = "api/collection",
    GET_COLLECTIONS_WITH_ITEMS_BY_USER = "api/collection/user",
    CREATE_ITEM = "api/item/new",
-   DELETE_ITEM ="api/item/delete"
+   DELETE_ITEM ="api/item/delete",
+   UPLOAD_IMAGE = "api/collection/image"
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, options)
@@ -38,6 +39,7 @@ export const deleteRequest = (url: string): AxiosPromise => api.delete(url, opti
 
 const options = {
   withCredentials: false,
+  headers: { 'content-type': 'multipart/form-data' },
 }
 
 export interface ITokens {

@@ -1,4 +1,4 @@
-import {Fragment, useState, ChangeEvent} from 'react'
+import {Fragment, useState, ChangeEvent, FormEvent} from 'react'
 import { CloudUploadIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import { PencilIcon } from "@heroicons/react/outline"
@@ -10,9 +10,11 @@ import SelectElement from "../../components/select-dropdown/selectDropdown.compo
 import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
 import { IItemData } from "../../components/create-item/item-types/itemTypes"
+import { API_URL, postRequest } from "../../api/axios-instance.api"
 
 const defaultFormFields = {
-   name: ""
+   name: "",
+   image:""
 }
 const defaultItemData = {
    id: "",
@@ -23,21 +25,35 @@ const defaultItemData = {
 export type CollectionTopic = keyof ICollectionTopics
 
 const CreateCollection = () => {
+
    const [collectionTopic, setCollectionTopic] = useState<CollectionTopic>()
    const [collectionFields, setCollectionFields] = useState(defaultFormFields)
    const [itemData, setItemData] = useState<IItemData>(defaultItemData)
-   const {name} = collectionFields
+   const [file, setFile] = useState<File>()
    let [isOpen, setIsOpen] = useState(false)
-   console.log(itemData)
-   
-   const handleSubmit = () => {
-      
+   console.log("collectionFields", collectionFields)
+
+   const handleSubmit = async (event:FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      console.log("file",  {collectionFields, file})
+      // const response = await postRequest(API_URL.UPLOAD_IMAGE, file)
+      const response = await postRequest(API_URL.UPLOAD_IMAGE, {collectionFields, file})
+      console.log(response)
+
    }
 
-   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
+   const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-      setCollectionFields(prevState => ({...prevState, [name]: value}))
+      setCollectionFields(prevValue =>  ( {...prevValue, [name]: value, topic: collectionTopic})    )
    }
+
+   
+  const selectFileHandler = (event:ChangeEvent<HTMLInputElement>) => {
+      if(!event.target.files) return
+      const file = event.target.files[0]
+      setFile(file)
+  }
+
    function closeModal() {
       setIsOpen(false)
     }
@@ -61,18 +77,20 @@ const CreateCollection = () => {
                <li className="step step-info">Add Item</li>
             </ul> */}
             <h1 className="text-2xl pb-1">Create Collection</h1>
-            <button className="btn btn-sm" type="submit">DONE!</button>
+            <button className="btn btn-sm" form="create-collection" type="submit">DONE!</button>
          </div>
        
          <div className="col-start-1 col-end-2  ">
+            <form  onSubmit={handleSubmit} id="create-collection">
             <div className="w-full">
                <FormInput
                   label="collection name"
                   componentName="createCollection"
-                  value={name}
+                  //@ts-ignore
+                  value={collectionFields.name}
                   onChange={handleChange}
                   name="name"
-                  required
+                  // required
                />
             </div>
             <div className="max-w-xl">
@@ -84,9 +102,10 @@ const CreateCollection = () => {
                            <span className="text-blue-600 underline"> browse</span>
                         </span>
                   </span>
-                  <input type="file" name="file_upload" className="hidden"/>
+                  <input type="file" name="image" className="hidden" accept="image/*" onChange={selectFileHandler}/>
                </label>
             </div>
+            </form>
          </div>
 
          <div className="col-start-2 col-end-3">
