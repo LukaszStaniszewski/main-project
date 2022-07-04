@@ -1,15 +1,22 @@
-import CollectionModel, {ICreateItemCollection, IItemCollectionDocument, IAppendItemsToCollections} from "../models/collection.model"
-import {IItemDocument} from "../models/item.model"
+import CollectionModel, {ICreateItemCollection, IItemCollectionDocument} from "../models/collection.model"
+
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
-import { uploadImage, findFile } from "../utils/imageKit.utils"
+import { uploadImage} from "../utils/imageKit.utils"
 
-export const createCollection = async ({body, image }: {body: ICreateItemCollection, image?: Buffer}): Promise<IItemCollectionDocument> => {
+export const createCollection = async (collectionData: ICreateItemCollection, image?:Buffer): Promise<IItemCollectionDocument> => {
    try {
+      console.log("image", image)
+      console.log("collectionData", collectionData)
+      if(image) {
+         console.log("hit image")
       //@ts-ignore
-      const {url, fileId} = uploadImage(image, body.name)
-      const collection = await CollectionModel.create({...body, image: {url: url, imageId: fileId}})
+         const {url, fileId} = await uploadImage(image, collectionData.name)
+         const collection = await CollectionModel.create({...collectionData, image: {url: url, imageId: fileId}})
+         return collection
+      }
+      const collection = await CollectionModel.create({...collectionData})
       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
@@ -38,19 +45,6 @@ export const findAllCollections = async (): Promise<IItemCollectionDocument[]> =
    }
 }
 
-export const appendItemsToCollections = (collections: IItemCollectionDocument[], items: IItemDocument[]):IAppendItemsToCollections[] => {
-   for(let collection = 0; collection < collections.length; collection++) {
-      for(let item = 0; item < items.length; item++) {
-         if(collections[collection]["_id"].toString() === items[item]["collectionId"].toString()){
-            //@ts-ignore
-           collections[collection].items = [items[item]]
-         } else {
-           collections
-         }
-      }
-   }
-   return [...collections]
-}
 
 export const deleteCollections = async (userId : IUserDocument["_id"]) => {
    try {

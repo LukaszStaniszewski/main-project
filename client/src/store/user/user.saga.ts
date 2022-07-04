@@ -90,8 +90,8 @@ function* onEmailSignInStart() {
    yield* takeLatest(USER_ACTION_TYPES.SIGN_IN_START, signInWithEmail)
 }
 
-export function* userSagas() {
-   yield all([
+export default function* userSagas() {
+   yield* all([
       call(onEmailSignInStart),
       call(onLogOut),
       call(onEmailSignUpStart),

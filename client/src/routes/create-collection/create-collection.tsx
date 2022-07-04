@@ -1,57 +1,88 @@
 import {Fragment, useState, ChangeEvent, FormEvent} from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import { CloudUploadIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import { PencilIcon } from "@heroicons/react/outline"
 
-import { Topics, ICollectionTopics } from "./MOCKUP_DATA"
+import { Topics} from "./MOCKUP_DATA"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
 import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
-import { IItemData } from "../../components/create-item/item-types/itemTypes"
+import { ICreateItem,CollectionTopic } from "../../components/create-item/item-types/itemTypes"
 import { API_URL, postRequest } from "../../api/axios-instance.api"
+import { selectCurrentUser } from "../../store/user/user.selector"
+import { createCollectionWithItemsStart } from "../../store/collections/collection.actions"
 
 const defaultFormFields = {
    name: "",
-   image:""
+
 }
+
 const defaultItemData = {
    id: "",
    name: "",
    tags: [""],
+   topic: ""
 }
 
-export type CollectionTopic = keyof ICollectionTopics
+interface ICollectionFields {
+   name: string,
+   description?: string,
+   topic?: typeof Topics,
+}
+
+export interface ICreateCollection extends ICollectionFields{
+   owner: {
+      _id: string,
+      name: string
+   }
+   image?: File,
+   items?: ICreateItem[]
+}
+
+const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreateCollection = () => {
-
    const [collectionTopic, setCollectionTopic] = useState<CollectionTopic>()
-   const [collectionFields, setCollectionFields] = useState(defaultFormFields)
-   const [itemData, setItemData] = useState<IItemData>(defaultItemData)
-   const [file, setFile] = useState<File>()
+   const [collectionFields, setCollectionFields] = useState<ICollectionFields>(defaultFormFields)
+   const [itemData, setItemData] = useState<ICreateItem>(defaultItemData)
+   const [image, setImage] = useState<File>()
    let [isOpen, setIsOpen] = useState(false)
-   console.log("collectionFields", collectionFields)
+   const dispatch = useDispatch()
+   const currentUser = useSelector(selectCurrentUser)
+
 
    const handleSubmit = async (event:FormEvent<HTMLFormElement>) => {
+      console.log(image)
       event.preventDefault()
-      console.log("file",  {collectionFields, file})
-      // const response = await postRequest(API_URL.UPLOAD_IMAGE, file)
-      const response = await postRequest(API_URL.UPLOAD_IMAGE, {collectionFields, file})
-      console.log(response)
+      const collectionWithItems = appendItemsToCollection()
+      // @ts-ignore
+      dispatch(createCollectionWithItemsStart(collectionWithItems))
 
+      const response = await postRequest(API_URL.UPLOAD_IMAGE,  {image: image})
+
+   }
+   const appendItemsToCollection = () => {
+      return {...collectionFields, topic: collectionTopic, ower:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
    }
 
    const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-      setCollectionFields(prevValue =>  ( {...prevValue, [name]: value, topic: collectionTopic})    )
+      setCollectionFields(prevValue =>  ({...prevValue, [name]: value}))
    }
 
    
   const selectFileHandler = (event:ChangeEvent<HTMLInputElement>) => {
       if(!event.target.files) return
-      const file = event.target.files[0]
-      setFile(file)
+      const file = event.target.files[0];
+      if (!file.type.match(imageMimeType)) {
+         alert("Image mime type is not valid");
+         return;
+       }
+
+      setImage(file)
   }
 
    function closeModal() {

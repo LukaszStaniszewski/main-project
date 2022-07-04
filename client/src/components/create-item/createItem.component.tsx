@@ -1,29 +1,29 @@
 import { Fragment, useState, useEffect, Dispatch, SetStateAction, MouseEvent, ChangeEvent} from 'react'
 import { Reorder } from "framer-motion"
 
-import { CollectionTopic } from "../../routes/create-collection/create-collection"
 import FormInput from "../form-input/form-input.componentx"
 import ChosenItemField from "./item-field/chosenItemField.component"
 import OptionalField from "./item-field/optionalField.component"
-import { IOptionalField, ItemKey, IItemData, COLLECTIONS_MOCKUP, OptionalItemData } from "./item-types/itemTypes"
+import { CollectionTopic, IOptionalField, ItemKey, ICreateItem, COLLECTIONS_MOCKUP, OptionalItemData } from "./item-types/itemTypes"
 
 
 interface ICreateItemComponent {
    collectionTopic: CollectionTopic
-   setItemData: Dispatch<SetStateAction<IItemData>>
+   setItemData: Dispatch<SetStateAction<ICreateItem>>
 }
 
 const defaultUserInputData = {
    id: "",
    name: "",
    tags: [""],
+   topic: "",
 }
 
 const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
    const [optionalFields, setOptionalFields] = useState<IOptionalField[]>([])
    const [chosenOptionalFields, setChosenOptionalFields] = useState<IOptionalField[]>([])
            
-   const [userInputData, setUserInputData] = useState<IItemData>(defaultUserInputData)
+   const [userInputData, setUserInputData] = useState<ICreateItem>(defaultUserInputData)
    
    const getCollectionKeyes = () => {
       if(!collectionTopic) return
@@ -66,7 +66,7 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
 
    const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-     setUserInputData(prevState => ({...prevState, [name]: value}))
+     setUserInputData(prevState => ({...prevState, [name]: value, topic: collectionTopic}))
    }
    const saveItemHandler = () => {
       if(!userInputData?.id || !userInputData?.name) return alert("name and id are required")

@@ -42,7 +42,7 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
    },
    description: {
       type: String,
-      required: true
+      // required: true
    },
    image: {
       url: String,
@@ -71,5 +71,5 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
    },
 })
 
-const UserCollectionModel = model<IItemCollectionDocument>("Collection", userCollectionSchema)
-export default UserCollectionModel
+const CollectionModel = model<IItemCollectionDocument>("Collection", userCollectionSchema)
+export default CollectionModel

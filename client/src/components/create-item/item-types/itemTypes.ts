@@ -1,3 +1,5 @@
+import { Topics } from "../../../routes/create-collection/MOCKUP_DATA"
+
 export const COLLECTIONS_MOCKUP = {
    books: {
       author: "",
@@ -57,9 +59,10 @@ export interface IOptionalField {
    isAdded?: boolean 
 }
 
-export interface IItemData{
+export interface ICreateItem{
    id: string,
    name: string,
    tags: string[],
+   topic: string
    optional?: OptionalItemData
 }

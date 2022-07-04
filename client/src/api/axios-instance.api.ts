@@ -24,6 +24,7 @@ export enum API_URL {
    UPDATE_USERS = "/api/user",
    DELETE_USERS = "/api/user/delete",
    CREATE_COLLECTION = "api/collection/new",
+   CREATE_COLLECTION_WITH_ITEMS = "api/collection",
    DETE_COLLECTION = "api/collection/delete",
    GET_COLLECTIONS_WITH_ITEMS = "api/collection",
    GET_COLLECTIONS_WITH_ITEMS_BY_USER = "api/collection/user",
@@ -32,16 +33,21 @@ export enum API_URL {
    UPLOAD_IMAGE = "api/collection/image"
 }
 
-export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, options)
-export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.patch(url, payload, options)
-export const getRequest = <returnType>(url: string): AxiosPromise<returnType> => api.get(url, options)
-export const deleteRequest = (url: string): AxiosPromise => api.delete(url, options)
+export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsUploadImage)
+export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.patch(url, payload, optionsDefault)
+export const getRequest = <returnType>(url: string): AxiosPromise<returnType> => api.get(url, optionsDefault)
+export const deleteRequest = (url: string): AxiosPromise => api.delete(url, optionsDefault)
 
-const options = {
+const optionsDefault = {
   withCredentials: false,
-  headers: { 'content-type': 'multipart/form-data' },
 }
 
+export const optionsUploadImage = {
+   // withCredentials: false,
+   // headers: { 'content-type': 'application/octet-stream' },
+   headers: { 'content-type': 'multipart/form-data' },
+   
+ }
 export interface ITokens {
    accessToken: string,
    refreshToken: string

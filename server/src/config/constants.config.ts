@@ -11,12 +11,13 @@ export enum ErrorMessage {
    USER_DELETION_FAILURE = "User/s weren't deleted",
    USER_UPDATE_FAILURE = "User/s weren't updated",
    COLLECTION_TOPIC_ERROR = "Collection topic is invalid",
-   ITEM_DELITION_FAILURE = "Item/s weren't deleted"
+   ITEM_DELITION_FAILURE = "Item/s weren't deleted",
+   COLLECTION_NOT_CREATED = "Collection was not created"
 }
 
 export enum SuccessMessage {
    COLLECTION_DELETED = "Collection has been successfully deleted",
-   ITEM_DELETED = "ITEM has been successfully deleted"
+   ITEM_DELETED = "Item has been successfully deleted"
 }
 
 export const collectionTopics = ["books", "clothes", "music", "movies", "painting", "sculpture", "banknot", "postard"] as const

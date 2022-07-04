@@ -4,6 +4,7 @@ import multer, { FileFilterCallback} from "multer"
 const storage = multer.memoryStorage()
 
 const fileFilter = (req: Request, file: Express.Multer.File , cb: FileFilterCallback) => {
+   console.log("hit")
    if(file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       cb(null, true)
    } else {
@@ -17,6 +18,6 @@ const fileFilter = (req: Request, file: Express.Multer.File , cb: FileFilterCall
       fileSize: 1024 * 1024 * 5
    },
    fileFilter: fileFilter
- }).single("file")
+ }).single("image")
 
 export default upload

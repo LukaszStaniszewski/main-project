@@ -1,34 +1,25 @@
 import{ Request, Response } from "express"
 
 import { ICreateItemCollection } from "../models/collection.model"
-import { IUserDocument } from "../models/user.model"
 import { findCollectionsByUser,
          findAllCollections,
          createCollection,
-         appendItemsToCollections,
          deleteCollections,
-       
 } from "../services/collection.service"
-import { findItems} from "../services/item.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
-import { uploadImage, findFile } from "../utils/imageKit.utils"
+import { uploadImage, } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
    console.log("hit")
 
    const uploadedImage= req.file?.buffer
-console.log("hit")
    try {
       const isTopicExisting = collectionTopics.find(topic => topic === req.body.topic)
       if(!isTopicExisting) return res.status(401).send({message: ErrorMessage.COLLECTION_TOPIC_ERROR})
-      
-      if(uploadedImage) {
-         const colletion = await createCollection({body: req.body, image: uploadedImage})
-         return res.json({colletion})
-      }
-      const colletion = await createCollection({body: req.body})
-      res.json({colletion})
+
+      const colletion = await createCollection(req.body, uploadedImage)
+      return res.json({colletion})
    } catch (error) {
       res.sendStatus(400)
    }
@@ -51,7 +42,6 @@ export const uploadImageHandler = async (req: Request, res:Response) => {
    }
 }
 
-
 export const getCollectionsPinnedToUser = async (req:Request, res: Response) => {
    // const params = req.params._id
    // const user = res.locals.user
@@ -70,29 +60,6 @@ export const getAllCollections = async (req: Request, res: Response) => {
       res.json({collections})
    } catch(error) {
       res.sendStatus(405)
-   }
-}
-
-// this can be get request - get user id from locals - then search for user to ensure that it exist ...
-export const getCollectionsWithItemsPinnedToUser = async (req:Request<{}, {}, IUserDocument["_id"]>, res:Response) => {
-   try {
-      const collections = await findCollectionsByUser(req.body._id)
-      const items = await findItems(collections)
-      const itemsWithCollections = appendItemsToCollections(collections, items)
-      res.json(itemsWithCollections)
-   } catch (error) {
-      res.sendStatus(404)
-   }
-}
-
-export const getCollectionWithItems = async (req:Request, res:Response) => {
-   try {
-      const collections = await findAllCollections()
-      const items = await findItems(collections)
-      const itemsWithCollections = appendItemsToCollections(collections, items)
-      res.json(itemsWithCollections)
-   } catch (error) {
-      res.sendStatus(404)
    }
 }
 

@@ -3,7 +3,6 @@ import dotenv from "dotenv"
 dotenv.config({debug: true});
 import mongoose from "mongoose"
 import cors from "cors"
-import ImageKit from "imagekit"
 
 import logger from "./utils/logger"
 import userRouter from "./routes/user.route"
@@ -11,7 +10,6 @@ import sessionRouter from "./routes/session.route";
 import deserialaizeUser from "./middleware/deserialaizeUser"
 import collectionRouter from "./routes/collection.route";
 import itemRouter from "./routes/item.route";
-import {awsBucketName, awsBucketRegion, awsAccessKey, awsSecretAccessKey} from "./config/keyes"
 
 
 mongoose.connect(process.env.MONGO_URL_CLOUD as string).
