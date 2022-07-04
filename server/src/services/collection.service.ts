@@ -3,7 +3,7 @@ import {IItemDocument} from "../models/item.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
-import { uploadImage, getFileUrl } from "../utils/imageKit.utils"
+import { uploadImage, findFile } from "../utils/imageKit.utils"
 
 export const createCollection = async ({body, image }: {body: ICreateItemCollection, image: Buffer}): Promise<IItemCollectionDocument> => {
    try {

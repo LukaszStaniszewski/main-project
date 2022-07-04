@@ -11,7 +11,7 @@ import { findCollectionsByUser,
 } from "../services/collection.service"
 import { findItems} from "../services/item.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
-import { uploadImage, getFileUrl } from "../utils/imageKit.utils"
+import { uploadImage, findFile } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {

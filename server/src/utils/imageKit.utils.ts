@@ -1,13 +1,13 @@
 import ImageKit from "imagekit"
 
-import { imageKitPublicKey,imageKitPrivateKey} from "../config/keyes";
+import { imageKitPublicKey,imageKitPrivateKey, imageKitUrl} from "../config/keyes";
 import getErrorMessage from "./getErrorMessage";
 import { ICreateItemCollection } from "../models/collection.model";
 
  const imageKit = new ImageKit({
    publicKey: imageKitPublicKey,
    privateKey: imageKitPrivateKey,
-   urlEndpoint: "https://ik.imagekit.io/9rjpvqxqk/"
+   urlEndpoint: imageKitUrl,
 })
 
 export const uploadImage = async (file : Buffer, name: ICreateItemCollection["name"]) => {
@@ -20,13 +20,13 @@ export const uploadImage = async (file : Buffer, name: ICreateItemCollection["na
          
       })
       if(!image) throw new Error("Couldn't find image with given name")
-      return 
+      return image
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
    
 } 
-export const getFileUrl = async(collectionId: string) => {
+export const findFile = async(collectionId: string) => {
    const imageName = collectionId.toString()
    try {
       const imageList = await imageKit.listFiles({

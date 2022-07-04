@@ -10,4 +10,5 @@ export const awsAccessKey = process.env.AWS_S3_ACCESS_KEY2 as string
 export const awsSecretAccessKey = process.env.AWS_S3_SECRET_ACCESS_KEY2 as string
 
 export const imageKitPublicKey = process.env.IMAGE_KIT_PUBLIC_KEY as string
-export const imageKitPrivateKey = process.env.IMAGE_KID_PRIVATE_KEY as string
+export const imageKitPrivateKey = process.env.IMAGE_KIT_PRIVATE_KEY as string
+export const imageKitUrl = process.env.IMAGE_KIT_URL as string
