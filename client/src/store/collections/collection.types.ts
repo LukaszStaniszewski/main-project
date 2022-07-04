@@ -21,7 +21,10 @@ export interface ICollection extends Omit<ICreateCollection, "image"| "items">{
    createdAt: string,
    updatedAt: string,
    _id: string,
-   image?: string,
+   image?: {
+      url: string,
+      imageId: string
+   }
    items?: IItem[]
 }
 
@@ -40,6 +43,6 @@ export type DeleteCollectionStart = ActionWithPayload<COLLECTION_ACTION_TYPES.DE
 export type DeleteCollectionSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS, IError>
 export type DeleteCollectionFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.DELETE_COLLECTION_FAILURE, AxiosError>;
 
-export type CreateCollectionWithItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START, ICreateCollection>
+export type CreateCollectionWithItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START, {collectionWithItems: ICreateCollection, image?: File}>
 export type CreateCollectionWithItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS, ICollection>
 export type CreateCollectionWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_FAILURE, AxiosError>

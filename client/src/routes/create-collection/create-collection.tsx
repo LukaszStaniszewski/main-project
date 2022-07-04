@@ -1,4 +1,4 @@
-import {Fragment, useState, ChangeEvent, FormEvent} from 'react'
+import {Fragment, useState, ChangeEvent, FormEvent, useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
 import { CloudUploadIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
@@ -38,7 +38,10 @@ export interface ICreateCollection extends ICollectionFields{
       _id: string,
       name: string
    }
-   image?: File,
+   image?: {
+      url: string,
+      imageId: string,
+   }
    items?: ICreateItem[]
 }
 
@@ -48,6 +51,7 @@ const CreateCollection = () => {
    const [collectionTopic, setCollectionTopic] = useState<CollectionTopic>()
    const [collectionFields, setCollectionFields] = useState<ICollectionFields>(defaultFormFields)
    const [itemData, setItemData] = useState<ICreateItem>(defaultItemData)
+   const [fileDataURL, setFileDataURL] = useState(null);
    const [image, setImage] = useState<File>()
    let [isOpen, setIsOpen] = useState(false)
    const dispatch = useDispatch()
@@ -59,9 +63,9 @@ const CreateCollection = () => {
       event.preventDefault()
       const collectionWithItems = appendItemsToCollection()
       // @ts-ignore
-      dispatch(createCollectionWithItemsStart(collectionWithItems))
+      dispatch(createCollectionWithItemsStart({collectionWithItems: collectionWithItems, image: image}))
 
-      const response = await postRequest(API_URL.UPLOAD_IMAGE,  {image: image})
+      // const response = await postRequest(API_URL.UPLOAD_IMAGE,  {image: image})
 
    }
    const appendItemsToCollection = () => {
@@ -84,6 +88,31 @@ const CreateCollection = () => {
 
       setImage(file)
   }
+
+  useEffect(() => {
+      // @ts-ignore
+   let fileReader, isCancel = false;
+   if (image) {
+     fileReader = new FileReader();
+     fileReader.onload = (e) => {
+      // @ts-ignore
+       const { result } = e.target;
+       if (result && !isCancel) {
+         setFileDataURL(result)
+       }
+     }
+     fileReader.readAsDataURL(image);
+   }
+   return () => {
+     isCancel = true;
+      // @ts-ignore
+     if (fileReader && fileReader.readyState === 1) {
+      // @ts-ignore
+       fileReader.abort();
+     }
+   }
+
+ }, [image]);
 
    function closeModal() {
       setIsOpen(false)
@@ -137,6 +166,12 @@ const CreateCollection = () => {
                </label>
             </div>
             </form>
+            {fileDataURL ?
+        <p className="img-preview-wrapper">
+          {
+            <img src={fileDataURL} alt="preview" />
+          }
+        </p> : null}
          </div>
 
          <div className="col-start-2 col-end-3">

@@ -33,7 +33,7 @@ export enum API_URL {
    UPLOAD_IMAGE = "api/collection/image"
 }
 
-export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsUploadImage)
+export const postRequest = <returnType>(url: string, payload: any, options = optionsDefault): AxiosPromise<returnType> => api.post(url, payload, options)
 export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.patch(url, payload, optionsDefault)
 export const getRequest = <returnType>(url: string): AxiosPromise<returnType> => api.get(url, optionsDefault)
 export const deleteRequest = (url: string): AxiosPromise => api.delete(url, optionsDefault)

@@ -5,7 +5,14 @@ import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
 import {IError} from "../user/user.reducer"
+import { ICreateCollection } from "../../routes/create-collection/create-collection"
 
+type ImageResponse = {
+   image: {
+      url: string,
+      fileId: string
+   }
+}
 
 function* createCollection({payload: collectionData}: type.CreateCollectionStart) {
    try {
@@ -17,17 +24,16 @@ function* createCollection({payload: collectionData}: type.CreateCollectionStart
 }
 
 
-function* createCollectionWithItems({payload: itemsCollection}: type.CreateCollectionWithItemsStart){
+function* createCollectionWithItems({payload: {collectionWithItems, image}}: type.CreateCollectionWithItemsStart){
    try {
-      // if(itemsCollection.image) {
-      //    console.log(itemsCollection.image)
-      //    const {data} = yield* uploadImage(itemsCollection.image)
-      //    const url = data.image.url
-      //    const imageId = data.image.fileId
-      //    console.log(image)
-
-      // }
-      const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, itemsCollection)
+      let payload = collectionWithItems;
+      console.log("payload", payload)
+      if(image) {
+         //@ts-ignore
+         const {data} = yield* uploadImage(image)
+         payload = yield* appendImage(data, payload)
+      }
+      const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, payload)
       yield* put(createCollectionWithItemsSuccess(response.data))
    } catch (error) {
       yield* put(createCollectionWithItemsFailure(error as AxiosError))
@@ -35,7 +41,15 @@ function* createCollectionWithItems({payload: itemsCollection}: type.CreateColle
 }
 
 function* uploadImage(image: File) {
-   return yield* call(postRequest, API_URL.UPLOAD_IMAGE, {image: image})
+         //@ts-ignore
+   return yield* call(postRequest<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
+}
+
+function* appendImage (data: ImageResponse, itemsCollection: ICreateCollection) {
+   const url = data.image.url
+   const imageId = data.image.fileId
+   return {...itemsCollection, image: {url: url, imageId: imageId}}
+   // const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, {...itemsCollection, image: {url: url, imageId: imageId}})
 }
 
 
