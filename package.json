@@ -1,0 +1,15 @@
+{
+  "name": "main-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startServer": "cd server && npx ts-node-dev --respawn --transpile-only src/index.ts ",
+    "startClient": "cd client && npm start",
+    "startDev": "npm run startServer && npm run startClient"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

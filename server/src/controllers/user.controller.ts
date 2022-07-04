@@ -7,7 +7,7 @@ import logger from "../utils/logger"
 import { signJwt } from "../utils/jtw.utils"
 import * as key from "../config/keyes"
 import {createSession} from "../services/session.service"
-import { Values_TO_Omit, ErrorMessages } from "../config/constants.config"
+import { Values_TO_Omit, ErrorMessage } from "../config/constants.config"
 
 
 export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
@@ -21,12 +21,12 @@ export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, 
       res.json({accessToken, refreshToken})
    } catch (error) {
       logger.error(getErrorMessage(error))
-      res.status(409).send({error: ErrorMessages.EMAIL_OR_PASSWORD_TAKEN})
+      res.status(409).send({error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN})
    }
 }
 
 export const deleteUserOrUsers = async (req: Request<{}, {}, Array<IUserDocument>>, res: Response) => {
-   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessages.NOT_AUTHORIZED})
+   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try {
       await deleteUsers(req.body)
 
@@ -35,18 +35,18 @@ export const deleteUserOrUsers = async (req: Request<{}, {}, Array<IUserDocument
       res.sendStatus(200)
    } catch (error) {
       logger.error(getErrorMessage(error))
-      res.status(404).send({message: ErrorMessages.USER_DELETION_FAILURE})
+      res.status(404).send({message: ErrorMessage.USER_DELETION_FAILURE})
    }
 }
 
 export const updateUserOrUsers = async (req: Request<{}, {},  Array<IUserDocument>>, res: Response) => {
-   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessages.NOT_AUTHORIZED})
+   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try {
        const isUpdated = await updateUsers(req.body)
        res.sendStatus(200)
    } catch (error) {
       logger.error(getErrorMessage(error))
-      res.status(406).send({message: ErrorMessages.USER_UPDATE_FAILURE})
+      res.status(406).send({message: ErrorMessage.USER_UPDATE_FAILURE})
    }
 }
 

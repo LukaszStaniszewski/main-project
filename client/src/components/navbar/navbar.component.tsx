@@ -44,6 +44,8 @@ const Navbar = () => {
       dispatch(setLanguage(initialValue))
    }, [])
 
+   // const redicrectToUserPage = () => navigate()
+
    const redirectToSignIn = () => navigate("/signin")
 
    const logoutHandler = () => {
@@ -63,7 +65,6 @@ const Navbar = () => {
       const languageKey: "Polski" | "English" = event.currentTarget.innerText
       setLangMenu(false)
       dispatch(setLanguage(languageList[languageKey]))
-      // localStorage.setItem("language", JSON.stringify(languageList[languageKey]))
       saveUserSetting("language", languageList[languageKey])
    }
 
@@ -85,121 +86,113 @@ const Navbar = () => {
   return (
                 //   <nav className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-700 h-32 p-3">
                 // <nav className="bg-gradient-to-r from-cyan-500 to-blue-500 h-20">
-                // <nav className="bg-gradient-to-l from-purple-700 via-purpśle-600 to-purple-700 h-20 p-3">
+                // <nav className="bg-gradient-to-l from-purple-700 via-purple-600 to-purple-700 h-20 p-3">
                 // <nav className="bg-gradient-to-r from-sky-700 to-cyan-600 h-32 p-3">
    <Fragment>
         <nav className="bg-gradient-to-r from-color-primary to-color-secondary h-30 pt-4 pb-6">
     
-            {/* top side */}
-            <section className="flex items-center justify-between w-100vw border-b border-color-border-primary px-9 mb-4">
+            <section className="flex items-center justify-between w-100vw border-b border-color-border-primary pb-4 px-9 ">
          
-                <div>
-                    <Link className="text-primary p-3 b rounded-md hover:bg-color-secondary" to='/'>
-                        <FormattedMessage
-                            id="navigation.home-link"
-                            defaultMessage="Home"
-                         />
-                    </Link>
-                    <Link className="text-primary px-10 "to='/'>
-                        <FormattedMessage 
-                            id="navigation.collections-link"
-                            defaultMessage="Collections"
-                         />
-                    </Link> 
+               <div>
+                  <Link className="text-primary p-3 b rounded-md hover:bg-color-secondary" to='/'>
+                     <FormattedMessage
+                           id="navigation.home-link"
+                           defaultMessage="Home"
+                        />
+                  </Link>
+                  <Link className="text-primary px-10 "to='/'>
+                     <FormattedMessage 
+                           id="navigation.collections-link"
+                           defaultMessage="Collections"
+                        />
+                  </Link> 
 
-                    <Link className="text-primary" to="/">
-                        <FormattedMessage 
-                            id="navigation.my-collections-link"
-                            defaultMessage="My collections"
-                         />
-                    </Link>
-                </div>
-               
-    
-                <div className="flex items-center pb-4">
-        
-                    <label className="swap swap-rotate w-6">
-                        <input type="checkbox" className="hidden" onChange={themeSwitchHandler}/>
-                        <SunIcon/>
-                        <MoonIcon/>
-                    </label>
-                    
-                    <div className="relative z-30">
-                        <label className="swap px-10 text-primary">
-                            <input className="hidden" type="checkbox" onChange={langMenuToggleHandler} checked={isLangMenuOpen} />
-                            <div className="swap-off">{`${language.toUpperCase()} ▼`}</div>
-                            <div className="swap-on">{`${language.toUpperCase()} ▲`}</div>
-                        </label>
-                        
-                        <ul className={`${!isLangMenuOpen && "hidden"} menu bg-base-100 w-max absolute rounded-box top-10 -left-3`}>
-                            <li onClick={languageSwitchHandler} className={`${language === "en" && "bordered"}`} ><a>English</a></li>
-                            <li onClick={languageSwitchHandler} className={`${language === "pl" && "bordered"}`}><a>Polski</a></li>
-                        </ul>
-                    </div>
-
-
-                    <div className="relative z-30 whitespace-nowrap" >
-                        {currentUser 
-                        ?  <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
-                        :  <button className="btn bg-color-primary border-none hover:bg-fuchsia-800" onClick={redirectToSignIn}>Sign In</button>
-                        }
-                        <ul className={`${!isUserMenuOpen && "hidden" } min-w-max menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
-                            <li>
-                                <NavLink to='/' className={({isActive}) => 
-                                    isActive 
-                                    ? "border-l-4 border-color-border-secondary" 
-                                    : undefined} 
-                                >
-                                <FormattedMessage 
-                                    id="navigation.user-menu.profile"
-                                    defaultMessage="Profile"
-                                 />
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='/signin' className={({isActive}) => 
-                                    isActive 
-                                    ? "border-l-4 border-color-border-secondary" 
-                                    : undefined} 
-                                >
-                                <FormattedMessage 
-                                    id="navigation.user-menu.signIn"
-                                    defaultMessage="Sign in"
-                                />
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='/signup' className={({isActive}) => 
-                                    isActive 
-                                    ? "border-l-4 border-color-border-secondary" 
-                                    : undefined} 
-                                >
-                                <FormattedMessage 
-                                    id="navigation.user-menu.signUp"
-                                    defaultMessage="Sign up"
-                                />
-                                </NavLink>
-                            </li>
-                            <li>
-                                <button onClick={logoutHandler}>
-                                    <FormattedMessage 
-                                        id="navigation.user-menu.logout"
-                                        defaultMessage="Logout"
-                                    />
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+                  <Link className="text-primary" to={`/user/${currentUser?.name}`}>
+                     <FormattedMessage 
+                           id="navigation.my-collections-link"
+                           defaultMessage="My collections"
+                        />
+                  </Link>
+               </div>
+            
+               <SearchBar/>
+               <div className="flex items-center pb-4">
+      
+                  <label className="swap swap-rotate w-6">
+                     <input type="checkbox" className="hidden" onChange={themeSwitchHandler}/>
+                     <SunIcon/>
+                     <MoonIcon/>
+                  </label>
                   
-                </div>
-    
-        
-            </section>
+                  <div className="relative z-30">
+                     <label className="swap px-10 text-primary">
+                           <input className="hidden" type="checkbox" onChange={langMenuToggleHandler} checked={isLangMenuOpen} />
+                           <div className="swap-off">{`${language.toUpperCase()} ▼`}</div>
+                           <div className="swap-on">{`${language.toUpperCase()} ▲`}</div>
+                     </label>
+                     
+                     <ul className={`${!isLangMenuOpen && "hidden"} menu bg-base-100 w-max absolute rounded-box top-10 -left-3`}>
+                           <li onClick={languageSwitchHandler} className={`${language === "en" && "bordered"}`} ><a>English</a></li>
+                           <li onClick={languageSwitchHandler} className={`${language === "pl" && "bordered"}`}><a>Polski</a></li>
+                     </ul>
+                  </div>
 
-       
-            <SearchBar/>
-    
-        </nav>
+
+                  <div className="relative z-30 whitespace-nowrap" >
+                     {currentUser 
+                     ?  <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
+                     :  <button className="btn bg-color-primary border-none hover:bg-fuchsia-800" onClick={redirectToSignIn}>Sign In</button>
+                     }
+                     <ul className={`${!isUserMenuOpen && "hidden" } min-w-max menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
+                           <li>
+                              <NavLink to='/' className={({isActive}) => 
+                                 isActive 
+                                 ? "border-l-4 border-color-border-secondary" 
+                                 : undefined} 
+                              >
+                              <FormattedMessage 
+                                 id="navigation.user-menu.profile"
+                                 defaultMessage="Profile"
+                              />
+                              </NavLink>
+                           </li>
+                           <li>
+                              <NavLink to='/signin' className={({isActive}) => 
+                                 isActive 
+                                 ? "border-l-4 border-color-border-secondary" 
+                                 : undefined} 
+                              >
+                              <FormattedMessage 
+                                 id="navigation.user-menu.signIn"
+                                 defaultMessage="Sign in"
+                              />
+                              </NavLink>
+                           </li>
+                           <li>
+                              <NavLink to='/signup' className={({isActive}) => 
+                                 isActive 
+                                 ? "border-l-4 border-color-border-secondary" 
+                                 : undefined} 
+                              >
+                              <FormattedMessage 
+                                 id="navigation.user-menu.signUp"
+                                 defaultMessage="Sign up"
+                              />
+                              </NavLink>
+                           </li>
+                           <li>
+                              <button onClick={logoutHandler}>
+                                 <FormattedMessage 
+                                       id="navigation.user-menu.logout"
+                                       defaultMessage="Logout"
+                                 />
+                              </button>
+                           </li>
+                     </ul>
+                  </div>
+               </div>
+            </section>
+         </nav>
         <Outlet/>
    </Fragment>
   )
