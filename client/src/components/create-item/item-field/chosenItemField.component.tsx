@@ -5,10 +5,10 @@ import {motion, useAnimation, AnimatePresence, useIsPresent} from "framer-motion
 import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
 
 import {IOptionalFieldComponent} from "./optionalField.component"
-import {OptionalItemData, IItemData, IOptionalField, COLLECTIONS_MOCKUP, CollectionTopic} from "../item-types/itemTypes"
+import {OptionalItemData, ICreateItem, IOptionalField, COLLECTIONS_MOCKUP, CollectionTopic} from "../item-types/itemTypes"
 
 interface IChosenItemField extends IOptionalFieldComponent {
-   setUserInputData:  Dispatch<SetStateAction<IItemData>>,
+   setUserInputData:  Dispatch<SetStateAction<ICreateItem>>,
    setChosenOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
    setOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
    collectionTopic: CollectionTopic

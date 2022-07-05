@@ -1,43 +1,119 @@
-import {Fragment, useState, ChangeEvent} from 'react'
+import {Fragment, useState, ChangeEvent, FormEvent, useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import { CloudUploadIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import { PencilIcon } from "@heroicons/react/outline"
 
-import { Topics, ICollectionTopics } from "./MOCKUP_DATA"
+import { Topics} from "./MOCKUP_DATA"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
 import CreateItem from "../../components/create-item/createItem.component"
 import TextArea from "../../components/text-area/textArea.component"
-import { IItemData } from "../../components/create-item/item-types/itemTypes"
+import { ICreateItem,CollectionTopic } from "../../components/create-item/item-types/itemTypes"
+import { API_URL, postRequest } from "../../api/axios-instance.api"
+import { selectCurrentUser } from "../../store/user/user.selector"
+import { createCollectionWithItemsStart } from "../../store/collections/collection.actions"
 
 const defaultFormFields = {
-   name: ""
+   name: "",
+
 }
+
 const defaultItemData = {
    id: "",
    name: "",
    tags: [""],
+   topic: ""
 }
 
-export type CollectionTopic = keyof ICollectionTopics
+interface ICollectionFields {
+   name: string,
+   description?: string,
+   topic?: typeof Topics,
+}
+
+export interface ICreateCollection extends ICollectionFields{
+   owner: {
+      _id: string,
+      name: string
+   }
+   image?: {
+      url: string,
+      imageId: string,
+   }
+   items?: ICreateItem[]
+}
+
+const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreateCollection = () => {
    const [collectionTopic, setCollectionTopic] = useState<CollectionTopic>()
-   const [collectionFields, setCollectionFields] = useState(defaultFormFields)
-   const [itemData, setItemData] = useState<IItemData>(defaultItemData)
-   const {name} = collectionFields
+   const [collectionFields, setCollectionFields] = useState<ICollectionFields>(defaultFormFields)
+   const [itemData, setItemData] = useState<ICreateItem>(defaultItemData)
+   const [fileDataURL, setFileDataURL] = useState(null);
+   const [image, setImage] = useState<File>()
    let [isOpen, setIsOpen] = useState(false)
-   console.log(itemData)
-   
-   const handleSubmit = () => {
-      
+   const dispatch = useDispatch()
+   const currentUser = useSelector(selectCurrentUser)
+
+
+   const handleSubmit = async (event:FormEvent<HTMLFormElement>) => {
+      console.log(image)
+      event.preventDefault()
+      const collectionWithItems = appendItemsToCollection()
+      // @ts-ignore
+      dispatch(createCollectionWithItemsStart({collectionWithItems: collectionWithItems, image: image}))
+
+      // const response = await postRequest(API_URL.UPLOAD_IMAGE,  {image: image})
+
+   }
+   const appendItemsToCollection = () => {
+      return {...collectionFields, topic: collectionTopic, owner:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
    }
 
-   const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
+   const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-      setCollectionFields(prevState => ({...prevState, [name]: value}))
+      setCollectionFields(prevValue =>  ({...prevValue, [name]: value}))
    }
+
+   
+  const selectFileHandler = (event:ChangeEvent<HTMLInputElement>) => {
+      if(!event.target.files) return
+      const file = event.target.files[0];
+      if (!file.type.match(imageMimeType)) {
+         alert("Image mime type is not valid");
+         return;
+       }
+
+      setImage(file)
+  }
+
+  useEffect(() => {
+      // @ts-ignore
+   let fileReader, isCancel = false;
+   if (image) {
+     fileReader = new FileReader();
+     fileReader.onload = (e) => {
+      // @ts-ignore
+       const { result } = e.target;
+       if (result && !isCancel) {
+         setFileDataURL(result)
+       }
+     }
+     fileReader.readAsDataURL(image);
+   }
+   return () => {
+     isCancel = true;
+      // @ts-ignore
+     if (fileReader && fileReader.readyState === 1) {
+      // @ts-ignore
+       fileReader.abort();
+     }
+   }
+
+ }, [image]);
+
    function closeModal() {
       setIsOpen(false)
     }
@@ -61,18 +137,20 @@ const CreateCollection = () => {
                <li className="step step-info">Add Item</li>
             </ul> */}
             <h1 className="text-2xl pb-1">Create Collection</h1>
-            <button className="btn btn-sm" type="submit">DONE!</button>
+            <button className="btn btn-sm" form="create-collection" type="submit">DONE!</button>
          </div>
        
          <div className="col-start-1 col-end-2  ">
+            <form  onSubmit={handleSubmit} id="create-collection">
             <div className="w-full">
                <FormInput
                   label="collection name"
                   componentName="createCollection"
-                  value={name}
+                  //@ts-ignore
+                  value={collectionFields.name}
                   onChange={handleChange}
                   name="name"
-                  required
+                  // required
                />
             </div>
             <div className="max-w-xl">
@@ -84,9 +162,16 @@ const CreateCollection = () => {
                            <span className="text-blue-600 underline"> browse</span>
                         </span>
                   </span>
-                  <input type="file" name="file_upload" className="hidden"/>
+                  <input type="file" name="image" className="hidden" accept="image/*" onChange={selectFileHandler}/>
                </label>
             </div>
+            </form>
+            {fileDataURL ?
+        <p className="img-preview-wrapper">
+          {
+            <img src={fileDataURL} alt="preview" />
+          }
+        </p> : null}
          </div>
 
          <div className="col-start-2 col-end-3">

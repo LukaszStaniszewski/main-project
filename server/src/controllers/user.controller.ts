@@ -1,5 +1,5 @@
 import {Request, Response} from "express"
-import { createUser, deleteUsers, updateUsers } from "../services/user.service"
+import { createUser, deleteUsers, findUser, updateUsers } from "../services/user.service"
 import { updateUsersSession } from "../services/session.service"
 import User, { IUserCredentials, IUserDocument} from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
@@ -54,6 +54,16 @@ export const sendUsers = async (req: Request, res: Response< Array<IUserDocument
    try {
       const data = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST)
       res.json(data)
+   } catch (error) {
+      logger.error(getErrorMessage(error))
+      res.sendStatus(400)
+   }
+}
+
+export const sendUser = async (req: Request<{},{}, IUserDocument>, res: Response) => {
+   try {
+      const user = await findUser(req.body, Values_TO_Omit.SEND_USERS_REQUEST)
+      res.json(user)
    } catch (error) {
       logger.error(getErrorMessage(error))
       res.sendStatus(400)

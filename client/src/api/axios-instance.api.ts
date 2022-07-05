@@ -21,25 +21,35 @@ export enum API_URL {
    LOG_OUT = "/api/session",
    SIGN_UP = "/api/user/register",
    GET_USERS = "/api/user",
+   GET_USER_SEND_CREDENTIALS = "api/user",
    UPDATE_USERS = "/api/user",
    DELETE_USERS = "/api/user/delete",
    CREATE_COLLECTION = "api/collection/new",
+   CREATE_COLLECTION_WITH_ITEMS = "api/collection",
    DETE_COLLECTION = "api/collection/delete",
    GET_COLLECTIONS_WITH_ITEMS = "api/collection",
-   GET_COLLECTIONS_WITH_ITEMS_BY_USER = "api/collection/user",
+   GET_COLLECTIONS_WITH_ITEMS_BY_USER = `api/collection/item/user`,
+   GET_COLLECTIONS_BY_USER = "api/collection/user",
    CREATE_ITEM = "api/item/new",
-   DELETE_ITEM ="api/item/delete"
+   DELETE_ITEM ="api/item/delete",
+   UPLOAD_IMAGE = "api/collection/image"
 }
 
-export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, options)
-export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.patch(url, payload, options)
-export const getRequest = <returnType>(url: string): AxiosPromise<returnType> => api.get(url, options)
-export const deleteRequest = (url: string): AxiosPromise => api.delete(url, options)
+export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsDefault)
+export const uploadFile = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsUploadImage)
+export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.patch(url, payload, optionsDefault)
+export const getRequest = <returnType>(url: string): AxiosPromise<returnType> => api.get(url, optionsDefault)
+export const deleteRequest = (url: string): AxiosPromise => api.delete(url, optionsDefault)
 
-const options = {
+const optionsDefault = {
   withCredentials: false,
 }
 
+export const optionsUploadImage = {
+   // withCredentials: false,
+   headers: { 'content-type': 'multipart/form-data' },
+   
+ }
 export interface ITokens {
    accessToken: string,
    refreshToken: string

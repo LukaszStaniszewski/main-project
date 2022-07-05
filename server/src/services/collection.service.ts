@@ -1,25 +1,31 @@
-import CollectionModel, {ICreateItemCollection, IItemCollectionDocument, IAppendItemsToCollections} from "../models/collection.model"
-import {IItemDocument} from "../models/item.model"
+import mongoose from "mongoose"
+
+import CollectionModel, {ICreateItemCollection, IItemCollectionDocument} from "../models/collection.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
-import { uploadImage, findFile } from "../utils/imageKit.utils"
+import { uploadImage} from "../utils/imageKit.utils"
+import { Values_TO_Omit } from "../config/constants.config"
 
-export const createCollection = async ({body, image }: {body: ICreateItemCollection, image: Buffer}): Promise<IItemCollectionDocument> => {
+export const createCollection = async (collectionData: ICreateItemCollection, image?:Buffer): Promise<IItemCollectionDocument> => {
    try {
-      //@ts-ignore
-      const {url, fileId} = uploadImage(image, body.name)
-      const collection = await CollectionModel.create({...body, image: {url: url, imageId: fileId}})
+      if(image) {
+         const {url, fileId} = await uploadImage(image, collectionData.name)
+         const collection = await CollectionModel.create({...collectionData, image: {url: url, imageId: fileId}})
+         return collection
+      }
+      const collection = await CollectionModel.create({...collectionData})
       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
 }
 
-export const findCollectionsByUser = async (userId : IUserDocument["_id"]): Promise<IItemCollectionDocument[]> => {
+export const findCollectionsByUser = async (name : IUserDocument["name"]): Promise<IItemCollectionDocument[]> => {
    try {
-
-       const collections = await CollectionModel.find({"owner._id": userId}).lean()
+      console.log("name", name)
+       const collections = await CollectionModel.find({"owner.name": name}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST).lean()
+       console.log(collections)
        if(!collections) throw new Error("Collection not found")
        return collections
    } catch (error) {
@@ -38,23 +44,10 @@ export const findAllCollections = async (): Promise<IItemCollectionDocument[]> =
    }
 }
 
-export const appendItemsToCollections = (collections: IItemCollectionDocument[], items: IItemDocument[]):IAppendItemsToCollections[] => {
-   for(let collection = 0; collection < collections.length; collection++) {
-      for(let item = 0; item < items.length; item++) {
-         if(collections[collection]["_id"].toString() === items[item]["collectionId"].toString()){
-            //@ts-ignore
-           collections[collection].items = [items[item]]
-         } else {
-           collections
-         }
-      }
-   }
-   return [...collections]
-}
 
-export const deleteCollections = async (userId : IUserDocument["_id"]) => {
+export const deleteCollections = async (name : IUserDocument["name"]) => {
    try {
-      const foundCollections = await findCollectionsByUser(userId)
+      const foundCollections = await findCollectionsByUser(name)
       if(!foundCollections) throw new Error(getErrorMessage("Couldn't find collection to delete"))
       await Promise.all(foundCollections.map(collection =>  deleteItemsByCollection(collection._id)))
       const collection =  await CollectionModel.deleteMany(foundCollections)

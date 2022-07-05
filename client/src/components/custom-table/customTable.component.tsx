@@ -5,7 +5,7 @@ import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
 const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
    const columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
-   
+   console.log(columns)
    const [checkbox, setCheckbox] = useState(false)
    const [sortedBy, setSortedBy] = useState({
       column: columns[0],
@@ -20,9 +20,11 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
       const {column, ascending} = sortedBy
       return rows.sort((a,b) => {
 
+         //@ts-ignore
          if(a[column].toString() > b[column].toString()) {
             return ascending ? -1 : 1;
          }
+         //@ts-ignore
          if(b[column].toString() > a[column].toString()) {
             return ascending ? 1: -1;
          }

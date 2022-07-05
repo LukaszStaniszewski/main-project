@@ -33,7 +33,7 @@ const itemSchema = new Schema<IItemDocument>({
    },
    tags: [{
       type: String,
-      required: [true, "tags are required"]
+      // required: [true, "tags are required"]
    }],
    collectionId: {
       type: Schema.Types.ObjectId,
