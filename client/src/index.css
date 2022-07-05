@@ -34,11 +34,12 @@
 }
 
 
-/* @layer utilities {
-   .placeholder-style::placeholder {
-      padding-left: 20px
+@layer utilities {
+ 
+   .screen-height {
+      height: calc(100vh - 129px)
    }
- } */
+ }
   body {
    background-color: var(--color-background-primary);
   }

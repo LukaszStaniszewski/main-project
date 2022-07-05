@@ -1,11 +1,11 @@
 import{ useState,} from 'react'
+import { Link } from "react-router-dom"
 
 import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
 const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
    const columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
-   console.log(columns)
    const [checkbox, setCheckbox] = useState(false)
    const [sortedBy, setSortedBy] = useState({
       column: columns[0],
@@ -33,9 +33,9 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
    }
  
    return (
-   <div className="overlow-auto">
+   <div >
 
-      <table className="table w-full bg-secondary table-normal">
+      <table className="table bg-secondary table-normal w-full ">
          <thead>
             <tr>
                <th>
@@ -44,6 +44,8 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
                {  
                columns.map((column, index) => 
                <th key={index}>
+               {/* @ts-ignore */}
+                {rows[0][column] &&  
                   <div className="flex items-center gap-2 cursor-pointer" 
                      onClick={() => setSortedBy(prevState => ({
                      column,
@@ -56,6 +58,7 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
                         : <div>▼</div>
                      )}
                   </div>
+                  }
                </th>
                   )   
                }
@@ -63,15 +66,18 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
          </thead>
          <tbody>
             {
-               sort(rows).map(row=> (
+               sort(rows).map(row=> 
+             
                <TableRows
                   key={row._id} 
                   row={row} 
                   columns={columns} 
                   selectAll={checkbox} 
                   setSelectedItems={setSelectedItems} 
-                  checkboxesAvaible={checkboxesAvaible}/>
-               ))
+                  checkboxesAvaible={checkboxesAvaible}
+                  />
+
+               )
             }
          </tbody>
       </table>

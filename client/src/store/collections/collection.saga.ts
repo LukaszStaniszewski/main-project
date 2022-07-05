@@ -1,6 +1,6 @@
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
 import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems} from "./collection.types"
-import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionsWithItemsByUserSuccess, getCollectionsWithItemsByUserFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure } from "./collection.actions"
+import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure } from "./collection.actions"
 import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
@@ -58,12 +58,12 @@ function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure
    }
 }
 
-function* getCollectionsWithItemsByUserStart({payload: userName}: type.GetCollectionsWithItemsStart) {
+function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectionWithItemsStart) {
    try {
-      const response = yield* call(getRequest<ICollection[]>, `${API_URL.GET_COLLECTIONS_WITH_ITEMS_BY_USER}/${userName}`)
-      yield* put(getCollectionsWithItemsByUserSuccess(response.data))
+      const response = yield* call(getRequest<ICollection[]>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
+      yield* put(getCollectionWithItemsSuccess(response.data[0]))
    } catch (error) {
-      yield* put(getCollectionsWithItemsByUserFailure(error as AxiosError))
+      yield* put(getCollectionWithItemsFailure(error as AxiosError))
    }
 }
 
@@ -80,8 +80,8 @@ function* onGetCollectionsWihoutItemStart() {
    yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START,getCollectionsWithoutItems)
 }
 
-function* onGetCollectionsWithItemsByUserStart() {
-   yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_START, getCollectionsWithItemsByUserStart)
+function* onGetCollectionWithItemsStart() {
+   yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START, getCollectionWithItemsStart)
 }
 
 function* onCreateCollectionWithItemsStart() {
@@ -101,7 +101,7 @@ export default function* collectionSagas() {
       call(onCreateCollectionStart),
       call(onDeleteCollectionStart),
       call(onCreateCollectionWithItemsStart),
-      call(onGetCollectionsWithItemsByUserStart),
+      call(onGetCollectionWithItemsStart),
       call(onGetCollectionsWihoutItemStart)
    ])
 }

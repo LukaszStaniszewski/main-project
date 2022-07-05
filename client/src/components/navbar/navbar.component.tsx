@@ -89,7 +89,7 @@ const Navbar = () => {
                 // <nav className="bg-gradient-to-l from-purple-700 via-purple-600 to-purple-700 h-20 p-3">
                 // <nav className="bg-gradient-to-r from-sky-700 to-cyan-600 h-32 p-3">
    <Fragment>
-        <nav className="bg-gradient-to-r from-color-primary to-color-secondary h-30 pt-4 pb-6">
+        <nav className="bg-gradient-to-r from-color-primary to-color-secondary min-h-max pt-4 pb-6">
     
             <section className="flex items-center justify-between w-100vw border-b border-color-border-primary pb-4 px-9 ">
          

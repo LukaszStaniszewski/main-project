@@ -53,18 +53,18 @@ export const createCollectionWithItemsFailure = (error: AxiosError): give.Create
    payload: error
 })
 
-export const getCollectionsWithItemsByUserStart = (userName: ICurrentUser["name"]): give.GetCollectionsWithItemsStart => ({
-   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_START,
-   payload: userName
+export const getCollectionWithItemsStart = (collectionId: ICollection["_id"]): give.GetCollectionWithItemsStart => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START,
+   payload: collectionId
 })
 
-export const getCollectionsWithItemsByUserSuccess = (itemsCollections: ICollection[]): give.GetCollectionsWithItemsSuccess =>({
-   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_SUCCESS,
+export const getCollectionWithItemsSuccess = (itemsCollections: ICollection): give.GetCollectionWithItemsSuccess =>({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_SUCCESS,
    payload: itemsCollections
 })
 
-export const getCollectionsWithItemsByUserFailure = (error: AxiosError): give.GetCollectionsWithItemsFailure => ({
-   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_FAILURE,
+export const getCollectionWithItemsFailure = (error: AxiosError): give.GetCollectionWithItemsFailure => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_FAILURE,
    payload: error
 })
 

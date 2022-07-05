@@ -18,9 +18,9 @@ export enum COLLECTION_ACTION_TYPES {
    CREATE_COLLECTION_WITH_ITEMS_SUCCESS = "CREATE_COLLECTION_WITH_ITEMS_SUCCESS",
    CREATE_COLLECTION_WITH_ITEMS_FAILURE = "CREATE_COLLECTION_WITH_ITEMS_FAILURE",
 
-   GET_COLLECTIONS_WITH_ITEMS_START = "GET_COLLECTIONS_WITH_ITEMS_START",
-   GET_COLLECTIONS_WITH_ITEMS_SUCCESS = "GET_COLLECTIONS_WITH_ITEMS_SUCCESS",
-   GET_COLLECTIONS_WITH_ITEMS_FAILURE = "GET_COLLECTIONS_WITH_ITEMS_FAILURE",
+   GET_COLLECTION_WITH_ITEMS_START = "GET_COLLECTION_WITH_ITEMS_START",
+   GET_COLLECTION_WITH_ITEMS_SUCCESS = "GET_COLLECTION_WITH_ITEMS_SUCCESS",
+   GET_COLLECTION_WITH_ITEMS_FAILURE = "GET_COLLECTION_WITH_ITEMS_FAILURE",
 
    GET_COLLECTIONS_WIHOUT_ITEMS_START = "GET_COLLECTIONS_WIHOUT_ITEMS_START",
    GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS = "GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS",
@@ -46,7 +46,7 @@ export type CollectionActions =
 CreateCollectionStart | CreateCollectionSuccess | CreateCollectionFailure |
 DeleteCollectionStart | DeleteCollectionSuccess | DeleteCollectionFailure |
 CreateCollectionWithItemsStart | CreateCollectionWithItemsSuccess | CreateCollectionWithItemsFailure |
-GetCollectionsWithItemsStart | GetCollectionsWithItemsSuccess | GetCollectionsWithItemsFailure |
+GetCollectionWithItemsStart | GetCollectionWithItemsSuccess | GetCollectionWithItemsFailure |
 GetCollectionsWithoutItemsStart | GetCollectionsWithoutItemsSuccess | GetCollectionsWithoutItemsFailure
 
 
@@ -62,9 +62,9 @@ export type CreateCollectionWithItemsStart = ActionWithPayload<COLLECTION_ACTION
 export type CreateCollectionWithItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS, ICollection>
 export type CreateCollectionWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_FAILURE, AxiosError>
 
-export type GetCollectionsWithItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_START, ICurrentUser["name"]>
-export type GetCollectionsWithItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_SUCCESS, ICollection[]>
-export type GetCollectionsWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_FAILURE, AxiosError>
+export type GetCollectionWithItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START, ICollection["_id"]>
+export type GetCollectionWithItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_SUCCESS, ICollection>
+export type GetCollectionWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_FAILURE, AxiosError>
 
 export type GetCollectionsWithoutItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START, ICurrentUser["name"]>
 export type GetCollectionsWithoutItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS, ICollectionWithoutItems>

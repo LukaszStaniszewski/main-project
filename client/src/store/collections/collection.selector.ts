@@ -12,10 +12,21 @@ export const selectCollection = createSelector(
 export const selectCollections = createSelector(
    selectCollectionReducer,
   (state) => state.collections
-)
+) 
 
 export const selectCollectionsWithoutItems = createSelector(
    selectCollectionReducer,
   (state) => state.collectionsWihoutItems
 )
+
+export const selectCollectionErrorMessage = createSelector(
+   selectCollectionReducer,
+   (state) => state.error
+)
+
+export const selectCollectionLoadingState = createSelector(
+   selectCollectionReducer,
+   (state) => state.collectionFetch
+)
+
 

@@ -1,9 +1,10 @@
-import { ICollection } from "../../../store/collections/collection.types"
+import { ICollection, ICollectionWithoutItems } from "../../../store/collections/collection.types"
 import { ICurrentUser } from "../../../store/user/user.types"
+import { ICustomizedCollections } from "../../../routes/user-page/frame/userPageFrame.component"
 
-export type Columns = Array<keyof ICurrentUser>
-export type Rows = ICurrentUser[] | ICollection[]
-export type Row = ICurrentUser | ICollection
+export type Columns = Array<keyof ICurrentUser> 
+export type Rows = ICurrentUser[] | ICustomizedCollections[]
+export type Row = ICurrentUser | ICustomizedCollections
 
 interface ITableAdmin{
    setSelectedItems?: React.Dispatch<React.SetStateAction<ICurrentUser[]>>
