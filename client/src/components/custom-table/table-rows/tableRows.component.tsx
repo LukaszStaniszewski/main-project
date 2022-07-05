@@ -18,6 +18,7 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
    const addUsersToUpdate = (checkbox: boolean) => {
       if(!setSelectedItems) return
       if(!checkbox) return removeFromUpdating()
+         //@ts-ignore
       setSelectedItems((prevState) => [...new Set([...prevState, row])])
    }  
   
@@ -32,9 +33,15 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
             {checkboxesAvaible && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
          </td>
          { 
-         columns.map((column, index) => 
-               <td key={index}>{row[column]}</td> 
-            )
+         columns.map((column, index) => {
+         console.log("column", column)
+         //@ts-ignore
+         if(column === "image") {
+            return <img className="max-h-20" src={`${row[column]}`}></img>
+         }
+         //@ts-ignore
+               return <td key={index}>{row[column]}</td> 
+          } )
          }
       </tr>
   )

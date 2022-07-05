@@ -11,13 +11,15 @@ export interface IError {
 
 export interface IUserState {
    currentUser: ICurrentUser | null,
-   users: ICurrentUser[]
+   users: ICurrentUser[],
+   user: ICurrentUser | null,
    isLoading: boolean,
    error: IError | null
 }
 
 const USER_INITIAL_STATE: IUserState = {
    currentUser: null,
+   user: null,
    error: null,
    users: [],
    isLoading: true,
@@ -30,6 +32,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
       case USER_ACTION_TYPES.SIGN_UP_START:
       case USER_ACTION_TYPES.GET_USERS_START:
       case USER_ACTION_TYPES.LOG_OUT_START:
+      case USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START:
          return {
             ...state,
             isLoading: true,
@@ -41,6 +44,12 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             currentUser: action.payload,
             isLoading: false,
   
+         }
+      case USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS:
+         return {
+            ...state,
+            user: action.payload,
+            isLoading: false
          }
       case USER_ACTION_TYPES.LOG_OUT_SUCCESS:
          return {

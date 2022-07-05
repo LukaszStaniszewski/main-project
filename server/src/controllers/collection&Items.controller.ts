@@ -11,9 +11,7 @@ import { ErrorMessage } from "../config/constants.config"
 
 export const createCollectionWithItemsHandler = async (req: Request<{}, {}, ICollectionWithItems>, res: Response) => {
    try {
-      console.log("colItems", req.body)
       const uploadedImage= req.file?.buffer
-      console.log("createCollectionWithItemsHandler", uploadedImage)
       await createCollectionWithItems(req.body, uploadedImage)
    } catch (error) {
       logger.error(getErrorMessage(error))
@@ -21,10 +19,13 @@ export const createCollectionWithItemsHandler = async (req: Request<{}, {}, ICol
    }
 }
 
-// this can be get request - get user id from locals - then search for user to ensure that it exist ...
-export const getCollectionsWithItemsPinnedToUser = async (req:Request<{}, {}, IUserDocument["_id"]>, res:Response) => {
+export const getCollectionsWithItemsPinnedToUser = async (req:Request, res:Response) => {
+      // const params = req.params.name
+      const user = res.locals.user
+   console.log("user", user)
+      // if(params !== user.name || user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try {
-      const collections = await findCollectionsByUser(req.body._id)
+      const collections = await findCollectionsByUser(user.name)
       const items = await findItems(collections)
       const itemsWithCollections = appendItemsToCollections(collections, items)
       res.json(itemsWithCollections)

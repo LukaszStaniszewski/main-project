@@ -1,8 +1,8 @@
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
-import {COLLECTION_ACTION_TYPES, ICollection} from "./collection.types"
-import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure } from "./collection.actions"
+import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems} from "./collection.types"
+import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionsWithItemsByUserSuccess, getCollectionsWithItemsByUserFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure } from "./collection.actions"
 import * as type from "./collection.types"
-import { postRequest, API_URL, optionsUploadImage } from "../../api/axios-instance.api"
+import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
 import {IError} from "../user/user.reducer"
 import { ICreateCollection } from "../../routes/create-collection/create-collection"
@@ -27,9 +27,7 @@ function* createCollection({payload: collectionData}: type.CreateCollectionStart
 function* createCollectionWithItems({payload: {collectionWithItems, image}}: type.CreateCollectionWithItemsStart){
    try {
       let payload = collectionWithItems;
-      console.log("payload", payload)
       if(image) {
-         //@ts-ignore
          const {data} = yield* uploadImage(image)
          payload = yield* appendImage(data, payload)
       }
@@ -41,15 +39,13 @@ function* createCollectionWithItems({payload: {collectionWithItems, image}}: typ
 }
 
 function* uploadImage(image: File) {
-         //@ts-ignore
-   return yield* call(postRequest<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
+   return yield* call(uploadFile<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
 }
 
 function* appendImage (data: ImageResponse, itemsCollection: ICreateCollection) {
    const url = data.image.url
    const imageId = data.image.fileId
    return {...itemsCollection, image: {url: url, imageId: imageId}}
-   // const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, {...itemsCollection, image: {url: url, imageId: imageId}})
 }
 
 
@@ -60,6 +56,32 @@ function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure
    } catch (error) {
       yield* put(deleteColletionFailure(error as AxiosError))
    }
+}
+
+function* getCollectionsWithItemsByUserStart({payload: userName}: type.GetCollectionsWithItemsStart) {
+   try {
+      const response = yield* call(getRequest<ICollection[]>, `${API_URL.GET_COLLECTIONS_WITH_ITEMS_BY_USER}/${userName}`)
+      yield* put(getCollectionsWithItemsByUserSuccess(response.data))
+   } catch (error) {
+      yield* put(getCollectionsWithItemsByUserFailure(error as AxiosError))
+   }
+}
+
+function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWithoutItemsStart) {
+   try {
+      const repsonse = yield* call(getRequest<ICollectionWithoutItems>, `${API_URL.GET_COLLECTIONS_BY_USER}/${userName}`)
+      yield* put(getCollectionsWihoutItemsSuccess(repsonse.data))
+   } catch (error) {
+      yield* put(getCollectionsWihoutItemsFailure(error as  AxiosError))
+   }
+}
+
+function* onGetCollectionsWihoutItemStart() {
+   yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START,getCollectionsWithoutItems)
+}
+
+function* onGetCollectionsWithItemsByUserStart() {
+   yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_START, getCollectionsWithItemsByUserStart)
 }
 
 function* onCreateCollectionWithItemsStart() {
@@ -79,5 +101,7 @@ export default function* collectionSagas() {
       call(onCreateCollectionStart),
       call(onDeleteCollectionStart),
       call(onCreateCollectionWithItemsStart),
+      call(onGetCollectionsWithItemsByUserStart),
+      call(onGetCollectionsWihoutItemStart)
    ])
 }

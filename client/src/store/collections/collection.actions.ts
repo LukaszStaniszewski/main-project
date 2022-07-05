@@ -4,6 +4,9 @@ import { ICreateCollection } from "../../routes/create-collection/create-collect
 import { ICollection, COLLECTION_ACTION_TYPES } from "./collection.types"
 import { IError } from "../user/user.reducer"
 import * as give from "./collection.types"
+import { ICurrentUser } from "../user/user.types"
+
+
 
 export const createCollectionStart = (collectionData : ICreateCollection): give.CreateCollectionStart => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_START,
@@ -48,4 +51,34 @@ export const createCollectionWithItemsSuccess = (itemsCollection: ICollection): 
 export const createCollectionWithItemsFailure = (error: AxiosError): give.CreateCollectionWithItemsFailure => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_FAILURE,
    payload: error
+})
+
+export const getCollectionsWithItemsByUserStart = (userName: ICurrentUser["name"]): give.GetCollectionsWithItemsStart => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_START,
+   payload: userName
+})
+
+export const getCollectionsWithItemsByUserSuccess = (itemsCollections: ICollection[]): give.GetCollectionsWithItemsSuccess =>({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_SUCCESS,
+   payload: itemsCollections
+})
+
+export const getCollectionsWithItemsByUserFailure = (error: AxiosError): give.GetCollectionsWithItemsFailure => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WITH_ITEMS_FAILURE,
+   payload: error
+})
+
+export const getCollectionsWithoutItemsStart = (userName: ICurrentUser["name"]) : give.GetCollectionsWithoutItemsStart => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START,
+   payload: userName
+})
+
+export const getCollectionsWihoutItemsSuccess = (collections: give.ICollectionWithoutItems) : give.GetCollectionsWithoutItemsSuccess => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS,
+   payload: collections,
+})
+
+export const getCollectionsWihoutItemsFailure = (error: AxiosError) : give.GetCollectionsWithoutItemsFailure => ({
+   type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE,
+   payload: error,
 })

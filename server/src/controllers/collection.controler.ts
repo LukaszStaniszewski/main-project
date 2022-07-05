@@ -11,7 +11,6 @@ import { uploadImage, } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
-   console.log("hit")
 
    const uploadedImage= req.file?.buffer
    try {
@@ -26,9 +25,6 @@ export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCo
 }
 
 export const uploadImageHandler = async (req: Request, res:Response) => {
-   console.log("hit")
-   console.log(req.file)
-   console.log(req.body)
    const uploadedImage = req.file?.buffer
    const collectionId = "cos"
    if(!uploadedImage) return
@@ -43,12 +39,13 @@ export const uploadImageHandler = async (req: Request, res:Response) => {
 }
 
 export const getCollectionsPinnedToUser = async (req:Request, res: Response) => {
-   // const params = req.params._id
+   console.log("hit")
+   const params = req.params.name
    // const user = res.locals.user
-   // if(params !== user.userId || user.role !== "admin") return res.status(401).send({message: ErrorMessages.NOT_AUTHORIZED})
+   // if(params !== user.name || user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try {
-      const collections = await findCollectionsByUser(req.body._id)
-      res.json({collections})
+      const collections = await findCollectionsByUser(params)
+      res.json(collections)
    } catch (error) {
       res.sendStatus(402)
    }
@@ -68,7 +65,7 @@ export const deleteCollectionsHandler = async (req:Request, res:Response) => {
    const user = res.locals.user
    if(param !== user.userId || user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try { 
-      const collection = deleteCollections(user.Id)
+      const collection = deleteCollections(user.name)
       res.send({message: SuccessMessage.COLLECTION_DELETED})
    } catch (error) {
       res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})

@@ -3,7 +3,7 @@ import{ AxiosError}  from "axios"
 
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
-import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, AuthenticationFailure} from "./user.types"
+import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, AuthenticationFailure, GetUserByCredentialsStart} from "./user.types"
 import * as action from "./user.action"
 
 
@@ -66,6 +66,19 @@ function* getUsers() {
    }
 }
 
+function* getUserByCredentials({payload: userName}: GetUserByCredentialsStart) {
+   try {
+      const response = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
+      yield* put(action.GetUserByCredentialsSuccess(response.data))
+   } catch (error) {
+      yield* put(action.GetUserByCredentialsFailure(error as AxiosError))
+   }
+}
+
+function* onGetUserByCredentials() {
+   yield* takeLatest(USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START, getUserByCredentials)
+}
+
 function* onUpdateUsers() {
    yield* takeLatest(USER_ACTION_TYPES.UPDATE_USERS_START, updateUsers)
 }
@@ -98,5 +111,6 @@ export default function* userSagas() {
       call(onGetUsers),
       call(onDeleteUsers),
       call(onUpdateUsers),
+      call(onGetUserByCredentials),
    ]);
 }

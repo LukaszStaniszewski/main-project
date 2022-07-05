@@ -27,7 +27,7 @@ app.use(cors({
    methods: ["GET", "POST", "PATCH", "DELETE"],
   credentials: false,
 }))
-// app.use(deserialaizeUser) 
+app.use(deserialaizeUser) 
 
 app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)

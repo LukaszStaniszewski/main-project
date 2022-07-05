@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import mongoose, { Schema, model, Types } from "mongoose";
 import dayjs from "dayjs";
 
 import { IUserDocument } from "./user.model";
@@ -15,7 +15,7 @@ export interface ICreateItemCollection {
    topic: CollectionTopics,
    description: string,
    owner: {
-      _id: IUserDocument["_id"],
+      _id: IUserDocument["_id"]
       name: IUserDocument["name"]
    },
    image?: {
@@ -52,12 +52,12 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
       _id: {
          type: Schema.Types.ObjectId,
          ref: "User",
-         // required: true
+         required: true
       },
       name: {
-         type: Schema.Types.String,
+         type:  Schema.Types.String,
          ref: "User",
-         // required: true
+         required: true
       },
    },
    createdAt: {

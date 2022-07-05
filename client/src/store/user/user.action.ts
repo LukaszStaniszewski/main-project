@@ -3,6 +3,22 @@ import { AxiosError}  from "axios"
 import * as type from "./user.types"
 
 
+
+export const getUserByCredentialsStart = (userName: ICurrentUser["name"]): type.GetUserByCredentialsStart => ({
+   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
+   payload: userName,
+})
+
+export const GetUserByCredentialsSuccess = (user: ICurrentUser): type.GetUserByCredentialsSuccess => ({
+   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS,
+   payload: user,
+})
+
+export const GetUserByCredentialsFailure = (error: AxiosError): type.GetUserByCredentialsFailure =>({
+   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_FAILURE,
+   payload: error
+})
+
 export const setUsers = (users: ICurrentUser[]): type.SetUsers => ({
    type: USER_ACTION_TYPES.SET_USERS,
    payload: users

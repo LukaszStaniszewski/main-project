@@ -25,6 +25,10 @@ export enum USER_ACTION_TYPES {
    DELETE_USERS_START = "DELETE_USERS_START",
    // DELETE_USERS_SUCCESS = "DELETE_USERS_SUCCESS",
    // DELETE_USERS_FAILURE = "DELETE_USERS_FAILURE",
+   
+   GET_USER_BY_CREDENTIALS_START = "GET_USER_BY_CREDENTIALS_START",
+   GET_USER_BY_CREDENTIALS_SUCCESS = "GET_USER_BY_CREDENTIALS_SUCCESS",
+   GET_USER_BY_CREDENTIALS_FAILURE = "GET_USER_BY_CREDENTIALS_FAILURE",
 }
 
 
@@ -54,12 +58,18 @@ export type DeleteUsersStart = ActionWithPayload<USER_ACTION_TYPES.DELETE_USERS_
 // export type DeleteUsersSuccess = Action<USER_ACTION_TYPES.DELETE_USERS_SUCCESS>
 // export type DeleteUsersFailure = ActionWithPayload<USER_ACTION_TYPES.DELETE_USERS_FAILURE, AxiosError>
 
+export type GetUserByCredentialsStart = ActionWithPayload<USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START, ICurrentUser["name"]>
+export type GetUserByCredentialsSuccess = ActionWithPayload<USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS, ICurrentUser>
+export type GetUserByCredentialsFailure = ActionWithPayload<USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_FAILURE, AxiosError>
+
 
 export type UserAction = 
-AuthenticationFailure | AuthenticationSuccess | SignInStart | LogOutStart | 
-LogOutSuccess | LogOutFailure | SetCurrentUser| GetUsersStart| GetUsersSuccess| 
-GetUsersFailure | DeleteUsersStart | UpdateUsersStart | UpdateUsersFailure |
-UpdateUsersSuccess | SetUsers | SignUpStart
+SignInStart | SignUpStart | AuthenticationSuccess | AuthenticationFailure |
+LogOutStart | LogOutSuccess | LogOutFailure |
+SetCurrentUser | SetUsers |
+GetUsersStart | GetUsersSuccess | GetUsersFailure |
+UpdateUsersStart | DeleteUsersStart | UpdateUsersSuccess | UpdateUsersFailure |
+GetUserByCredentialsStart | GetUserByCredentialsSuccess | GetUserByCredentialsFailure
 
 export interface ICurrentUser {
    _id: string,

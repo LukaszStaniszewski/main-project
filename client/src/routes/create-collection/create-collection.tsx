@@ -69,7 +69,7 @@ const CreateCollection = () => {
 
    }
    const appendItemsToCollection = () => {
-      return {...collectionFields, topic: collectionTopic, ower:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
+      return {...collectionFields, topic: collectionTopic, owner:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
    }
 
    const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {
