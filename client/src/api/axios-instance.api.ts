@@ -1,6 +1,6 @@
 import axios, {AxiosPromise} from 'axios'
-export const api = axios.create({baseURL : "http://localhost:8000"})
-// process.env.REACT_APP_BASE_API_URL
+const baseUrl = process.env.REACT_APP_BASE_API_URL
+export const api = axios.create({baseURL : baseUrl})
 api.defaults.headers.post['Content-Type'] = 'application/json'
 
 api.interceptors.request.use( (req) => {
