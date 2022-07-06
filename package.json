@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "start": "node server/build/index.js",
+   "postinstall": "cd server npx tsc",
+   "start": "npx node server/build/index.js",
    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client && cd server npx tsc"
   },
   "engines": { "node": "16.14.0" },
   "keywords": [],
-  "author": "",
+  "author": "Łukasz Staniszewski",
   "license": "ISC"
 }
