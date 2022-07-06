@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd server && npx ts-node-dev --respawn --transpile-only src/index.ts ",
+   "start": "node server/dist/index.js",
+   "postinstall": "cd server && npm run start tsc",
     "startClient": "cd client && npm start",
     "startDev": "npm run startServer && npm run startClient",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client"
 
   },
+  "engines": { "node": "16.14.0" },
   "keywords": [],
   "author": "",
   "license": "ISC"
