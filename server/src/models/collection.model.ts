@@ -63,6 +63,7 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
    createdAt: {
       type: String,
       default: dayjs().format("DD-MM-YYYY HH:mm:ss"),
+      unique: true,
       immutable: true
    },
    updatedAt: {

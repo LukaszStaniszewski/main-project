@@ -21,16 +21,21 @@
       --color-secondary: #0284c7;
     
     }
-    /* :root{
-        --color-background-primary: 179, 255, 23;
-        --color-background-secondary: #0B294A;
+
+    h1 {
+      @apply text-2xl;
+      @apply font-bold
     }
-    
-    .theme-dark {
-      --color-background-primary:  235, 250, 204;
-      --color-background-secondary: #0284c7;
-    
-    } */
+    h2 {
+      @apply text-xl;
+      @apply font-bold
+
+    }
+    h3 {
+      @apply text-lg;
+      @apply font-semibold
+    }
+   
 }
 
 

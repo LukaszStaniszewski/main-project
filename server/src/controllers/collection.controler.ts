@@ -39,12 +39,12 @@ export const uploadImageHandler = async (req: Request, res:Response) => {
 }
 
 export const getCollectionsPinnedToUser = async (req:Request, res: Response) => {
-   console.log("hit")
    const params = req.params.name
    // const user = res.locals.user
    // if(params !== user.name || user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
    try {
       const collections = await findCollectionsByUser(params)
+      if(!collections.length) res.status(406).send({message: "Haven't found collections owned by this user"})
       res.json(collections)
    } catch (error) {
       res.sendStatus(402)

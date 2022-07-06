@@ -3,20 +3,23 @@ import { useDispatch, useSelector } from "react-redux"
 import { CloudUploadIcon } from "@heroicons/react/outline"
 import { Dialog, Transition } from "@headlessui/react"
 import { PencilIcon } from "@heroicons/react/outline"
+import ReactMarkdown from "react-markdown"
 
 import { Topics} from "./MOCKUP_DATA"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SelectElement from "../../components/select-dropdown/selectDropdown.component"
 import CreateItem from "../../components/create-item/createItem.component"
-import TextArea from "../../components/text-area/textArea.component"
+
 import { ICreateItem,CollectionTopic } from "../../components/create-item/item-types/itemTypes"
 import { API_URL, postRequest } from "../../api/axios-instance.api"
 import { selectCurrentUser } from "../../store/user/user.selector"
 import { createCollectionWithItemsStart } from "../../store/collections/collection.actions"
+import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component"
 
 const defaultFormFields = {
    name: "",
+   description: "",
 
 }
 
@@ -121,7 +124,7 @@ const CreateCollection = () => {
     function openModal() {
       setIsOpen(true)
     }
-  
+  console.log("collectionFields", collectionFields)
   return (
    <section className=" relative z-0 overflow-auto" >
       <HeaderExtension/>
@@ -186,27 +189,18 @@ const CreateCollection = () => {
             </button>
             <Transition appear show={isOpen} as={Fragment}>
                <Dialog onClose={closeModal} className="relative z-50 ">
-                  <div className="fixed inset-0 flex items-center justify-center p-4">
-                     <Dialog.Panel className="w-full max-w-max rounded bg-gradient-to-r from-sky-500 to-cyan-500 p-4">
-                     <TextArea
-                        buttonText="add description"
-                        textAreaText="Write a description..."
-                     />
+                  <div className="fixed inset-0 flex items-center justify-center">
+                     <Dialog.Panel className="w-full max-w-max rounded bg-gradient-to-r from-sky-500 to-cyan-500 pb-4 pl-4 pr-4">
+                        <MarkdownTextArea/>
+                        <button>Save</button>
                      </Dialog.Panel>
                   </div>
                </Dialog>
             </Transition>
 
-
+          
            {!collectionFields && <button className="btn btn-sm bg-green-600">Save item</button>}
          </div>
-   
-
-        
-            {/* <TextArea/> */}
-   
-   
-   
          {collectionTopic
             ?  <div className="col-start-1 col-end-3 h-70vh">
                   <CreateItem 

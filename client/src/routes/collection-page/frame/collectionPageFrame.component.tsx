@@ -46,6 +46,7 @@ const CollectionPageFrame = () => {
                <div>{collection.name}</div>
                <div>{collection.topic}</div>
                <div>{collection.createdAt}</div>
+               <div>{collection.description}</div>
             </Fragment>
             : <Spinner/>
          }
