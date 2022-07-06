@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "start": "node server/dist/index.js",
-   "postinstall": "cd server && npm run start tsc",
+   "start": "node server/build/index.js",
     "startClient": "cd client && npm start",
     "startDev": "npm run startServer && npm run startClient",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client && cd server npx tsc"
 
   },
   "engines": { "node": "16.14.0" },
