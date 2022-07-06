@@ -1,14 +1,31 @@
-import {ChangeEvent, useState} from 'react'
+import {ChangeEvent, useState, Dispatch} from 'react'
 import ReactMarkdown from "react-markdown"
+import { Textarea } from "@material-tailwind/react";
 
+import {ICollectionFields} from "../../routes/create-collection/create-collection"
 
-const MarkdownTextArea = () => {
+interface ITextArea {
+   setText: Dispatch<React.SetStateAction<ICollectionFields>>
+} 
+
+const MarkdownTextArea = ({setText } : ITextArea ) => {
    const [input, setInput] = useState<string>("")
+   const [toggle, setToggle] = useState(false)
+   const [message, setMessage] = useState<null | string>(null)
 
-   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => setInput(event.target.value)
+   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) =>{
+      if(event.target.value.length > 10) setMessage(null)
+      setInput(event.target.value)
+   } 
+
+   const handleSubmit = () => {
+      if(!input) return setMessage("Description must be minimum 10 characters long")
+      setText(prevValue => ({...prevValue, description: input}))
+      setToggle(!toggle)
+   }
   return (
     <div className="h-full"> 
-      <div className="collapse w-40vw">
+      <div className="collapse collapse-arrow w-40vw">
          <input type="checkbox" /> 
          <div className="collapse-title text-lg font-medium">
             Markdown tips
@@ -42,16 +59,20 @@ const MarkdownTextArea = () => {
          </div>
       </div>
 
-      <textarea className="block w-full h-40vh  p-2 border-2"  
-         placeholder="Your message"
+      <Textarea className="flex w-full items-end gap-4 focus:ring-0 focus:border-color-border-main focus:text-color-border-main"  
          autoFocus
          value={input}
          name="description"
-         //@ts-ignore
          onChange={handleChange}
+         label={`${toggle ? "Success" : "Enter your description"}`}
+         success = {toggle && true}
          required
             />
-      <ReactMarkdown className="bg-white mt-2 p-2 border-2 border-color-secondary" children={input}/> 
+      <ReactMarkdown className="bg-white mt-2" children={input}/> 
+      <div className="flex justify-between whitespace-normal break-words">
+         <button onClick={handleSubmit} className="btn bg-cyan-600 hover:bg-cyan-800">{`${toggle ? "Edit description": "Save description"}`}</button>
+         <div className="text-red-600">{message}</div>
+      </div>
    </div>
   )
 }

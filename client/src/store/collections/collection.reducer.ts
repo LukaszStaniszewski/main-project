@@ -14,7 +14,7 @@ const COLLECTION_INITIAL_STATE = {
    collection: null,
    collections: [],
    collectionsWihoutItems: [],
-   collectionFetch: true,
+   collectionFetch: false,
    error: null,
    successMessage: null
 }

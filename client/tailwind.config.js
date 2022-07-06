@@ -1,13 +1,5 @@
-function withOpacity(variableName) {
-    return ({ opacityValue }) => {
-      if (opacityValue !== undefined) {
-        return `rgba(var(${variableName}), ${opacityValue})`
-      }
-      return `rgb(var(${variableName}))`
-    }
-  }
-
-module.exports = {
+const withMT = require("@material-tailwind/react/utils/withMT");
+module.exports = withMT ({
     
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -72,11 +64,15 @@ module.exports = {
         'color-border-primary' : 'var(--color-border-primary)',
         'color-border-primary-m' : 'var(--color-border-primary-m)',
         'color-border-secondary' : 'var(--color-border-secondary)',
-        'gradient-primary':"bg-gradient-to-r from-color-primary to-color-secondary"
+        'gradient-primary':"bg-gradient-to-r from-color-primary to-color-secondary",
+        "color-border-main" : "var(--color-border-main)",
+        "color-border-main-hover" : "var(--color-border-main-hover)"
       },
       border: {
         'primary' : 'var(--color-border-primary)',
-        "secondary" : "var(--color-border-secondary)"
+        'color-border-primary-m' : 'var(--color-border-primary-m)',
+        "secondary" : "var(--color-border-secondary)",
+        "tertiary" : "var(--color-border-tertiary)",
       },
       textColor: {
         'primary': 'var(--color-text-primary)'
@@ -99,5 +95,5 @@ module.exports = {
     require("daisyui")
   ],
 
-}
+})
 

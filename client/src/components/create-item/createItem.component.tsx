@@ -131,7 +131,7 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
                <button className="btn btn-sm">ADD TAGS</button>
                <button className="btn btn-sm bg-green-600"
                   onClick={saveItemHandler}
-               >Save item</button>
+               >Add item</button>
           
          </div>
 
