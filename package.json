@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
    "start": "node server/build/index.js",
-    "startClient": "cd client && npm start",
-    "startDev": "npm run startServer && npm run startClient",
-    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client && cd server npx tsc"
-
+   "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install --prefix server && npm run build --prefix client && cd server npx tsc"
   },
   "engines": { "node": "16.14.0" },
   "keywords": [],
