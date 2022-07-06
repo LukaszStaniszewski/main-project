@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "startServer": "cd server && npx ts-node-dev --respawn --transpile-only src/index.ts ",
+    "start": "cd server && npx ts-node-dev --respawn --transpile-only src/index.ts ",
     "startClient": "cd client && npm start",
-    "startDev": "npm run startServer && npm run startClient"
+    "startDev": "npm run startServer && npm run startClient",
+    "build": "npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+
+    
   },
   "keywords": [],
   "author": "",

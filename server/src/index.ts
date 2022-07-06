@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express"
 import dotenv from "dotenv"
 dotenv.config({debug: true});
@@ -33,6 +34,19 @@ app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)
 app.use("/api/collection", collectionRouter)
 app.use("/api/item", itemRouter)
+
+
+if (process.env.NODE_ENV === 'production') {
+   app.use(express.static(path.join(__dirname, '../../client/build')))
+ 
+   app.get('*', (req, res) =>
+     res.sendFile(
+       path.resolve(__dirname, '../../', 'client', 'build', 'index.html')
+     )
+   )
+ } else {
+   app.get('/', (req, res) => res.send('Please set to production'))
+ }
 
 const PORT = 8000;
 
