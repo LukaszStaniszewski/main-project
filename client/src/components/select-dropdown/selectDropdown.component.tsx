@@ -1,8 +1,11 @@
 import React, {useState, Fragment, useEffect, Dispatch, SetStateAction} from 'react'
+import { useSelector } from "react-redux"
+
 import { Topics } from "../../routes/create-collection/MOCKUP_DATA"
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import {ICollectionTopics} from "../../routes/create-collection/MOCKUP_DATA"
+import { selectTopicDropdown } from "../../store/local/local.selector"
 
 interface ISelectDropDown {
    data: typeof Topics,
@@ -10,16 +13,21 @@ interface ISelectDropDown {
 }
 type SelectedTopic = typeof Topics[number]
 const SelectDropdown = ({data, setTopic} : ISelectDropDown) => {
-
-   const [selected, setSelected] = useState<SelectedTopic | "Choose Topic">("Choose Topic")
+   const [selected, setSelected] = useState<SelectedTopic | "Choose Topic">(() => {
+      const topic = sessionStorage.getItem("topic")  as SelectedTopic | undefined
+      if(!topic ) return "Choose Topic"
+      return topic
+   })
+   const topicDropdownState = useSelector(selectTopicDropdown)
 
    useEffect(() => {
       if(selected === "Choose Topic") return
       setTopic(selected)
+      sessionStorage.setItem("topic", selected)
    }, [selected])
   return (
  
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selected} onChange={setSelected} disabled={topicDropdownState} >
         <div className="relative z-10">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left  border-b-2 border-color-border-main  focus:outline-none focus-visible:border-main-hover focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
             <span className="block truncate">{selected}</span>

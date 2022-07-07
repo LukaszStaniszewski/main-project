@@ -64,5 +64,5 @@ export interface ICreateItem{
    name: string,
    tags: string[],
    topic: string
-   optional?: OptionalItemData
+   optionalFields?: OptionalItemData
 }

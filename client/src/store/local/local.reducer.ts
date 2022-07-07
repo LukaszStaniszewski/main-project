@@ -1,13 +1,14 @@
 import {LOCAL_ACTION_TYPES, LocalAction} from "./local.types"
 
 export interface ILocalState  {
-   currentLanguage: string
+   currentLanguage: string,
+   topicDropdownState: boolean,
 }
 
 
 const LOCAL_INITIAL_STATE: ILocalState = {
-   currentLanguage:  ""
-
+   currentLanguage:  "",
+   topicDropdownState: false,
 }
 
 const localReducer = (state = LOCAL_INITIAL_STATE, action = {} as LocalAction) => {
@@ -17,6 +18,11 @@ const localReducer = (state = LOCAL_INITIAL_STATE, action = {} as LocalAction) =
          return {
             ...state,
             currentLanguage: action.payload
+         }
+      case LOCAL_ACTION_TYPES.DISABLE_TOPIC_DROPDOWN:
+         return {
+            ...state,
+            topicDropdownState: action.payload
          }
       default:
          return state

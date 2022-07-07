@@ -38,7 +38,7 @@ export const deleteColletionFailure = (error : AxiosError): give.DeleteCollectio
    payload: error
 })
 
-export const createCollectionWithItemsStart = (itemsCollection: {collectionWithItems: ICreateCollection, image: File}): give.CreateCollectionWithItemsStart => ({
+export const createCollectionWithItemsStart = (itemsCollection: {collectionWithItems: ICreateCollection, image?: File}): give.CreateCollectionWithItemsStart => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START,
    payload: itemsCollection
 })

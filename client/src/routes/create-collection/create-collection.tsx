@@ -1,7 +1,7 @@
-import {Fragment, useState, ChangeEvent, FormEvent, useEffect} from 'react'
+import React, { useState, ChangeEvent, FormEvent, useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux"
-import { CloudUploadIcon, PhotographIcon, InformationCircleIcon, XIcon } from "@heroicons/react/outline"
-import {Tabs, TabsHeader, TabsBody, Tab, TabPanel, Popover, PopoverHandler, PopoverContent} from "@material-tailwind/react"
+import { PhotographIcon} from "@heroicons/react/outline"
+import {Tabs, TabsHeader, TabsBody, Tab, TabPanel} from "@material-tailwind/react"
 
 import { Topics} from "./MOCKUP_DATA"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
@@ -14,8 +14,9 @@ import { selectCurrentUser } from "../../store/user/user.selector"
 import { createCollectionWithItemsStart } from "../../store/collections/collection.actions"
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component"
 import { selectCollectionErrorMessage, selectCollectionLoadingState } from "../../store/collections/collection.selector"
-import Spinner from "../../components/spinner/spinner.component"
-import Alert from "../../components/alert/alert.component"
+import Alert, {IAlert} from "../../components/alert/alert.component"
+import { disableTopicDropdown } from "../../store/local/local.action"
+import { ICollection, } from "../../store/collections/collection.types"
 
 const requiredCollectionFields = {
    name: "",
@@ -23,7 +24,11 @@ const requiredCollectionFields = {
    topic: undefined,
 }
 
-type Test = keyof typeof requiredCollectionFields
+const alertSettings:IAlert  = {
+   message: "",
+   toggle: true,
+   type: "info"
+}
 
 const defaultItemData = {
    id: "",
@@ -35,10 +40,11 @@ const defaultItemData = {
 export interface ICollectionFields {
    name: string,
    description: string,
-   topic?: typeof Topics,
+   topic?: CollectionTopic
 }
 
-export interface ICreateCollection extends ICollectionFields{
+export interface ICreateCollection extends Omit<ICollectionFields, "topic">{
+   topic: CollectionTopic,
    owner: {
       _id: string,
       name: string
@@ -58,36 +64,31 @@ const CreateCollection = () => {
    const [itemData, setItemData] = useState<ICreateItem>(defaultItemData)
    const [header, setHeader] = useState(false)
    const [fileDataURL, setFileDataURL] = useState(null);
-   const [messageToUser, setMessageToUser] = useState("")
+   const [alert, setAlert] = useState(alertSettings)
    const [image, setImage] = useState<File>()
    const dispatch = useDispatch()
    const currentUser = useSelector(selectCurrentUser)
    const collectionFetch = useSelector(selectCollectionLoadingState)
    const error = useSelector(selectCollectionErrorMessage)
    
+   
    const setCardHandler = () => setHeader(!header)
 
    const handleSubmit = async (event:FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       const collectionWithItems = appendItemsToCollection()
-      const validated = validation(collectionWithItems)
-      if(!validated) return
-      // @ts-ignore
+      if(!collectionWithItems) return
       dispatch(createCollectionWithItemsStart({collectionWithItems: collectionWithItems, image: image}))
-      if(!error) return setMessageToUser("Collection has been saved!")
+      if(!error) return setAlert(prevState => ({...prevState, message: "Collection has been saved!", toggle: true, type:"success"}))
+      dispatch(disableTopicDropdown(false))
    }
 
-   const appendItemsToCollection = () => {
-      console.log(collectionTopic)
-      return {...collectionFields, topic: collectionTopic, owner:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
-   }
-      // @ts-ignore
-   const validation = (collectionWithItems) => {
-      if(!collectionWithItems.name || !collectionWithItems.description || !collectionWithItems.topic){
-         return setMessageToUser(`You missed required fields!`)
+   const appendItemsToCollection = (): ICreateCollection | false => {
+      if(!currentUser?.name|| !currentUser?._id || !collectionTopic){
+         setAlert(prevState => ({...prevState, toggle: true, message: `You missed required fields!`, type:"error"}))
+         return false
       }
-      setMessageToUser("Saving...")
-      return true
+      return {...collectionFields, topic: collectionTopic, owner:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
    }
 
    const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +100,7 @@ const CreateCollection = () => {
       if(!event.target.files) return
       const file = event.target.files[0];
       if (!file.type.match(imageMimeType)) {
-         alert("Image mime type is not valid");
+         setAlert(prevState => ({toggle: true, message: "Saving...", type: "error"}));
          return;
        }
 
@@ -131,21 +132,14 @@ const CreateCollection = () => {
 
  }, [image]);
 
- 
+ useEffect(() => {
+   setAlert({message: "You won't be able to change a topic, after you add an item.", toggle: true, type: "info"})
+ },[])
 
   console.log("collectionWithItems", collectionFields)
   return (
    <section className="relative z-0 pb-4" >
       <HeaderExtension/>
-      {/* <div className="absolute z-50 w-full h-full">
-         <div className=" flex justify-center items-center h-full">
-               <Alert 
-                  alertType="error" 
-                  text="this is info alert"
-                  className="text-md"
-               />
-         </div>
-      </div> */}
       <Tabs value="createCollection"  className="w-90vw m-auto bg-secondary p-3 screen-height " >
          <div className="flex justify-between items-center">
             
@@ -154,61 +148,61 @@ const CreateCollection = () => {
                <Tab value="createCollection" className="text-2xl w-50vw pb-1 cursor-pointer" onClick={setCardHandler}>Create Collection</Tab>
                <Tab value="addItems" className="text-2xl  pb-1 cursor-pointer" onClick={setCardHandler} >Add items</Tab>
                </TabsHeader>
-            
-            <div>  
-               <Popover>
-                  <PopoverHandler>
-                     <button className={`btn ${collectionFetch && "loading"}`} form="create-collection"  type="submit">DONE!</button>
-                  </PopoverHandler>
-                  <PopoverContent className="whitespace-nowrap">{messageToUser}</PopoverContent>   
-               </Popover> 
-         
-            </div>
+
+               <button className={`btn ${collectionFetch && "loading"}`} form="create-collection"  type="submit">DONE!</button>
          </div>
           
          <TabsBody>
             <TabPanel value="createCollection"  className="grid grid-cols-2 content-start gap-x-10">
-            <div className="col-start-1 col-end-2">
-               <form noValidate onSubmit={handleSubmit} id="create-collection">
-               <div className="w-full">
-                  <FormInput
-                     label="collection name"
-                     componentName="createCollection"
-                     value={collectionFields.name}
-                     onChange={handleChange}
-                     name="name"
-                     required
-                  />
-               </div>
-               <div>
-                  {fileDataURL 
-                     ? <img src={fileDataURL} alt="preview" />  
-                     : null
-                  }
-                  <label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-tertiary focus:outline-none">
-                     <span className="flex items-center space-x-2">
-                           <PhotographIcon className="w-1/12"/>
-                           <span className="font-medium text-gray-600">
-                              Drop files to Attach, or
-                              <span className="text-blue-600 underline"> browse</span>
-                           </span>
-                     <input type="file" name="image" className="hidden" accept="image/*" onChange={selectFileHandler}/>
-                     </span>
-                  </label>
-               </div>
-               </form>
+               <div className="col-start-1 col-end-2">
+                  <form onSubmit={handleSubmit} id="create-collection">
+                  <div className="w-full">
+                     <FormInput
+                        label="collection name"
+                        componentName="createCollection"
+                        value={collectionFields.name}
+                        onChange={handleChange}
+                        name="name"
 
-            </div>
-
-            <div className="col-start-2 col-end-3">
-               <div className="w-full mb-5">
-                  <SelectElement setTopic={setCollectionTopic} data={Topics}/>
-               </div>
+                     />
+                  </div>
                   <MarkdownTextArea
                      setText={setCollectionFields}
                   />
-            </div>
-        
+                  </form>
+
+               </div>
+
+               <div className="col-start-2 col-end-3">
+                  <div className="w-full mb-5">
+                     <SelectElement setTopic={setCollectionTopic} data={Topics}/>
+                  </div>
+                  <div className={`${!alert.toggle && "opacity-0"}`} onClick={()=> setAlert(prevState => ({...prevState, toggle: false}))}>
+                     <Alert 
+                        type={alert.type}
+                        message={alert.message}
+                        className="text-sm"       
+                      />
+                  </div>
+                  <div>
+                     {fileDataURL 
+                        ? <img src={fileDataURL} alt="preview" />  
+                        : null
+                     }
+                     <label className="flex justify-center w-full h-32 px-4 bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-tertiary focus:outline-none">
+                        <span className="flex items-center space-x-2">
+                              <PhotographIcon className="w-1/12"/>
+                              <span className="font-medium text-gray-600">
+                                 Drop files to Attach, or
+                                 <span className="text-blue-600 underline"> browse</span>
+                              </span>
+                        <input type="file" name="image" className="hidden" accept="image/*" onChange={selectFileHandler}/>
+                        </span>
+                     </label>
+                  </div>
+               </div>
+
+             
             </TabPanel>
             <TabPanel className="col-start-1 col-end-3 h-70vh" value="addItems">
              {collectionTopic
@@ -230,7 +224,7 @@ const CreateCollection = () => {
   )
 }
 
-export default CreateCollection
+export default React.memo(CreateCollection)
 
 
 

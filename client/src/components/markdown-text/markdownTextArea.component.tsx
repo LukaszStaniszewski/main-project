@@ -1,4 +1,4 @@
-import {ChangeEvent, useState, Dispatch} from 'react'
+import React,{ChangeEvent, useState, Dispatch, useEffect} from 'react'
 import ReactMarkdown from "react-markdown"
 import { Textarea } from "@material-tailwind/react";
 
@@ -9,13 +9,19 @@ interface ITextArea {
 } 
 
 const MarkdownTextArea = ({setText } : ITextArea ) => {
-   const [input, setInput] = useState<string>("")
+   const [input, setInput] = useState<string>(() => {
+      const userText = sessionStorage.getItem("description") 
+      if(!userText) return ""
+      return userText
+   })
+   
    const [toggle, setToggle] = useState(false)
    const [message, setMessage] = useState<null | string>(null)
 
    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) =>{
       if(event.target.value.length > 10) setMessage(null)
       setInput(event.target.value)
+      sessionStorage.setItem("description", input)
    } 
 
    const handleSubmit = () => {
@@ -23,6 +29,7 @@ const MarkdownTextArea = ({setText } : ITextArea ) => {
       setText(prevValue => ({...prevValue, description: input}))
       setToggle(!toggle)
    }
+ 
   return (
     <div className="h-full"> 
       <div className="collapse collapse-arrow w-40vw">
@@ -59,22 +66,22 @@ const MarkdownTextArea = ({setText } : ITextArea ) => {
          </div>
       </div>
 
-      <Textarea className="flex w-full items-end gap-4 focus:ring-0 focus:border-color-border-main focus:text-color-border-main"  
+      <Textarea className="flex w-full items-end gap-4 focus:ring-0 focus:border-color-border-main focus:text-secondary"  
          autoFocus
          value={input}
          name="description"
          onChange={handleChange}
          label={`${toggle ? "Success" : "Enter your description"}`}
          success = {toggle && true}
-         required
+
             />
       <ReactMarkdown className="bg-white mt-2" children={input}/> 
       <div className="flex justify-between whitespace-normal break-words">
-         <button onClick={handleSubmit} className="btn bg-cyan-600 hover:bg-cyan-800">{`${toggle ? "Edit description": "Save description"}`}</button>
+         <button type="button" onClick={handleSubmit} className="btn bg-cyan-600 hover:bg-cyan-800">{`${toggle ? "Edit description": "Save description"}`}</button>
          <div className="text-red-600">{message}</div>
       </div>
    </div>
   )
 }
 
-export default MarkdownTextArea
+export default React.memo(MarkdownTextArea)

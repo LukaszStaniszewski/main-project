@@ -1,11 +1,12 @@
-import { Fragment, useState, useEffect, Dispatch, SetStateAction, MouseEvent, ChangeEvent} from 'react'
+import { Fragment, useState, useEffect, Dispatch, SetStateAction, ChangeEvent} from 'react'
+import { useDispatch } from "react-redux"
 import { Reorder } from "framer-motion"
 
 import FormInput from "../form-input/form-input.componentx"
 import ChosenItemField from "./item-field/chosenItemField.component"
 import OptionalField from "./item-field/optionalField.component"
 import { CollectionTopic, IOptionalField, ItemKey, ICreateItem, COLLECTIONS_MOCKUP, OptionalItemData } from "./item-types/itemTypes"
-
+import { disableTopicDropdown } from "../../store/local/local.action"
 
 interface ICreateItemComponent {
    collectionTopic: CollectionTopic
@@ -22,8 +23,8 @@ const defaultUserInputData = {
 const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
    const [optionalFields, setOptionalFields] = useState<IOptionalField[]>([])
    const [chosenOptionalFields, setChosenOptionalFields] = useState<IOptionalField[]>([])
-           
    const [userInputData, setUserInputData] = useState<ICreateItem>(defaultUserInputData)
+   const dispatch = useDispatch()
    
    const getCollectionKeyes = () => {
       if(!collectionTopic) return
@@ -40,7 +41,7 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
    }
 
    useEffect(() => {
-      const optionalFields = getBaseFields()
+      const optionalFields = getBaseFields() 
       setOptionalFields(optionalFields)
       setChosenOptionalFields([])
    }, [collectionTopic])
@@ -72,14 +73,15 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
       if(!userInputData?.id || !userInputData?.name) return alert("name and id are required")
       removeFalsyValues()
       setItemData(userInputData)
+      dispatch(disableTopicDropdown(true))
       resetFields()
    }
    
    const removeFalsyValues = () => {
-      if(!userInputData.optional) return
-      const keyes =  Object.keys(userInputData.optional) as Array<keyof OptionalItemData>
+      if(!userInputData.optionalFields) return
+      const keyes =  Object.keys(userInputData.optionalFields) as Array<keyof OptionalItemData>
       keyes.forEach((key) => {
-         if(userInputData.optional && !userInputData.optional[key]) {
+         if(userInputData.optionalFields && !userInputData.optionalFields[key]) {
             //@ts-ignore
             delete userInputData.optional[key]
          }

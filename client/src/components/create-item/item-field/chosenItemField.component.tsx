@@ -34,7 +34,7 @@ const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, 
          value = event?.target.value
       
       setFieldValues(prevState => ({...prevState, [fieldName]: value}))
-      setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [fieldName]: value}}))
+      setUserInputData(prevState => ({...prevState, optionalFields: {...prevState.optionalFields, [fieldName]: value}}))
    }
 
    const moveFieldHandler =async () => {
@@ -43,7 +43,7 @@ const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, 
       setChosenOptionalFields(prevValue =>  prevValue.filter(field => field.fieldName !== fieldName))
       setOptionalFields(prevValue => [{...baseField, isAdded: false}, ...prevValue, ]) 
 
-      setUserInputData(prevState => prevState.optional&& prevState.optional[fieldName] === fieldValue[fieldName] ? {...prevState, optional: {...prevState.optional ,[fieldName]: ""}}: prevState)
+      setUserInputData(prevState => prevState.optionalFields && prevState.optionalFields[fieldName] === fieldValue[fieldName] ? {...prevState, optionalFields: {...prevState.optionalFields ,[fieldName]: ""}}: prevState)
 
    }
 
