@@ -25,6 +25,7 @@ const Navbar = () => {
    const dispatch = useDispatch()
    const currentUser = useSelector(selectCurrentUser)
    const language = useSelector(selectCurrentLanguage)
+   const user  = useSelector(selectCurrentUser)
    const navigate = useNavigate()
 
    useEffect(() => {
@@ -107,12 +108,12 @@ const Navbar = () => {
                         />
                   </Link> 
 
-                  <Link className="text-primary" to={`/user/${currentUser?.name}`}>
+         { user && <Link className="text-primary" to={`/user/${currentUser?.name}`}>
                      <FormattedMessage 
                            id="navigation.my-collections-link"
                            defaultMessage="My collections"
                         />
-                  </Link>
+                  </Link>}
                </div>
             
                <SearchBar/>
@@ -120,7 +121,7 @@ const Navbar = () => {
       
                   <label className="swap swap-rotate w-6">
                      <input type="checkbox" className="hidden" onChange={themeSwitchHandler}/>
-                     <SunIcon/>
+                     <SunIcon />
                      <MoonIcon/>
                   </label>
                   
@@ -138,10 +139,10 @@ const Navbar = () => {
                   </div>
 
 
-                  <div className="relative z-30 whitespace-nowrap" >
+                  <div className="relative z-30 whitespace-nowrap">
                      {currentUser 
                      ?  <div className="text-primary text-3xl cursor-pointer"  onClick={userMenuToggleHandler}><UserIcon/></div>
-                     :  <button className="btn bg-color-primary border-none hover:bg-fuchsia-800" onClick={redirectToSignIn}>Sign In</button>
+                     :  <button className="btn bg-color-primary border-none hover:bg-color-primary hover:opacity-80" onClick={redirectToSignIn}>Sign In</button>
                      }
                      <ul className={`${!isUserMenuOpen && "hidden" } min-w-max menu bg-base-100 w-28 rounded-box absolute top-10 -right-2 z-10`}>
                            <li>

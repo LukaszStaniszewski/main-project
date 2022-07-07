@@ -3,7 +3,7 @@ import { IItemCollectionDocument } from "../models/collection.model"
 import ItemModel, {ICreateItem, IItemDocument} from "../models/item.model"
 import getErrorMessage from "../utils/getErrorMessage"
 
-export const createItem = async (input: ICreateItem[], collectionId: IItemCollectionDocument["_id"]):Promise<IItemDocument[]> => {
+export const createItem = async (input: ICreateItem[], collectionId?: IItemCollectionDocument["_id"]):Promise<IItemDocument[]> => {
    try{
       if(!createItem.length) throw new Error(getErrorMessage("To create item it must an array"))
       const item = await Promise.all(input.map(item => {

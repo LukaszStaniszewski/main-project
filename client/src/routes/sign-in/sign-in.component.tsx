@@ -31,7 +31,6 @@ const SignIn = () => {
    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
-      console.log("error", error)
 
       !isLoading && error && navigate('/')
 

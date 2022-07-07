@@ -5,7 +5,7 @@ import { ICreateItem } from "../models/item.model";
 import { createItem, deleteItems } from "../services/item.service";
 import { SuccessMessage, ErrorMessage } from "../config/constants.config";
 
-export const createItemHandler = async (req:Request<{},{}, ICreateItem>, res:Response) => {
+export const createItemHandler = async (req:Request<{},{}, ICreateItem[]>, res:Response) => {
    try {
       const item = await createItem(req.body)
       console.log("item", item)
