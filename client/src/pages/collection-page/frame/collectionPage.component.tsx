@@ -54,7 +54,7 @@ const CollectionPage = () => {
       setColumns(columns)
       console.log("columns", columns)
    }, [collection])
-   
+ 
    const customizeColumns = () => {
       return  [...Object.keys(items[0])
       .filter(value => 
@@ -66,9 +66,15 @@ const CollectionPage = () => {
          ), "createdAt"]
    }
 
-   const createItemHandler = () => {
-      navigate("/new/item")
+   const deleteSelectedItems = () => {
+      
    }
+   console.log("collection", collection)
+   console.log("items" , items)
+   const toCreateItemPage = () =>  navigate("/new/item");
+
+    
+   
   return (
     <section className=" relative z-0 pb-4">
       <HeaderExtension/>
@@ -87,13 +93,14 @@ const CollectionPage = () => {
                      {image && <img className="max-w-1/3 max-h-40vh bg-cover bg-no-repeat" src={image.url} alt="" />}
                      <ReactMarkdown className="w-1/2" children={description}/>
                   </div>
-                  <button onClick={createItemHandler} className="btn my-5">new item</button>
+                  <button onClick={toCreateItemPage} className="btn my-5">new item</button>
                   <div>
-                     {items && 
+                     {items && columns.length > 1 && 
                         <CustomTable
                         //@ts-ignore
                            rows={items}
                            customizedColumns = {columns}
+                           checkboxesAvaible={true}
                         />
                      }
                   </div>

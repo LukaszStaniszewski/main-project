@@ -61,8 +61,8 @@ function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure
 
 function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectionWithItemsStart) {
    try {
-      const response = yield* call(getRequest<ICollection[]>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
-      const collectionWithItems = response.data[0]
+      const response = yield* call(getRequest<ICollection>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
+      const collectionWithItems = response.data
       const {items, ...collection} = collectionWithItems
       yield* put(getCollectionWithItemsSuccess(collection))
       if(items) yield* put(setItems(items))

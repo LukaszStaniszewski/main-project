@@ -5,7 +5,7 @@ import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
 const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
-   let columns = customizedColumns
+   let columns: string[]
    if(customizedColumns) {
       columns = customizedColumns
    } else {
@@ -25,7 +25,7 @@ const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false,
    const sort = (rows: Rows) => {
       const {column, ascending} = sortedBy
       return rows.sort((a,b) => {
-
+         console.log("columns", column)
          //@ts-ignore
          if(a[column].toString() > b[column].toString()) {
             return ascending ? -1 : 1;
