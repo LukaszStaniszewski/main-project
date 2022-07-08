@@ -16,7 +16,6 @@ import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.co
 import { selectCollectionErrorMessage, selectCollectionLoadingState } from "../../store/collections/collection.selector"
 import Alert, {IAlert} from "../../components/alert/alert.component"
 import { disableTopicDropdown } from "../../store/local/local.action"
-import { ICollection, } from "../../store/collections/collection.types"
 
 const requiredCollectionFields = {
    name: "",
@@ -30,11 +29,11 @@ const alertSettings:IAlert  = {
    type: "info"
 }
 
-const defaultItemData = {
+export const defaultItemData = {
    id: "",
    name: "",
    tags: [""],
-   topic: ""
+   topic: "",
 }
 
 export interface ICollectionFields {
@@ -81,6 +80,7 @@ const CreateCollection = () => {
       dispatch(createCollectionWithItemsStart({collectionWithItems: collectionWithItems, image: image}))
       if(!error) return setAlert(prevState => ({...prevState, message: "Collection has been saved!", toggle: true, type:"success"}))
       dispatch(disableTopicDropdown(false))
+      clearSession()
    }
 
    const appendItemsToCollection = (): ICreateCollection | false => {
@@ -89,6 +89,11 @@ const CreateCollection = () => {
          return false
       }
       return {...collectionFields, topic: collectionTopic, owner:{_id: currentUser?._id, name: currentUser?.name} ,items: new Array(itemData)}
+   }
+
+   const clearSession = () => {
+      sessionStorage.removeItem("topic")
+      sessionStorage.removeItem("description")
    }
 
    const handleChange = async (event:ChangeEvent<HTMLInputElement>) => {

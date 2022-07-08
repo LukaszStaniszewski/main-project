@@ -1,4 +1,5 @@
 import {InformationCircleIcon, XIcon } from "@heroicons/react/outline"
+import { Fragment } from "react"
 
 export const ALERT_TYPE_CLASSES = {
    info: "info",
@@ -10,14 +11,14 @@ export const ALERT_TYPE_CLASSES = {
 export type Alert = keyof typeof ALERT_TYPE_CLASSES
 
 export interface IAlert  {
-   message: string,
-   type: Alert,
+   message?: string,
+   type?: Alert,
    className?: string,
    toggle?: boolean
 }
 
 const Alert = ({type = "info", message = "message", className}: IAlert)=> {
-
+   if(!message && !type) return <Fragment></Fragment>
 
   return (
    <div 

@@ -1,7 +1,7 @@
 import { AxiosError } from "axios"
 
 import { Action, ActionWithPayload } from "../../utils/store.utils"
-import { ICreateCollection } from "../../routes/create-collection/create-collection"
+import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { IError } from "../user/user.reducer"
 import { IItem } from "../items/item.types"
 import { ICurrentUser } from "../user/user.types"

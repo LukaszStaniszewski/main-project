@@ -4,8 +4,14 @@ import { Link } from "react-router-dom"
 import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
-const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
-   const columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
+const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
+   let columns = customizedColumns
+   if(customizedColumns) {
+      columns = customizedColumns
+   } else {
+      columns = Object.keys(rows[0]).filter(value => value !== "_id") as Columns
+   }
+
    const [checkbox, setCheckbox] = useState(false)
    const [sortedBy, setSortedBy] = useState({
       column: columns[0],
@@ -71,6 +77,7 @@ const CustomTable =  ({rows = [], checkboxesAvaible = false, setSelectedItems}: 
                <TableRows
                   key={row._id} 
                   row={row} 
+                  //@ts-ignore
                   columns={columns} 
                   selectAll={checkbox} 
                   setSelectedItems={setSelectedItems} 

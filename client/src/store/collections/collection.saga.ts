@@ -5,7 +5,8 @@ import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
 import {IError} from "../user/user.reducer"
-import { ICreateCollection } from "../../routes/create-collection/create-collection"
+import { ICreateCollection } from "../../pages/create-collection/create-collection"
+import { setItems } from "../items/item.actions"
 
 type ImageResponse = {
    image: {
@@ -61,7 +62,10 @@ function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure
 function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectionWithItemsStart) {
    try {
       const response = yield* call(getRequest<ICollection[]>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
-      yield* put(getCollectionWithItemsSuccess(response.data[0]))
+      const collectionWithItems = response.data[0]
+      const {items, ...collection} = collectionWithItems
+      yield* put(getCollectionWithItemsSuccess(collection))
+      if(items) yield* put(setItems(items))
    } catch (error) {
       yield* put(getCollectionWithItemsFailure(error as AxiosError))
    }

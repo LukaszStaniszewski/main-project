@@ -16,7 +16,7 @@ export interface ICustomizedCollections extends Omit<ICollectionWithoutItems, "i
    owner: string,
 }
 
-const UserPageFrame = () => {
+const UserPage = () => {
    const [collections, setCollections] = useState<ICustomizedCollections[]>([])
    const {currentUser, user, isLoading} = useSelector(selectUserReducer)
    const collectionsWihoutItems = useSelector(selectCollectionsWithoutItems)
@@ -85,4 +85,4 @@ const UserPageFrame = () => {
   )
 }
 
-export default UserPageFrame
+export default UserPage

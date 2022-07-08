@@ -1,10 +1,10 @@
 import React, {useState, Fragment, useEffect, Dispatch, SetStateAction} from 'react'
 import { useSelector } from "react-redux"
 
-import { Topics } from "../../routes/create-collection/MOCKUP_DATA"
+import { Topics } from "../../pages/create-collection/MOCKUP_DATA"
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
-import {ICollectionTopics} from "../../routes/create-collection/MOCKUP_DATA"
+import {ICollectionTopics} from "../../pages/create-collection/MOCKUP_DATA"
 import { selectTopicDropdown } from "../../store/local/local.selector"
 
 interface ISelectDropDown {

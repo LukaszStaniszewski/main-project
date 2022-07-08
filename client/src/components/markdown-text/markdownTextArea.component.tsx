@@ -2,7 +2,7 @@ import React,{ChangeEvent, useState, Dispatch, useEffect} from 'react'
 import ReactMarkdown from "react-markdown"
 import { Textarea } from "@material-tailwind/react";
 
-import {ICollectionFields} from "../../routes/create-collection/create-collection"
+import {ICollectionFields} from "../../pages/create-collection/create-collection"
 
 interface ITextArea {
    setText: Dispatch<React.SetStateAction<ICollectionFields>>

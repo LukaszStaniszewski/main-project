@@ -1,4 +1,4 @@
-import { Topics } from "../../../routes/create-collection/MOCKUP_DATA"
+import { Topics } from "../../../pages/create-collection/MOCKUP_DATA"
 
 export const COLLECTIONS_MOCKUP = {
    books: {
@@ -63,6 +63,7 @@ export interface ICreateItem{
    id: string,
    name: string,
    tags: string[],
+   collectionId?: string,
    topic: string
    optionalFields?: OptionalItemData
 }

@@ -1,18 +1,23 @@
 import { AxiosError } from "axios";
 import { ICreateItem } from "../../components/create-item/item-types/itemTypes";
-import { ITEM_TYPES, CreateItemStart, IItem, CreateItemSuccess, CreateItemFailure } from "./item.types";
+import { ITEM_TYPES, CreateItemsStart, IItem, CreateItemsSuccess, CreateItemsFailure, SetItems } from "./item.types";
 
-export const createItemStart = (item: ICreateItem): CreateItemStart => ({
-   type: ITEM_TYPES.CREATE_ITEM_START,
-   payload: item,
+export const createItemsStart = (items: ICreateItem[]): CreateItemsStart => ({
+   type: ITEM_TYPES.CREATE_ITEMS_START,
+   payload: items,
 })
 
-export const createItemSuccess = (item: IItem): CreateItemSuccess => ({
-   type: ITEM_TYPES.CREATE_ITEM_SUCCESS,
-   payload: item
+export const createItemsSuccess = (items: IItem[]): CreateItemsSuccess => ({
+   type: ITEM_TYPES.CREATE_ITEMS_SUCCESS,
+   payload: items
 })
 
-export const createItemFailure = (error: AxiosError): CreateItemFailure => ({
-   type: ITEM_TYPES.CREATE_ITEM_FAILURE,
+export const createItemsFailure = (error: AxiosError): CreateItemsFailure => ({
+   type: ITEM_TYPES.CREATE_ITEMS_FAILURE,
    payload: error
+})
+
+export const setItems = (items: IItem[]):SetItems => ({
+   type: ITEM_TYPES.SET_ITEMS,
+   payload: items
 })
