@@ -35,6 +35,7 @@ const ChosenItemField = ({addedField, setChosenOptionalFields, setUserInputData,
          value = event?.target.value
       
       setFieldValues(prevState => ({...prevState, [fieldName]: value}))
+      //@ts-ignore
       setUserInputData(prevState => ({...prevState, optionalFields: {...prevState.optionalFields, [fieldName]: value}}))
    }
 

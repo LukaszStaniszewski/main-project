@@ -17,11 +17,27 @@ export const COLLECTIONS_MOCKUP = {
       image: "",
       notes: "",
    },
-   postard: {
-      author: "",
+   vehicle: {
+      model: "",
+      type: "",
+      color: "",
+      "Production Date": Date,
+      "Purchase date": Date,
+      manufacturer: "",
+      firstOwner: false,
+      "Current Price": 1,
+      fuelType: ""
    },
    painting: {
       author: "",
+      description: "",
+      image: "",
+      isDamaged: false,
+      notes: "",
+      "First Owner": false,
+      "Creation Data": Date,
+      "Purchase date": Date,
+
    },
    sculpture: {
       author: "",
@@ -34,12 +50,16 @@ export const COLLECTIONS_MOCKUP = {
    },
    music: {
       author: "",
+      genre: "",
+      name: "",
+      album: "",
+      "Creation Date": Date
    },
    movies: {
       author: "",
    },
 
-} 
+}
 
 type typeOfCollections = typeof COLLECTIONS_MOCKUP
 
