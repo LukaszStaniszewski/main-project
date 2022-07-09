@@ -25,6 +25,8 @@ export enum COLLECTION_ACTION_TYPES {
    GET_COLLECTIONS_WIHOUT_ITEMS_START = "GET_COLLECTIONS_WIHOUT_ITEMS_START",
    GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS = "GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS",
    GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE = "GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE",
+
+   SET_COLLECTION = "SET_COLLECTION"
    
 }
 
@@ -39,7 +41,7 @@ export interface ICollection extends Omit<ICreateCollection, "image"| "items">{
    items?: IItem[]
 }
 
-export interface ICollectionWithoutItems extends Exclude<ICollection, "items"> {}
+export interface ICollectionWithoutItems extends Omit<ICollection, "items"> {}
 
 
 export type CollectionActions = 
@@ -47,7 +49,8 @@ CreateCollectionStart | CreateCollectionSuccess | CreateCollectionFailure |
 DeleteCollectionStart | DeleteCollectionSuccess | DeleteCollectionFailure |
 CreateCollectionWithItemsStart | CreateCollectionWithItemsSuccess | CreateCollectionWithItemsFailure |
 GetCollectionWithItemsStart | GetCollectionWithItemsSuccess | GetCollectionWithItemsFailure |
-GetCollectionsWithoutItemsStart | GetCollectionsWithoutItemsSuccess | GetCollectionsWithoutItemsFailure
+GetCollectionsWithoutItemsStart | GetCollectionsWithoutItemsSuccess | GetCollectionsWithoutItemsFailure |
+SetCollection
 
 
 export type CreateCollectionStart = ActionWithPayload<COLLECTION_ACTION_TYPES.CREATE_COLLECTION_START, ICreateCollection>
@@ -69,3 +72,5 @@ export type GetCollectionWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_
 export type GetCollectionsWithoutItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START, ICurrentUser["name"]>
 export type GetCollectionsWithoutItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS, ICollectionWithoutItems>
 export type GetCollectionsWithoutItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE, AxiosError>
+
+export type SetCollection = ActionWithPayload<COLLECTION_ACTION_TYPES.SET_COLLECTION, any>

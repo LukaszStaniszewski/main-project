@@ -2,9 +2,8 @@ import {takeLatest, put, all, call} from "typed-redux-saga/macro"
 import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems} from "./collection.types"
 import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure } from "./collection.actions"
 import * as type from "./collection.types"
-import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest } from "../../api/axios-instance.api"
+import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
-import {IError} from "../user/user.reducer"
 import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { setItems } from "../items/item.actions"
 
@@ -52,7 +51,8 @@ function* appendImage (data: ImageResponse, itemsCollection: ICreateCollection) 
 
 function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure) {
    try {
-      const response = yield* call(postRequest<IError>, API_URL.DETE_COLLECTION, collectionId)
+      const response = yield* call(deleteRequest,`${API_URL.DELETE_COLLECTION}/${collectionId}`)
+      //@ts-ignore
       yield* put(deleteCollectionSuccess(response.data))
    } catch (error) {
       yield* put(deleteColletionFailure(error as AxiosError))

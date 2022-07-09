@@ -1,13 +1,16 @@
 import { AxiosError } from "axios";
 import { ICreateItem } from "../../components/create-item/item-types/itemTypes";
-import { ActionWithPayload } from "../../utils/store.utils";
+import { Action, ActionWithPayload } from "../../utils/store.utils";
 import { ICollection } from "../collections/collection.types";
 
 export enum ITEM_TYPES {
    CREATE_ITEMS_START = "CREATE_ITEMS_START",
    CREATE_ITEMS_SUCCESS = "CREATE_ITEMS_SUCCESS",
    CREATE_ITEMS_FAILURE= "CREATE_ITEMS_FAILURE",
-   SET_ITEMS = "SET_ITEMS"
+   SET_ITEMS = "SET_ITEMS",
+   DELETE_ITEMS_START = "DELETE_ITEMS_START",
+   DELETE_ITEMS_SUCCESS= "DELETE_ITEMS_SUCCESS",
+   DELETE_ITEMS_FAILURE = "DELETE_ITEMS_FAILURE",
 }
 
 
@@ -20,10 +23,15 @@ export interface IItem extends ICreateItem {
 
 export type ItemActionTypes = 
    CreateItemsStart | CreateItemsSuccess | CreateItemsFailure |
-   SetItems
+   SetItems |
+   DelteItemsStart | DelteItemsSuccess | DelteItemsFailure
 
 export type CreateItemsStart = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_START, ICreateItem[]>
 export type CreateItemsSuccess = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_SUCCESS, IItem[]>
 export type CreateItemsFailure = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_FAILURE, AxiosError>
+
+export type DelteItemsStart = ActionWithPayload<ITEM_TYPES.DELETE_ITEMS_START, IItem["_id"][]>
+export type DelteItemsSuccess = Action<ITEM_TYPES.DELETE_ITEMS_SUCCESS>
+export type DelteItemsFailure= ActionWithPayload<ITEM_TYPES.DELETE_ITEMS_FAILURE, AxiosError>
 
 export type SetItems = ActionWithPayload<ITEM_TYPES.SET_ITEMS, IItem[]>

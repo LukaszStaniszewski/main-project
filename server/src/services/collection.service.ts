@@ -23,15 +23,24 @@ export const createCollection = async (collectionData: ICreateItemCollection, im
 
 export const findCollectionsByUser = async (name : IUserDocument["name"]): Promise<IItemCollectionDocument[]> => {
    try {
-      console.log("name", name)
        const collections = await CollectionModel.find({"owner.name": name}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST).lean()
-       console.log(collections)
        if(!collections) throw new Error("Collection not found")
        return collections
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
 }
+export const findCollection = async (collectionId: string): Promise<IItemCollectionDocument> => {
+   try {
+       const collection = await CollectionModel.findOne({_id: collectionId}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
+       console.log(collection)
+       if(!collection) throw new Error("Collection not found")
+       return collection
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+   }
+}
+
 
 export const findAllCollections = async (): Promise<IItemCollectionDocument[]> => {
    try {
@@ -55,6 +64,17 @@ export const deleteCollections = async (name : IUserDocument["name"]) => {
       return true
    } catch (error) {
       throw new Error(getErrorMessage(error))
+   }
+}
+
+export const deleteCollection = async (collectionId: string) => {
+      try {
+      await deleteItemsByCollection(collectionId)
+      await CollectionModel.findByIdAndDelete(collectionId)
+      return true
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+      
    }
 }
 

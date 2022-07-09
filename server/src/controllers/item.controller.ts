@@ -8,15 +8,15 @@ import { SuccessMessage, ErrorMessage } from "../config/constants.config";
 export const createItemHandler = async (req:Request<{},{}, ICreateItem[]>, res:Response) => {
    try {
       const item = await createItem(req.body)
-      console.log("item", item)
       res.json({item})
    } catch (error) {
       res.sendStatus(409)
    }
 }
 
-export const deleteItemsHandler = async (req:Request<{},{},ObjectId>, res:Response) => {
+export const deleteItemsHandler = async (req:Request, res:Response) => {
    try {
+
       await deleteItems(req.body)
       res.send({message: SuccessMessage.ITEM_DELETED})
    } catch (error) {

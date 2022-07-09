@@ -37,7 +37,6 @@ const CreateItemPage = () => {
          setChosenCollection(collection)
          setTopic(collection.topic)
       }
-         
    },[collection])
 
    useEffect(() => {
@@ -59,6 +58,7 @@ const CreateItemPage = () => {
    const toCollectionPageHandler = () => {
       navigate(-1)
    }
+
   return (
     <section className="relative z-0 pb-4">
       <HeaderExtension/>

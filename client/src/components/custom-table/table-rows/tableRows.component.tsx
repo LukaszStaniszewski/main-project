@@ -8,19 +8,20 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
 
    useEffect(() => {
       setCheckbox(selectAll)
-      addUsersToUpdate(selectAll)
+      addItemsToUpdate(selectAll)
    }, [selectAll])
   
    const checkBoxHandler = (event : ChangeEvent<HTMLInputElement>) => {
       const selectOne = event.target.checked
       setCheckbox((prevState) => prevState === selectAll ? selectOne : selectAll)
-      addUsersToUpdate(selectOne)
+      addItemsToUpdate(selectOne)
    }
 
-   const addUsersToUpdate = (checkbox: boolean) => {
+   const addItemsToUpdate = (checkbox: boolean) => {
       if(!setSelectedItems) return
       if(!checkbox) return removeFromUpdating()
-         //@ts-ignore
+   //@ts-ignore
+      
       setSelectedItems((prevState) => [...new Set([...prevState, row])])
    }  
   

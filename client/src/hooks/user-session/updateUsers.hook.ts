@@ -9,7 +9,7 @@ const useUpdateUsers = () => {
   
       const updateUsers = (users: ICurrentUser[], usersToUpdate: ICurrentUser[], value: object) => {
          if(!usersToUpdate.length) return
-            const updatedUsers = changeItemsValue(users,usersToUpdate, value)
+            const updatedUsers = changeItemsValue<ICurrentUser>(users,usersToUpdate, value)
 
             dispatch(setUsers(updatedUsers))
             dispatch(updateUsersStart(usersToUpdate))

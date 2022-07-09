@@ -16,7 +16,9 @@ export const selectCollections = createSelector(
 
 export const selectCollectionsWithoutItems = createSelector(
    selectCollectionReducer,
-  (state) => state.collectionsWihoutItems
+  (state) => state.collectionsWihoutItems.map(collection => {
+          return {...collection, owner: collection.owner.name, image: collection.image?.url}
+       })
 )
 
 export const selectCollectionErrorMessage = createSelector(

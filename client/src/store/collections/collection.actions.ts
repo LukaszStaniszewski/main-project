@@ -82,3 +82,8 @@ export const getCollectionsWihoutItemsFailure = (error: AxiosError) : give.GetCo
    type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE,
    payload: error,
 })
+
+export const setCollection = (collection: any):give.SetCollection => ({
+   type: COLLECTION_ACTION_TYPES.SET_COLLECTION,
+   payload: collection
+})

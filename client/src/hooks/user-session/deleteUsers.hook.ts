@@ -7,10 +7,10 @@ import { ICurrentUser } from "../../store/user/user.types";
 const useDeleteUsers = () => {
 const dispatch = useDispatch()
  
-   const deleteUsers = (items:ICurrentUser[], itemsToDelete:ICurrentUser[]) => {
-      const wihoutUnwontedUsers = deleteItems(items, itemsToDelete)
+   const deleteUsers = (users:ICurrentUser[], usersToDelete:ICurrentUser[]) => {
+      const wihoutUnwontedUsers = deleteItems<ICurrentUser>(users, usersToDelete)
       dispatch(setUsers(wihoutUnwontedUsers))
-      dispatch(deleteUsersStart(itemsToDelete))
+      dispatch(deleteUsersStart(usersToDelete))
    }   
    return [deleteUsers]
 }

@@ -85,10 +85,6 @@ const Navbar = () => {
    }
  
   return (
-                //   <nav className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-700 h-32 p-3">
-                // <nav className="bg-gradient-to-r from-cyan-500 to-blue-500 h-20">
-                // <nav className="bg-gradient-to-l from-purple-700 via-purple-600 to-purple-700 h-20 p-3">
-                // <nav className="bg-gradient-to-r from-sky-700 to-cyan-600 h-32 p-3">
    <Fragment>
         <nav className="bg-gradient-to-r from-color-primary to-color-secondary min-h-max pt-4 pb-6">
     

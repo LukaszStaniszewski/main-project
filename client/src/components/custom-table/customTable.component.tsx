@@ -25,7 +25,6 @@ const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false,
    const sort = (rows: Rows) => {
       const {column, ascending} = sortedBy
       return rows.sort((a,b) => {
-         console.log("columns", column)
          //@ts-ignore
          if(a[column].toString() > b[column].toString()) {
             return ascending ? -1 : 1;

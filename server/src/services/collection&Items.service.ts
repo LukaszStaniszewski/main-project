@@ -11,8 +11,6 @@ export interface ICollectionWithItems extends ICreateItemCollection {
 export const createCollectionWithItems = async (body: ICollectionWithItems, image?: Buffer) => {
    try {
       const {items, ...excludeItems} = body 
-      console.log("items", items)
-      console.log("collection", excludeItems)
       const collection = await createCollection(excludeItems)
       if(!collection) throw new Error(getErrorMessage("collection wasn't created"));
       const item = await createItem(body.items, collection._id)

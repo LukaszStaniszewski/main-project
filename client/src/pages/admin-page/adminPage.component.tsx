@@ -7,8 +7,8 @@ import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart, logOutStart } from "../../store/user/user.action"
 import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
-import useUpdateUsers from "../../hooks/client-server/updateUsers.hook"
-import useDeleteUsers from "../../hooks/client-server/deleteUsers.hook"
+import useUpdateUsers from "../../hooks/user-session/updateUsers.hook"
+import useDeleteUsers from "../../hooks/user-session/deleteUsers.hook"
 
 const AdminPage = () => {
    const {isLoading, users, currentUser} = useSelector(selectUserReducer)

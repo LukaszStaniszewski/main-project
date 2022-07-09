@@ -26,7 +26,7 @@ export enum API_URL {
    DELETE_USERS = "/api/user/delete",
    CREATE_COLLECTION = "api/collection/new",
    CREATE_COLLECTION_WITH_ITEMS = "api/collection",
-   DETE_COLLECTION = "api/collection/delete",
+   DELETE_COLLECTION = "api/collection/delete",
    GET_COLLECTION_WITH_ITEMS = "api/collection",
    // GET_COLLECTIONS_WITH_ITEMS_BY_USER = `api/collection/item/user`,
    GET_COLLECTIONS_BY_USER = "api/collection/user",
