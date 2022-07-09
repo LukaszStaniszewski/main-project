@@ -5,7 +5,7 @@ export interface IItemState {
    isLoading: boolean
    error: IError,
    items: IItem[],
-   item: null,
+   item: IItem,
 }
 
 const ITEM_INITIAL_STATE = {

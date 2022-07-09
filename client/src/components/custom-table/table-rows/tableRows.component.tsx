@@ -2,7 +2,7 @@ import {useState, ChangeEvent, useEffect} from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { ITableRows } from "../table-types/table-types"
 
-const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible}: ITableRows) => {
+const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible, url}: ITableRows) => {
    const [checkbox, setCheckbox] = useState(false)
    const navigate = useNavigate()
 
@@ -30,12 +30,14 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
       return setSelectedItems((prevState) => prevState.filter(prevItem => prevItem._id!== row._id))
    }
 
-   const redirectToCollection = () => {
-      navigate(`/collection/${row._id}`)
+   const redirect = () => {
+      if(!url) return
+      navigate(`/${url}/${row._id}`)
+      console.log("row", row)
    }
 
   return (
-      <tr onClick={redirectToCollection} className="cursor-pointer">
+      <tr onClick={redirect} className="cursor-pointer">
          <td>
             {checkboxesAvaible && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
          </td>

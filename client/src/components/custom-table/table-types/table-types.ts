@@ -14,11 +14,13 @@ interface ITableAdmin{
 export interface ICustomTable extends ITableAdmin {
    rows: Rows,
    customizedColumns?: string[]
+   url?: string
 }
 
 export interface ITableRows extends ITableAdmin {
    row: Row,
    columns: Columns
    selectAll: boolean,
+   url?: string
 }
 

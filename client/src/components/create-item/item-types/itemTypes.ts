@@ -1,4 +1,5 @@
-import { Topics } from "../../../pages/create-collection/MOCKUP_DATA"
+export const Topics = ["books", "vehicle", "painting", "sculpture", "banknot", "clothing", "music", "movies"] as const
+
 
 export const COLLECTIONS_MOCKUP = {
    books: {

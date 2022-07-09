@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
-const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false, setSelectedItems}: ICustomTable) => {
+const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false, setSelectedItems, url}: ICustomTable) => {
    let columns: string[]
    if(customizedColumns) {
       columns = customizedColumns
@@ -81,6 +81,7 @@ const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false,
                   selectAll={checkbox} 
                   setSelectedItems={setSelectedItems} 
                   checkboxesAvaible={checkboxesAvaible}
+                  url={url}
                   />
 
                )

@@ -76,7 +76,7 @@ const UserPage = () => {
       <HeaderExtension/>
       <main className="grid grid-cols-8 bg-secondary w-90vw m-auto max-w-90vw  screen-height p-4"  >
          <div className="col-start-1 col-end-7 overflow-x-auto">
-            {columns.length > 1 && <CustomTable rows={collectionsWihoutItems} customizedColumns={columns}/>}
+            {columns.length > 1 && <CustomTable rows={collectionsWihoutItems} url="collection" customizedColumns={columns}/>}
          </div>
         {writeMode && <div className="col-start-7 col-end-9 p-5 border-l-2">
             <figure className="flex gap-2 pb-4">

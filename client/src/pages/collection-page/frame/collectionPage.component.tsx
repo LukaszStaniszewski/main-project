@@ -128,6 +128,7 @@ const CollectionPage = () => {
                            checkboxesAvaible={true}
                         //@ts-ignore
                             setSelectedItems={setSelectedItems}
+                            url="item"
 
                         />
                      }

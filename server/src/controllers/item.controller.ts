@@ -28,6 +28,7 @@ export const sendItemHandler = async (req: Request<{id: string}>, res: Response)
    const params = req.params.id
    try {
       const item = await findItem(params)
+      if(!item) throw new Error()
       res.json(item)
    } catch (error) {
       res.status(404).send({message: ErrorMessage.GET_ITEM_FAILURE})

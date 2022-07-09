@@ -10,3 +10,8 @@ export const selectAdjustedItems = createSelector(
       return {...item, ...item.optionalFields, optionalFields: undefined}
    })
 )
+
+export const selectItem = createSelector(
+   [selectItemReducer],
+   (item) => item.item
+)
