@@ -1,4 +1,4 @@
-import { COMMENTS_ACTION_TYPES, IComment, CommentActions } from "./comment.typeS";
+import { COMMENTS_ACTION_TYPES, IComment, CommentActions } from "./comment.types";
 import { IError } from "../user/user.reducer";
 
 export interface ICommentState{
@@ -28,13 +28,21 @@ const commentReducer = (state = COMMENT_INITIAL_STATE, action = {} as CommentAct
             comment: null,
             error: null
          }
-            
+      case COMMENTS_ACTION_TYPES.GET_COMMENT_SUCCESS:
+            return {
+               ...state,
+               comment: action.payload,
+               error: null
+            }
       case COMMENTS_ACTION_TYPES.CREATE_COMMENT_FAILURE:
       case COMMENTS_ACTION_TYPES.DELETE_COMMENT_FAILURE:
+      case COMMENTS_ACTION_TYPES.GET_COMMENT_FAILURE:
          return {
             ...state,
             error: action.payload
          }
+      default:
+         return state
    }
 }
 

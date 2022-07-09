@@ -1,5 +1,5 @@
 import axios, {AxiosPromise} from 'axios'
-const baseUrl = process.env.REACT_APP_BASE_API_URL
+export const baseUrl = process.env.REACT_APP_BASE_API_URL as string
 export const api = axios.create({baseURL : baseUrl})
 api.defaults.headers.post['Content-Type'] = 'application/json'
 

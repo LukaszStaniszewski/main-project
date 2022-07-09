@@ -1,24 +1,40 @@
 import {useState, useEffect, Fragment} from 'react'
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { getItemStart } from "../../store/items/item.actions"
-import { selectItem } from "../../store/items/item.selector"
+// import {io, Socket} from "socket.io-client"
+
+
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import Spinner from "../../components/spinner/spinner.component"
 import { OptionalItemData, Topics, ItemKey } from "../../components/create-item/item-types/itemTypes"
+import { getItemStart } from "../../store/items/item.actions"
+import { selectItem } from "../../store/items/item.selector"
+import { selectComment } from "../../store/comments/comment.selector"
+import { getCommentStart } from "../../store/comments/comment.action"
+import { baseUrl } from "../../api/axios-instance.api"
 
 const ItemPage = () => {
    const [fieldKeys, setFieldKeys] = useState<ItemKey[]>([])
    const dispatch = useDispatch()
    const item = useSelector(selectItem)
-
+   const comment = useSelector(selectComment)
    const {id} = useParams()
-
+   console.log("comment", comment)
    useEffect(() => {
       if(!id || item) return
       dispatch(getItemStart(id))
    }, [])
 
+   useEffect(() => {
+      // dispatch(getCommentStart())
+   //   const socket = io(baseUrl)
+   //   socket.on("connect", ()=> {
+   //    console.log(socket.id)
+   //   })
+   },[])
+   const click = () => {
+      dispatch(getCommentStart())
+   }
    useEffect(() => {
       if(!item?.optionalFields) return
 
@@ -37,6 +53,7 @@ const ItemPage = () => {
                      <div>name: {item.name}</div>
                      <div>topic: {item.topic}</div>
                      <div>createdAt: {item.createdAt}</div>
+                     <button onClick={click} className="btn btn-xl">Open listner</button>
                  </div>
                  {
                   fieldKeys.length > 0 &&  

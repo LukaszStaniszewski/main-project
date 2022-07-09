@@ -1,4 +1,10 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+
+// import {io} from "socket.io-client"
+// import { baseUrl } from "./api/axios-instance.api"
+
+
 
 import Navbar from "./components/navbar/navbar.component";
 import SignUp from "./pages/sign-up/sign-up.component";
@@ -10,10 +16,10 @@ import CreateContent from "./routes/create-content/create-content.route";
 import ItemPageRoute from "./routes/item-page/item-page.route";
 import LangProvider from "./language/langProvider.component";
 
-
-
 function App() {
-
+   useEffect(() => {
+   //   const socket = io(baseUrl)
+   },[])
 
   return (
     <div className="w-screen">

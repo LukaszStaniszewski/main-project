@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { COMMENTS_ACTION_TYPES,CreateCommentSuccess, CreateCommentStart, IComment, ICreateComment, CreateCommentFailure } from "./comment.typeS";
+import { COMMENTS_ACTION_TYPES,CreateCommentSuccess, CreateCommentStart, IComment, ICreateComment, CreateCommentFailure, GetCommentStart, GetCommentSuccess, GetCommentFailure } from "./comment.types";
 
 
 export const createCommentStart = (comment: ICreateComment) : CreateCommentStart => ({
@@ -14,5 +14,19 @@ export const createCommentSuccess = (comment: IComment): CreateCommentSuccess =>
 
 export const createCommentFailure = (error: AxiosError) : CreateCommentFailure => ({
    type: COMMENTS_ACTION_TYPES.CREATE_COMMENT_FAILURE,
+   payload: error
+})
+
+export const getCommentStart = () :GetCommentStart => ({
+   type: COMMENTS_ACTION_TYPES.GET_COMMENT_START,
+})
+
+export const getCommentSuccess = (comment: IComment): GetCommentSuccess => ({
+   type: COMMENTS_ACTION_TYPES.GET_COMMENT_SUCCESS,
+   payload: comment
+})
+
+export const getCommentFailure = (error: Error): GetCommentFailure => ({
+   type: COMMENTS_ACTION_TYPES.GET_COMMENT_FAILURE,
    payload: error
 })
