@@ -13,6 +13,7 @@ import deserialaizeUser from "./middleware/deserialaizeUser"
 import collectionRouter from "./routes/collection.route";
 import itemRouter from "./routes/item.route";
 import socket from "./utils/socket.utils"
+import commentRouter from "./routes/comment.route";
 
 
 mongoose.connect(process.env.MONGO_URL_CLOUD as string).
@@ -47,6 +48,7 @@ app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)
 app.use("/api/collection", collectionRouter)
 app.use("/api/item", itemRouter)
+app.use("api/comment", commentRouter)
 
 const PORT = 8000;
 

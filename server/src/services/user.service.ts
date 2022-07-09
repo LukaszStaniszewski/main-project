@@ -8,7 +8,6 @@ import { Values_TO_Omit } from "../config/constants.config";
 export const createUser = async (input: IUserCredentials) => {
    try {
       const user = await User.create(input)
-      console.log(user)
       return omit(user.toJSON(), ...Values_TO_Omit.USER_LOGGED_IN);
    } catch(error) {
       throw new Error(getErrorMessage(error))
