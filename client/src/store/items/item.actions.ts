@@ -36,3 +36,18 @@ export const deleteItemsFailure = (error : AxiosError): get.DelteItemsFailure =>
    type: ITEM_TYPES.DELETE_ITEMS_FAILURE,
    payload: error
 })
+
+export const getItemStart = (itemId : IItem["_id"]): get.GetItemStart => ({
+   type: ITEM_TYPES.GET_ITEM_START,
+   payload: itemId,
+})
+
+export const getItemSuccess = (item: IItem): get.GetItemSuccess => ({
+   type: ITEM_TYPES.GET_ITEM_SUCCESS,
+   payload: item,
+})
+
+export const getItemFailure = (error: AxiosError): get.GetItemFailure => ({
+   type: ITEM_TYPES.GET_ITEM_FAILURE,
+   payload: error
+})

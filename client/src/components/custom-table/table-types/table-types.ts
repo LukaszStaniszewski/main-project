@@ -1,6 +1,6 @@
 import { ICollection, ICollectionWithoutItems } from "../../../store/collections/collection.types"
 import { ICurrentUser } from "../../../store/user/user.types"
-import { ICustomizedCollections } from "../../../pages/user-page/frame/userPageFrame.component"
+import { ICustomizedCollections } from "../../../pages/user-page/frame/userPagecomponent"
 
 export type Columns = Array<keyof ICurrentUser> 
 export type Rows = ICurrentUser[] | ICustomizedCollections[]

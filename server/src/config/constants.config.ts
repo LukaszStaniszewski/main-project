@@ -14,7 +14,8 @@ export enum ErrorMessage {
    USER_UPDATE_FAILURE = "User/s weren't updated",
    COLLECTION_TOPIC_ERROR = "Collection topic is invalid",
    ITEM_DELITION_FAILURE = "Item/s weren't deleted",
-   COLLECTION_NOT_CREATED = "Collection was not created"
+   COLLECTION_NOT_CREATED = "Collection was not created",
+   GET_ITEM_FAILURE = "Item was not found",
 }
 
 export enum SuccessMessage {

@@ -32,7 +32,8 @@ export enum API_URL {
    GET_COLLECTIONS_BY_USER = "api/collection/user",
    CREATE_ITEM = "api/item/new",
    DELETE_ITEM ="api/item/delete",
-   UPLOAD_IMAGE = "api/collection/image"
+   UPLOAD_IMAGE = "api/collection/image",
+   GET_ITEM = "api/item/get",
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsDefault)

@@ -9,7 +9,6 @@ export interface IAppendItemsToCollections extends ICreateItemCollection {
    items?: IItemDocument[]
 }
 
-
 export interface ICreateItemCollection {
    name: string,
    topic: CollectionTopics,
@@ -42,7 +41,7 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
    },
    description: {
       type: String,
-      // required: true
+      required: true
    },
    image: {
       url: String,
@@ -63,7 +62,6 @@ const userCollectionSchema = new Schema<IItemCollectionDocument>({
    createdAt: {
       type: String,
       default: dayjs().format("DD-MM-YYYY HH:mm:ss"),
-      unique: true,
       immutable: true
    },
    updatedAt: {

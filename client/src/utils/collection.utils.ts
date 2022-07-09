@@ -1,4 +1,4 @@
-import { ICustomizedCollections } from "../pages/user-page/frame/userPageFrame.component"
+import { ICustomizedCollections } from "../pages/user-page/frame/userPagecomponent"
 import { ICollectionWithoutItems } from "../store/collections/collection.types"
 
 

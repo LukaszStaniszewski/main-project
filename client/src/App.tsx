@@ -7,6 +7,7 @@ import AdminPage from "./pages/admin-page/adminPage.component";
 import UserPageRoute from "./routes/user-page/user-page.route";
 import CollectionPageRoute from "./routes/collection-page/collection-page.route";
 import CreateContent from "./routes/create-content/create-content.route";
+import ItemPageRoute from "./routes/item-page/item-page.route";
 import LangProvider from "./language/langProvider.component";
 
 
@@ -25,6 +26,7 @@ function App() {
                <Route path="/user/*" element={<UserPageRoute/>}/>
                <Route path="/new/*" element={<CreateContent/>}/>
                <Route path="collection/*" element={<CollectionPageRoute/>}></Route>
+               <Route path="/item/*" element={<ItemPageRoute/>}></Route>
             </Route>
          </Routes>
       </LangProvider>

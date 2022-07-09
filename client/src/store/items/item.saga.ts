@@ -1,8 +1,8 @@
 import { AxiosError } from "axios"
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
-import { API_URL, postRequest } from "../../api/axios-instance.api"
-import { createItemsFailure, createItemsSuccess, deleteItemsFailure, deleteItemsSuccess } from "./item.actions"
-import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart} from "./item.types"
+import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
+import { createItemsFailure, createItemsSuccess, deleteItemsFailure, deleteItemsSuccess, getItemFailure, getItemSuccess } from "./item.actions"
+import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart} from "./item.types"
 
 function* createItems({payload: item}:CreateItemsStart) {
    try {
@@ -22,6 +22,19 @@ function* deleteItems({payload: itemsId}:DelteItemsStart) {
    }
 }
 
+function* getItem({payload: itemId}: GetItemStart) {
+   try {
+      const response = yield* call(getRequest<IItem>, `${API_URL.GET_ITEM}/${itemId}`)
+      yield* put(getItemSuccess(response.data))
+   } catch (error) {
+      yield* put(getItemFailure(error as AxiosError))
+   }  
+}
+
+function* onGetItem() {
+   yield* takeLatest(ITEM_TYPES.GET_ITEM_START, getItem)
+}
+
 function* onCreateItem () {
    yield* takeLatest(ITEM_TYPES.CREATE_ITEMS_START, createItems)
 }
@@ -33,6 +46,7 @@ function* onDeleteItems() {
 export default function* itemsSaga() {
    yield* all([
       call(onCreateItem),
-      call(onDeleteItems)
+      call(onDeleteItems),
+      call(onGetItem),
    ])
 }
