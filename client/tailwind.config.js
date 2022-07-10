@@ -1,4 +1,5 @@
 const withMT = require("@material-tailwind/react/utils/withMT");
+const { slate } = require("tailwindcss/colors");
 module.exports = withMT ({
     
   content: [
@@ -75,7 +76,8 @@ module.exports = withMT ({
         "tertiary" : "var(--color-border-tertiary)",
       },
       textColor: {
-        'primary': 'var(--color-text-primary)'
+        'primary': 'var(--color-text-primary)',
+        'secondary': slate[600]
       },
       backgroundColor: {
          'primary' : 'var(--color-background-primary)',

@@ -1,7 +1,9 @@
 export const Values_TO_Omit = {
    USER_LOGGED_IN: ["password", "createdAt", "lastLogin", "email"] as const,
    SEND_USERS_REQUEST: ["-password", "-createdAt", "-__v"] as const,
-   SEND_COLLECTION_REQUEST: ["-__v"] as const
+   SEND_COLLECTION_REQUEST: ["-__v"] as const,
+   SEND_ITEMS_REQUEST: ["-__v", "-updatedAt"] as const,
+   SEND_COMMENT: ["-__v"] as const,
 }
 
 export enum ErrorMessage {
@@ -13,7 +15,9 @@ export enum ErrorMessage {
    USER_UPDATE_FAILURE = "User/s weren't updated",
    COLLECTION_TOPIC_ERROR = "Collection topic is invalid",
    ITEM_DELITION_FAILURE = "Item/s weren't deleted",
-   COLLECTION_NOT_CREATED = "Collection was not created"
+   COLLECTION_NOT_CREATED = "Collection was not created",
+   GET_ITEM_FAILURE = "Item was not found",
+   COMMENT_NOT_CREATED = "Comment hasn't been created",
 }
 
 export enum SuccessMessage {

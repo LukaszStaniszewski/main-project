@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types} from "mongoose";
 import dayjs from "dayjs";
 
 import {IItemCollectionDocument} from "./collection.model"
@@ -13,6 +13,7 @@ export interface ICreateItem {
 }
 
 export interface IItemDocument extends ICreateItem {
+   _id: Types.ObjectId,
    createdAt: string,
    updatedAt: string,
 }
@@ -33,7 +34,7 @@ const itemSchema = new Schema<IItemDocument>({
    },
    tags: [{
       type: String,
-      // required: [true, "tags are required"]
+      required: [true, "tags are required"]
    }],
    collectionId: {
       type: Schema.Types.ObjectId,

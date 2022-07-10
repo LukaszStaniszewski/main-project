@@ -22,7 +22,8 @@ const OptionalField = ({baseField, setChosenOptionalFields, setOptionalFields}: 
    setChosenOptionalFields(prevValue => [...prevValue, {...baseField, isAdded: true}])
    setOptionalFields(prevValue => prevValue.filter(field => field.fieldName !== fieldName))
    }
-
+   
+  
    const startAnimation = async () => {
      await controls.start({
       opacity: 0,

@@ -9,4 +9,8 @@ export const selectCurrentLanguage = createSelector(
    (local) => local.currentLanguage
 )
 
+export const selectTopicDropdown = createSelector(
+   selectLocalReducer,
+   (local) => local.topicDropdownState
+)
 

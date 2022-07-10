@@ -17,8 +17,18 @@ export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, 
 
       const accessToken = signJwt({...user, sessionId: session._id}, key.privateAccessKey, "60s")
       const refreshToken = signJwt({...user, sessionId: session._id}, key.privateRefreshKey, "1d")
-   
+      if(accessToken && refreshToken) 
       res.json({accessToken, refreshToken})
+   } catch (error) {
+      logger.error(getErrorMessage(error))
+      res.status(409).send({error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN})
+   }
+}
+
+export const registerUser = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+   try {
+      const user = await createUser(req.body)
+      res.json(user)
    } catch (error) {
       logger.error(getErrorMessage(error))
       res.status(409).send({error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN})

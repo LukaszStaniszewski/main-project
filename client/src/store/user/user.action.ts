@@ -29,15 +29,6 @@ export const deleteUsersStart = (users: ICurrentUser[]): type.DeleteUsersStart =
    payload: users
 })
 
-// export const deleteUsersSuccess = (): type.DeleteUsersSuccess => ({
-//    type: USER_ACTION_TYPES.DELETE_USERS_SUCCESS,
-// })
-
-// export const deleteUsersFailure = (error: AxiosError): type.DeleteUsersFailure => ({
-//    type: USER_ACTION_TYPES.DELETE_USERS_FAILURE,
-//    payload: error
-// })
-
 export const updateUsersStart = (users: ICurrentUser[]): type.UpdateUsersStart => ({
    type: USER_ACTION_TYPES.UPDATE_USERS_START,
    payload: users,
@@ -66,7 +57,7 @@ export const getUsersFailure = (error: AxiosError) : type.GetUsersFailure =>({
    payload: error
 })
 
-export const setCurrentUser = (user: ICurrentUser) : type.SetCurrentUser => ({
+export const setCurrentUser = (user: ICurrentUser | null) : type.SetCurrentUser => ({
    type: USER_ACTION_TYPES.SET_CURRENT_USER,
    payload: user
 })

@@ -23,8 +23,6 @@ export enum USER_ACTION_TYPES {
    UPDATE_USERS_FAILURE = "UPDATE_USERS_FAILURE",
 
    DELETE_USERS_START = "DELETE_USERS_START",
-   // DELETE_USERS_SUCCESS = "DELETE_USERS_SUCCESS",
-   // DELETE_USERS_FAILURE = "DELETE_USERS_FAILURE",
    
    GET_USER_BY_CREDENTIALS_START = "GET_USER_BY_CREDENTIALS_START",
    GET_USER_BY_CREDENTIALS_SUCCESS = "GET_USER_BY_CREDENTIALS_SUCCESS",
@@ -43,7 +41,7 @@ export type LogOutStart = Action<USER_ACTION_TYPES.LOG_OUT_START>
 export type LogOutSuccess = Action<USER_ACTION_TYPES.LOG_OUT_SUCCESS>
 export type LogOutFailure= ActionWithPayload<USER_ACTION_TYPES.LOG_OUT_FAILURE, AxiosError>
 
-export type SetCurrentUser = ActionWithPayload<USER_ACTION_TYPES.SET_CURRENT_USER, ICurrentUser>
+export type SetCurrentUser = ActionWithPayload<USER_ACTION_TYPES.SET_CURRENT_USER, ICurrentUser | null>
 export type SetUsers = ActionWithPayload<USER_ACTION_TYPES.SET_USERS, ICurrentUser[]>
 
 export type GetUsersStart = Action<USER_ACTION_TYPES.GET_USERS_START>
@@ -55,8 +53,6 @@ export type UpdateUsersSuccess = Action<USER_ACTION_TYPES.UPDATE_USERS_SUCCESS>
 export type UpdateUsersFailure = ActionWithPayload<USER_ACTION_TYPES.UPDATE_USERS_FAILURE, AxiosError>
 
 export type DeleteUsersStart = ActionWithPayload<USER_ACTION_TYPES.DELETE_USERS_START, ICurrentUser[]>
-// export type DeleteUsersSuccess = Action<USER_ACTION_TYPES.DELETE_USERS_SUCCESS>
-// export type DeleteUsersFailure = ActionWithPayload<USER_ACTION_TYPES.DELETE_USERS_FAILURE, AxiosError>
 
 export type GetUserByCredentialsStart = ActionWithPayload<USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START, ICurrentUser["name"]>
 export type GetUserByCredentialsSuccess = ActionWithPayload<USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS, ICurrentUser>

@@ -1,4 +1,5 @@
-import { Topics } from "../../../routes/create-collection/MOCKUP_DATA"
+export const Topics = ["books", "vehicle", "painting", "sculpture", "banknot", "clothing", "music", "movies"] as const
+
 
 export const COLLECTIONS_MOCKUP = {
    books: {
@@ -17,11 +18,27 @@ export const COLLECTIONS_MOCKUP = {
       image: "",
       notes: "",
    },
-   postard: {
-      author: "",
+   vehicle: {
+      model: "",
+      type: "",
+      color: "",
+      "Production Date": Date,
+      "Purchase date": Date,
+      manufacturer: "",
+      firstOwner: false,
+      "Current Price": 1,
+      fuelType: ""
    },
    painting: {
       author: "",
+      description: "",
+      image: "",
+      isDamaged: false,
+      notes: "",
+      "First Owner": false,
+      "Creation Data": Date,
+      "Purchase date": Date,
+
    },
    sculpture: {
       author: "",
@@ -34,12 +51,16 @@ export const COLLECTIONS_MOCKUP = {
    },
    music: {
       author: "",
+      genre: "",
+      name: "",
+      album: "",
+      "Creation Date": Date
    },
    movies: {
       author: "",
    },
 
-} 
+}
 
 type typeOfCollections = typeof COLLECTIONS_MOCKUP
 
@@ -63,6 +84,7 @@ export interface ICreateItem{
    id: string,
    name: string,
    tags: string[],
+   collectionId?: string,
    topic: string
-   optional?: OptionalItemData
+   optionalFields?: OptionalItemData
 }

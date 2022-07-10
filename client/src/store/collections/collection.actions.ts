@@ -1,6 +1,6 @@
  import { AxiosError } from "axios"
 
-import { ICreateCollection } from "../../routes/create-collection/create-collection"
+import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { ICollection, COLLECTION_ACTION_TYPES } from "./collection.types"
 import { IError } from "../user/user.reducer"
 import * as give from "./collection.types"
@@ -38,14 +38,13 @@ export const deleteColletionFailure = (error : AxiosError): give.DeleteCollectio
    payload: error
 })
 
-export const createCollectionWithItemsStart = (itemsCollection: {collectionWithItems: ICreateCollection, image: File}): give.CreateCollectionWithItemsStart => ({
+export const createCollectionWithItemsStart = (itemsCollection: {collectionWithItems: ICreateCollection, image?: File}): give.CreateCollectionWithItemsStart => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START,
    payload: itemsCollection
 })
 
-export const createCollectionWithItemsSuccess = (itemsCollection: ICollection): give.CreateCollectionWithItemsSuccess => ({
-   type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS,
-   payload: itemsCollection
+export const createCollectionWithItemsSuccess = (): give.CreateCollectionWithItemsSuccess => ({
+   type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS
 })
 
 export const createCollectionWithItemsFailure = (error: AxiosError): give.CreateCollectionWithItemsFailure => ({
@@ -81,4 +80,9 @@ export const getCollectionsWihoutItemsSuccess = (collections: give.ICollectionWi
 export const getCollectionsWihoutItemsFailure = (error: AxiosError) : give.GetCollectionsWithoutItemsFailure => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE,
    payload: error,
+})
+
+export const setCollection = (collection: any):give.SetCollection => ({
+   type: COLLECTION_ACTION_TYPES.SET_COLLECTION,
+   payload: collection
 })

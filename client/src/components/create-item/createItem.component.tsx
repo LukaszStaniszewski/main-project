@@ -1,29 +1,36 @@
-import { Fragment, useState, useEffect, Dispatch, SetStateAction, MouseEvent, ChangeEvent} from 'react'
+import { Fragment, useState, useEffect, Dispatch, SetStateAction, ChangeEvent} from 'react'
+import { useDispatch } from "react-redux"
 import { Reorder } from "framer-motion"
+
 
 import FormInput from "../form-input/form-input.componentx"
 import ChosenItemField from "./item-field/chosenItemField.component"
 import OptionalField from "./item-field/optionalField.component"
 import { CollectionTopic, IOptionalField, ItemKey, ICreateItem, COLLECTIONS_MOCKUP, OptionalItemData } from "./item-types/itemTypes"
-
+import { disableTopicDropdown } from "../../store/local/local.action"
+import Alert, {IAlert} from "../alert/alert.component"
 
 interface ICreateItemComponent {
    collectionTopic: CollectionTopic
    setItemData: Dispatch<SetStateAction<ICreateItem>>
+   buttonText?: string,
 }
 
 const defaultUserInputData = {
    id: "",
    name: "",
-   tags: [""],
+   tags: ["Books", "English"],
    topic: "",
 }
 
-const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
+const CreateItem = ({collectionTopic, setItemData, buttonText = "Add item"}: ICreateItemComponent) => {
    const [optionalFields, setOptionalFields] = useState<IOptionalField[]>([])
    const [chosenOptionalFields, setChosenOptionalFields] = useState<IOptionalField[]>([])
-           
    const [userInputData, setUserInputData] = useState<ICreateItem>(defaultUserInputData)
+   const [alert, setAlert] = useState<IAlert>({message:"", type:'info', toggle:false})
+   const dispatch = useDispatch()
+
+ 
    
    const getCollectionKeyes = () => {
       if(!collectionTopic) return
@@ -40,12 +47,12 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
    }
 
    useEffect(() => {
-      const optionalFields = getBaseFields()
+      const optionalFields = getBaseFields() 
       setOptionalFields(optionalFields)
       setChosenOptionalFields([])
    }, [collectionTopic])
    
-   const addAllFields = () => {
+   const moveFieldsToLeft = () => {
       if(!optionalFields.length) return
       const upToDateBaseFields =  getBaseFields()
       setChosenOptionalFields(() => 
@@ -56,7 +63,7 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
       )
    }
 
-   const removeFields =  () => {
+   const moveFieldsToRight =  () => {
       setOptionalFields(() => getBaseFields())
       setChosenOptionalFields(() => 
          chosenOptionalFields.filter(value => value === null)
@@ -66,22 +73,35 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
 
    const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-     setUserInputData(prevState => ({...prevState, [name]: value, topic: collectionTopic}))
+     setUserInputData(prevState => ({...prevState, [name]: value, topic: collectionTopic, tags: ["books"]}))
    }
+
    const saveItemHandler = () => {
-      if(!userInputData?.id || !userInputData?.name) return alert("name and id are required")
+      if(!userInputData?.id || !userInputData?.name) {
+         return setAlert(prevState => 
+            ({...prevState, message: "Item name and id are required", type: "error", toggle: true}
+         ))
+      }
+      setAlert(prevState => {
+         if(buttonText === "Add item"){
+            return ({...prevState, message: "Item has been added", type: "info", toggle: true})
+         } else {
+            return ({...prevState, message: "Item has been created", type: "success", toggle: true})
+         }
+      })
       removeFalsyValues()
       setItemData(userInputData)
+      dispatch(disableTopicDropdown(true))
       resetFields()
    }
    
    const removeFalsyValues = () => {
-      if(!userInputData.optional) return
-      const keyes =  Object.keys(userInputData.optional) as Array<keyof OptionalItemData>
+      if(!userInputData.optionalFields) return
+      const keyes =  Object.keys(userInputData.optionalFields) as Array<keyof OptionalItemData>
       keyes.forEach((key) => {
-         if(userInputData.optional && !userInputData.optional[key]) {
+         if(userInputData.optionalFields && !userInputData.optionalFields[key]) {
             //@ts-ignore
-            delete userInputData.optional[key]
+            delete userInputData.optionalFields[key]
          }
       })
    }
@@ -93,7 +113,18 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
    }
   return (
    <Fragment>
-      <div className=" border-b col-start-1 col-end-3 mt-4 grid grid-cols-2 gap-x-4 ">
+      <div  
+         className="border-b col-start-1 col-end-3  grid grid-cols-2 gap-x-4"
+        
+      >
+        <div className={`flex justify-end col-start-1 col-end-4 pointer  ${!alert?.toggle && "opacity-0 h-5"}`}
+         onClick={()=> setAlert(prevState => ({...prevState, toggle: false}))}>
+            <Alert
+               message={alert?.message}
+               type={alert?.type}
+               className="py-2"
+            />
+        </div>
          <div className="col-start-1 col-end-2 flex items-center gap-10 with-33vw max-w-33vw">
             <FormInput 
                label="item name"
@@ -115,23 +146,24 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
          <div className="col-start-2 col-end-3 w-33vw flex 2xl:max-w-[50%] max-w-[80%] m-auto justify-center items-center ">
 
                <button className="w-32 h-8 bg-red-300 text-2xl  rounded-l-full hover:bg-red-500 text-white hover:flex-grow transition-all duration-200 ease-in-out "
-               onClick={removeFields}
+               onClick={moveFieldsToRight}
                >
                   &#8594;
                </button>
                <button className="w-32 h-8 bg-green-300 text-2xl  rounded-r-full hover:bg-green-500 text-white hover:flex-grow transition-all duration-200 ease-in-out "
-                  onClick={addAllFields}
+                  onClick={moveFieldsToLeft}
                   >
                   &#8592;
                </button>
          
          </div>
-        
+       
          <div className="col-start-3 col-end-4 flex items-center justify-end gap-10 w-29vw">
                <button className="btn btn-sm">ADD TAGS</button>
+               
                <button className="btn btn-sm bg-green-600"
                   onClick={saveItemHandler}
-               >Add item</button>
+               >{buttonText}</button>
           
          </div>
 
@@ -145,7 +177,7 @@ const CreateItem = ({collectionTopic, setItemData}: ICreateItemComponent) => {
                      <Reorder.Item key={index} value={baseField}>
                         <ChosenItemField
                            key={baseField.fieldName}
-                           baseField={baseField}
+                           addedField={baseField}
                            setChosenOptionalFields = {setChosenOptionalFields}
                            setOptionalFields = {setOptionalFields}
         

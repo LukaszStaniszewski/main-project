@@ -11,8 +11,10 @@ import * as key from "../config/keyes"
 
 export const authentication = async ({email, password}: {email: string, password: string}) => {
   const user = await findUser({email})
+
   if(!user) return false
   const isPasswordValid = await user.comparePasswords(password)
+  
   if(!isPasswordValid) return false
   await user.updateLastLogin(email)
 

@@ -1,6 +1,6 @@
 import { ICollection, ICollectionWithoutItems } from "../../../store/collections/collection.types"
 import { ICurrentUser } from "../../../store/user/user.types"
-import { ICustomizedCollections } from "../../../routes/user-page/frame/userPageFrame.component"
+import { ICustomizedCollections } from "../../../pages/user-page/user-page.component"
 
 export type Columns = Array<keyof ICurrentUser> 
 export type Rows = ICurrentUser[] | ICustomizedCollections[]
@@ -13,11 +13,14 @@ interface ITableAdmin{
 
 export interface ICustomTable extends ITableAdmin {
    rows: Rows,
+   customizedColumns?: string[]
+   url?: string
 }
 
 export interface ITableRows extends ITableAdmin {
    row: Row,
    columns: Columns
    selectAll: boolean,
+   url?: string
 }
 

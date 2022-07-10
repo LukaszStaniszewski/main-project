@@ -1,14 +1,15 @@
 import axios, {AxiosPromise} from 'axios'
-const baseUrl = process.env.REACT_APP_BASE_API_URL
+export const baseUrl = process.env.REACT_APP_BASE_API_URL as string
 export const api = axios.create({baseURL : baseUrl})
 api.defaults.headers.post['Content-Type'] = 'application/json'
 
 api.interceptors.request.use( (req) => {
   
   if (localStorage.getItem('token') && req.headers) {
-   // @ts-ignore
+   //@ts-ignore
     req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('token')).accessToken}`;
-     // @ts-ignore
+   //@ts-ignore
+
     req.headers["x-refresh"] = `${JSON.parse(localStorage.getItem('token')).refreshToken}`;
   }
   return req;
@@ -26,13 +27,16 @@ export enum API_URL {
    DELETE_USERS = "/api/user/delete",
    CREATE_COLLECTION = "api/collection/new",
    CREATE_COLLECTION_WITH_ITEMS = "api/collection",
-   DETE_COLLECTION = "api/collection/delete",
+   DELETE_COLLECTION = "api/collection/delete",
    GET_COLLECTION_WITH_ITEMS = "api/collection",
-   // GET_COLLECTIONS_WITH_ITEMS_BY_USER = `api/collection/item/user`,
    GET_COLLECTIONS_BY_USER = "api/collection/user",
    CREATE_ITEM = "api/item/new",
    DELETE_ITEM ="api/item/delete",
-   UPLOAD_IMAGE = "api/collection/image"
+   UPLOAD_IMAGE = "api/collection/image",
+   GET_ITEM = "api/item/get",
+   CREATE_COMMENT = "api/comment/new",
+   GET_COMMENTS = "api/comment/",
+   DELETE_COMMENT ="api/comment/delete",
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsDefault)
@@ -53,10 +57,5 @@ export const optionsUploadImage = {
 export interface ITokens {
    accessToken: string,
    refreshToken: string
-}
-
-interface IHeaders {
-   Authorization: string,
-   "x-refresh": string
 }
 

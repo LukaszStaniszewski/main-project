@@ -66,7 +66,8 @@ userSchema.pre("save", async function(next){
 })
 
 userSchema.methods.comparePasswords = async function(plaintextPassword: string): Promise<boolean> {
-   return await bcrypt.compare(plaintextPassword, this.password).catch(e => false)
+   const result = await bcrypt.compare(plaintextPassword, this.password).catch(e => false)
+   return result
 }
 
 userSchema.methods.updateLastLogin = async function(email: string): Promise<boolean> {

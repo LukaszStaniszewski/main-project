@@ -1,20 +1,12 @@
-import mongoose from "mongoose"
-
 import CollectionModel, {ICreateItemCollection, IItemCollectionDocument} from "../models/collection.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
-import { uploadImage} from "../utils/imageKit.utils"
 import { Values_TO_Omit } from "../config/constants.config"
 
-export const createCollection = async (collectionData: ICreateItemCollection, image?:Buffer): Promise<IItemCollectionDocument> => {
+export const createCollection = async (collectionData: ICreateItemCollection): Promise<IItemCollectionDocument> => {
    try {
-      if(image) {
-         const {url, fileId} = await uploadImage(image, collectionData.name)
-         const collection = await CollectionModel.create({...collectionData, image: {url: url, imageId: fileId}})
-         return collection
-      }
-      const collection = await CollectionModel.create({...collectionData})
+      const collection = await CollectionModel.create(collectionData)
       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
@@ -23,11 +15,17 @@ export const createCollection = async (collectionData: ICreateItemCollection, im
 
 export const findCollectionsByUser = async (name : IUserDocument["name"]): Promise<IItemCollectionDocument[]> => {
    try {
-      console.log("name", name)
        const collections = await CollectionModel.find({"owner.name": name}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST).lean()
-       console.log(collections)
-       if(!collections) throw new Error("Collection not found")
        return collections
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+   }
+}
+export const findCollection = async (collectionId: string): Promise<IItemCollectionDocument> => {
+   try {
+       const collection = await CollectionModel.findOne({_id: collectionId}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
+       if(!collection) throw new Error("Collection not found")
+       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
@@ -36,14 +34,12 @@ export const findCollectionsByUser = async (name : IUserDocument["name"]): Promi
 export const findAllCollections = async (): Promise<IItemCollectionDocument[]> => {
    try {
        const collections = await CollectionModel.find().lean()
-       console.log(collections)
        if(!collections) throw new Error("Collections not found")
        return collections
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
 }
-
 
 export const deleteCollections = async (name : IUserDocument["name"]) => {
    try {
@@ -55,6 +51,17 @@ export const deleteCollections = async (name : IUserDocument["name"]) => {
       return true
    } catch (error) {
       throw new Error(getErrorMessage(error))
+   }
+}
+
+export const deleteCollection = async (collectionId: string) => {
+      try {
+      await deleteItemsByCollection(collectionId)
+      await CollectionModel.findByIdAndDelete(collectionId)
+      return true
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+      
    }
 }
 

@@ -36,7 +36,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
          return {
             ...state,
             isLoading: true,
-        
+            error: null,
          }
       case USER_ACTION_TYPES.AUTHENTICATION_SUCCESS:
          return {

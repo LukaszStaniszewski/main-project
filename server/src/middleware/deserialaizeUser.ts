@@ -22,7 +22,7 @@ const deserialaizeUser = async (req: Request, res: Response, next: NextFunction)
       res.locals.user = decoded;
       return next()
    }
-   console.log(expired)
+  
    if(expired && refreshToken) {
       const newAccessToken = await reIssueAccessToken(refreshToken);
 

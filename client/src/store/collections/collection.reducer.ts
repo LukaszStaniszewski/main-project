@@ -31,13 +31,8 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
             error: null,
             collectionFetch: true,
          }
-      case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_SUCCESS:
-         return{
-            ...state,
-            isLoading: false,
-            collection: action.payload
-         }
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_SUCCESS:
+      case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_SUCCESS:
          return {
             ...state,
             collectionFetch: false,
@@ -49,8 +44,11 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
             collectionFetch: false,
             collectionsWihoutItems: action.payload
          }
+      case COLLECTION_ACTION_TYPES.SET_COLLECTION:
+         return {
+            collectionsWihoutItems: action.payload
+         }
       case COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS:
-      case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS:
          return {
             ...state,
             collectionFetch: false,

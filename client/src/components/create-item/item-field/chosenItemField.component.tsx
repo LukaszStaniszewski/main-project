@@ -7,17 +7,18 @@ import "../../../../node_modules/react-datepicker/dist/react-datepicker.css";
 import {IOptionalFieldComponent} from "./optionalField.component"
 import {OptionalItemData, ICreateItem, IOptionalField, COLLECTIONS_MOCKUP, CollectionTopic} from "../item-types/itemTypes"
 
-interface IChosenItemField extends IOptionalFieldComponent {
+interface IChosenItemField extends Omit<IOptionalFieldComponent, "baseField"> {
    setUserInputData:  Dispatch<SetStateAction<ICreateItem>>,
    setChosenOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
    setOptionalFields:  Dispatch<SetStateAction<IOptionalField[]>>,
    collectionTopic: CollectionTopic
+   addedField: IOptionalField
 }
 export type fieldValues<Type> = {[Property in keyof Type]: string; };
    
-const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, setOptionalFields, collectionTopic}: IChosenItemField) => {
+const ChosenItemField = ({addedField, setChosenOptionalFields, setUserInputData, setOptionalFields, collectionTopic}: IChosenItemField) => {
                    
-   const {fieldName, isAdded, valueType} = baseField
+   const {fieldName, isAdded, valueType} = addedField
    const [startDate, setStartDate] = useState<Date>();
    const [fieldValue, setFieldValues] = useState<OptionalItemData>(COLLECTIONS_MOCKUP[collectionTopic]);
    const isPresent = useIsPresent()
@@ -34,18 +35,23 @@ const ChosenItemField = ({baseField, setChosenOptionalFields, setUserInputData, 
          value = event?.target.value
       
       setFieldValues(prevState => ({...prevState, [fieldName]: value}))
-      setUserInputData(prevState => ({...prevState, optional: {...prevState.optional, [fieldName]: value}}))
+      //@ts-ignore
+      setUserInputData(prevState => ({...prevState, optionalFields: {...prevState.optionalFields, [fieldName]: value}}))
    }
 
-   const moveFieldHandler =async () => {
+   const moveFieldHandler = async () => {
       await startAnimation()
 
       setChosenOptionalFields(prevValue =>  prevValue.filter(field => field.fieldName !== fieldName))
-      setOptionalFields(prevValue => [{...baseField, isAdded: false}, ...prevValue, ]) 
+      setOptionalFields(prevValue => [{...addedField, isAdded: false}, ...prevValue, ]) 
 
-      setUserInputData(prevState => prevState.optional&& prevState.optional[fieldName] === fieldValue[fieldName] ? {...prevState, optional: {...prevState.optional ,[fieldName]: ""}}: prevState)
+      setUserInputData(prevState => prevState.optionalFields && prevState.optionalFields[fieldName] === fieldValue[fieldName] ? {...prevState, optionalFields: {...prevState.optionalFields ,[fieldName]: ""}}: prevState)
 
    }
+
+   // const saveInSession = () => {
+   //    sessionStorage.setItem("setField", )
+   // }
 
    const startAnimation = async () => {
       await  controls.start({
