@@ -44,17 +44,13 @@ const CollectionPage = () => {
    const dispatch = useDispatch()
    const collection = useSelector(selectCollection)
    const currentUser = useSelector(selectCurrentUser)
-   const error = useSelector(selectCollectionErrorMessage)
    const collectionsWihoutItems = useSelector(selectCollectionsWithoutItems)
    const items = useSelector(selectAdjustedItems)
    const navigate = useNavigate()
+   
    useEffect(() => {
       dispatch(getCollectionWithItemsStart(params.id as string))
    }, [])
-   useEffect(() => {
-      if(!error) return
-     navigate("/")
-   },[error])
 
    useEffect(() => {
       if(!collection) return

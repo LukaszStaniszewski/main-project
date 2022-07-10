@@ -10,6 +10,6 @@
     "startDev": "npm run startServer && npm run startClient"
   },
   "keywords": [],
-  "author": "",
+  "author": "Łukasz Staniszewski",
   "license": "ISC"
 }

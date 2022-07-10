@@ -29,8 +29,6 @@ const ItemPage = () => {
    useEffect(() => {
       if(!id || item) return
       dispatch(getItemStart(id))
-      //@ts-ignore
-      // dispatch(getCommentsStart(item._id))
    }, [])
 
    useEffect(()=> {
@@ -78,20 +76,24 @@ const ItemPage = () => {
          {
             item
             ?  <Fragment>
-                  <div>
-                     <div>name: {item.name}</div>
-                     <div>topic: {item.topic}</div>
-                     <div>createdAt: {item.createdAt}</div>
+                  <div className="flex justify-between">
+                     <div className="text-lg ">Theme / {item.topic}</div>
+                     <div className="text-lg font-semibold">{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</div>
+                     <div className="text-sm font-light">create at: {item.createdAt}</div>
                  </div>
                  {
                   fieldKeys.length > 0 &&  
-                  <div>
+                  <div className="flex flex-wrap">
                      {fieldKeys.map((key, index) => {
                         if(!item.optionalFields) return <span></span>
                         if(key === "image") {
-                           return <img src={`${item.optionalFields[key]}`} alt="" />
+                           return <img className="max-h-50vh" src={`${item.optionalFields[key]}`} alt="" />
                         } else {
-                           return <div key={index}>{key}:{item.optionalFields[key]}</div>   
+                           return <div className="p-1" key={index}>
+                                       <span className="font-semibold">{key}</span>
+                                          {/* @ts-ignore */}
+                                    : {item.optionalFields[key].toString()}
+                                 </div>   
                         }
                      })}
                   </div>

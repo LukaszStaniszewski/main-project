@@ -8,12 +8,8 @@ const socket = ({io} : {io: Server}) => {
   io.on("connection", (socket : Socket) => {
       logger.info(`User connected ${socket.id}`)
 
-         //@ts-ignore
-      // const getComment = (comment) => socket.emit("62c96bacd0cccdf3117ef724", comment)
-
        socket.on("createComment", async (commentData, callback) => {
          const comment =  await createComment(commentData)
-         // getComment(comment)
          callback({
             comment: comment
          })

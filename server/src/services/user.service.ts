@@ -19,7 +19,6 @@ export const deleteUsers = async(users : Array<IUserDocument>) => {
       Promise.all(users.map(user => User.deleteOne(user)))
       return true
    } catch(error) {
-      console.log(error)
       throw new Error(getErrorMessage(error))
    }  
 }
