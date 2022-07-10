@@ -1,6 +1,6 @@
 import{ useState,} from 'react'
 
-import TableRows from "./table-rows/tableRows.component"
+import TableRows from "./table-rows/table-rows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
 
 const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false, setSelectedItems, url}: ICustomTable) => {

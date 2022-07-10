@@ -1,6 +1,5 @@
-import React from 'react'
 import { Routes, Route } from "react-router-dom"
-import UserPage from "../../pages/user-page/frame/userPagecomponent"
+import UserPage from "../../pages/user-page/user-page.component"
 
 const UserPageRoute = () => {
   return (

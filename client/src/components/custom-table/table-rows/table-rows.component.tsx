@@ -1,5 +1,5 @@
 import {useState, ChangeEvent, useEffect} from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ITableRows } from "../table-types/table-types"
 
 const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible, url}: ITableRows) => {
@@ -33,13 +33,12 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
    const redirect = () => {
       if(!url) return
       navigate(`/${url}/${row._id}`)
-      console.log("row", row)
    }
 
   return (
       <tr onClick={redirect} className="cursor-pointer">
          <td>
-            {checkboxesAvaible && <input className="checkbox" type="checkbox" name={`index`} onChange={checkBoxHandler} checked={checkbox} />}
+            {checkboxesAvaible && <input className="checkbox" type="checkbox" onChange={checkBoxHandler} checked={checkbox} />}
          </td>
          { 
          columns.map((column, index) => {

@@ -1,6 +1,5 @@
-import { ICustomizedCollections } from "../pages/user-page/frame/userPagecomponent"
+import { ICustomizedCollections } from "../pages/user-page/user-page.component"
 import { ICollectionWithoutItems } from "../store/collections/collection.types"
-
 
 
 export function adjustCollections(collections: ICollectionWithoutItems[] ) : ICustomizedCollections[]  {

@@ -3,12 +3,17 @@ import { setCollection, deleteCollectionStart } from "../../store/collections/co
 import { ICollection, ICollectionWithoutItems } from "../../store/collections/collection.types";
 import { deleteItem } from "../../utils/hooks.utils";
 
+export interface AdjustedCollection extends Omit<ICollectionWithoutItems, "image" | "owner"> {
+   image: string | undefined,
+   owner: string,
+}
+
 const useDeleteCollection = () => {
    const dispatch = useDispatch()
 
-   const deleteCollection = (collections: ICollectionWithoutItems[], collectionToDelete: ICollection) => {
+   const deleteCollection = (collections: AdjustedCollection[], collectionToDelete: ICollection) => {
       console.log("collections", collections)
-      const wihoutUnwontedCollections = deleteItem<ICollectionWithoutItems>(collections, collectionToDelete)
+      const wihoutUnwontedCollections = deleteItem<AdjustedCollection, ICollection>(collections, collectionToDelete)
       console.log("wihoutUnwontedCollections", wihoutUnwontedCollections)
       dispatch(setCollection(wihoutUnwontedCollections))
       dispatch(deleteCollectionStart(collectionToDelete._id))

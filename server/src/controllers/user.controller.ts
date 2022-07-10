@@ -28,7 +28,6 @@ export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, 
 export const registerUser = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
    try {
       const user = await createUser(req.body)
-   
       res.json(user)
    } catch (error) {
       logger.error(getErrorMessage(error))

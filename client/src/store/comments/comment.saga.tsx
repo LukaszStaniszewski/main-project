@@ -10,7 +10,7 @@ import { IItem } from "../items/item.types";
 
 
 const receiveMessage = (socket: Socket, comment: ICreateComment) :EventChannel<IComment> => {
-   socket.on("disconnect", () => {
+   socket.on("connect", () => {
      socket.connect();
      console.log('socket disconnected');
    });

@@ -56,7 +56,12 @@ export const COLLECTIONS_MOCKUP = {
       "Creation Date": Date
    },
    movies: {
-      author: "",
+      director: "",
+      title: "",
+      genre: "",
+      "box office": 1,
+      "leading actor": "",
+      "Creation Date": Date,
    },
 
 } 

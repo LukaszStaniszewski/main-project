@@ -8,10 +8,7 @@ import logger from "./logger";
 export const signJwt = (payload: Object, privateKey: string, options: string) => {
 
    return jwt.sign(payload, privateKey, {expiresIn: options, algorithm: "RS256"})
-
 }
-
-
 interface IVerifyToken extends Omit<IUserDocument, "_id">, ISessionDocument {
    _id: string,
    sessionId: string,
@@ -19,7 +16,6 @@ interface IVerifyToken extends Omit<IUserDocument, "_id">, ISessionDocument {
 }
 
 export const verifyToken = (token: string, publicKey: string) => {
-   // add admin verification
    try {
       const decoded = jwt.verify(token, publicKey)
       return ({

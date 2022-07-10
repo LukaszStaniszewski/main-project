@@ -1,5 +1,5 @@
 import { Route, Routes} from "react-router-dom"
-import ItemPage from "../../pages/item-page/itemPage.component"
+import ItemPage from "../../pages/item-page/item-page.component"
 
 const ItemPageRoute = () => {
   return (

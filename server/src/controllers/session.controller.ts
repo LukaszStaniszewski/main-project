@@ -9,9 +9,7 @@ import { ErrorMessage } from "../config/constants.config"
 
 
 export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
-   console.log(req.body)
    const user = await authentication(req.body)
-   console.log("user", user)
    if(!user) return res.status(401).send({message: ErrorMessage.NOT_AUTHENTICATED})
    if(user.status === "blocked") return res.status(403).send({message: ErrorMessage.ACCOUNT_HAS_BLOCKED_STATUS})
    const session = await createSession(user._id)
@@ -23,7 +21,6 @@ export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: 
 }
 
 export const getUserSessions= async (req: Request, res: Response<ISessionDocument>) => {
-   console.log("res.locals.user", res.locals.user)
    const userId = res.locals.user._id
    const session = await findSession({user: userId, valid: true})
    

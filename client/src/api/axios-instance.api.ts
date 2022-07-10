@@ -59,8 +59,3 @@ export interface ITokens {
    refreshToken: string
 }
 
-interface IHeaders {
-   Authorization: string,
-   "x-refresh": string
-}
-

@@ -1,15 +1,14 @@
 import {useEffect, useState,MouseEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { FormattedMessage } from "react-intl"
 import { Button } from "@material-tailwind/react";
 
-import CustomTable from "../../components/custom-table/customTable.component"
+import CustomTable from "../../components/custom-table/custom-table.component"
 import { getUsersStart, logOutStart } from "../../store/user/user.action"
 import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
-import useUpdateUsers from "../../hooks/user-session/updateUsers.hook"
-import useDeleteUsers from "../../hooks/user-session/deleteUsers.hook"
+import useUpdateUsers from "../../hooks/user-session/update-users.hook"
+import useDeleteUsers from "../../hooks/user-session/delete-users.hook"
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 
 const AdminPage = () => {

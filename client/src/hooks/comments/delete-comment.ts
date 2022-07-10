@@ -9,7 +9,7 @@ const useDeleteComment = () => {
 
    const deleteComment = (comments: IComment[], commentToDelete: IComment) => {
       
-      const wihoutUnwontedComments = deleteItem<IComment>(comments, commentToDelete)
+      const wihoutUnwontedComments = deleteItem<IComment, {}>(comments, commentToDelete)
       dispatch(setComments(wihoutUnwontedComments))
       dispatch(deleteCommentStart(commentToDelete._id))
    }

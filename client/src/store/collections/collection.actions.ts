@@ -43,9 +43,8 @@ export const createCollectionWithItemsStart = (itemsCollection: {collectionWithI
    payload: itemsCollection
 })
 
-export const createCollectionWithItemsSuccess = (itemsCollection: ICollection): give.CreateCollectionWithItemsSuccess => ({
-   type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS,
-   payload: itemsCollection
+export const createCollectionWithItemsSuccess = (): give.CreateCollectionWithItemsSuccess => ({
+   type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS
 })
 
 export const createCollectionWithItemsFailure = (error: AxiosError): give.CreateCollectionWithItemsFailure => ({

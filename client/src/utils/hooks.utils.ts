@@ -4,7 +4,6 @@ interface IUpdateItems {
 }
 
 
-
 export const changeItemsValue = <T>(items: T[], itemsToUpdate: IUpdateItems[], value: object): T[] =>{
    const keyToUpdate =  Object.keys(value).join("")
    const valueToUpdate =  Object.values(value).join("")
@@ -32,7 +31,9 @@ export const deleteItems = <T>(items: T[], itemsToDelete: IUpdateItems[]): T[] =
    });
  }
 
-export const deleteItem = <T>(items:T[], itemToDelete: T) :T[] => {
+
+
+export const deleteItem = <T, D>(items:T[], itemToDelete: D | T) :T[] => {
    //@ts-ignore
    return items.filter(item => item._id !== itemToDelete._id)
 }

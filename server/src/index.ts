@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URL_CLOUD as string).
 catch(error => logger.error(error));
 
 const db = mongoose.connection
-db.on('error', error => new Error(error))
+db.on('error', error => console.log(error))
 db.once('open', () => logger.info('🔓 MongoDB connected 🔓'))
 
 const app = express()

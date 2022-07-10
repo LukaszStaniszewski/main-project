@@ -1,9 +1,9 @@
-import {takeLatest, put, all, call, putResolve, retry, take, spawn, actionChannel, debounce, takeEvery} from "typed-redux-saga/macro"
+import {takeLatest, put, all, call, } from "typed-redux-saga/macro"
 import{ AxiosError}  from "axios"
 
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
-import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, AuthenticationFailure, GetUserByCredentialsStart} from "./user.types"
+import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, GetUserByCredentialsStart} from "./user.types"
 import * as action from "./user.action"
 
 
@@ -20,42 +20,9 @@ function* Authenticate(credentials:IUserFormValues,url:string) {
    }
 }
 
-// function* Authenticate(credentials:IUserFormValues,) {
-//    try {
-//       localStorage.removeItem("token")
-//       const {data} = yield* call(postRequest<ITokens>, API_URL.SIGN_IN, credentials)
-//       localStorage.setItem('token', JSON.stringify(data))
-
-//       yield* put(action.authenticationSuccess(decodeToken(data.accessToken)))
-      
-//     } catch (error) {
-//       yield* put(action.authenticationFailure(error))
-//    }
-// }
-
-
-// function* authorizeAndSignIn() {
-//    const token = JSON.parse(localStorage.getItem("token") as string)
-//    if(!token) return yield* put(action.setCurrentUser(null))
-//    // get user session and check if its valid
-//    try {
-      
-//    } catch (error) {
-      
-//    }
-// }
-
-// function* signUpWithEmail({payload: credentials}: SignUpStart) {
-//    const response = yield* call(postRequest, API_URL.SIGN_UP, credentials)
-//    //@ts-ignore
-//    const {password, email} = response.data
-//    //@ts-ignore
-//    yield* call(Authenticate, {password, email})
-//  }
- 
 
 function* signInWithEmail({payload: credentials}: SignInStart) {
-   yield* Authenticate(credentials, API_URL.SIGN_IN)
+   yield* call(Authenticate,credentials, API_URL.SIGN_IN)
 }
 
 
@@ -65,7 +32,7 @@ function* signUpWithEmail({payload: credentials}: SignUpStart) {
 
 function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url:string) {
    try {
-      const response = yield* call(requestType, url, usersToUpdate)
+      yield* call(requestType, url, usersToUpdate)
       yield* put(action.updateUsersSuccess())
    } catch (error) {
       yield* put(action.updateUsersFailure(error as AxiosError))

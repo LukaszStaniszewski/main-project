@@ -1,12 +1,12 @@
-import { ObjectId } from "mongoose"
 import { IItemCollectionDocument } from "../models/collection.model"
 import ItemModel, {ICreateItem, IItemDocument} from "../models/item.model"
 import getErrorMessage from "../utils/getErrorMessage"
+import logger from "../utils/logger"
 import { Values_TO_Omit } from "../config/constants.config"
 
 export const createItem = async (input: ICreateItem[], collectionId?: IItemCollectionDocument["_id"]):Promise<IItemDocument[]> => {
    try{
-      if(!createItem.length) throw new Error(getErrorMessage("To create item it must an array"))
+      if(!input.length) throw new Error(getErrorMessage("To create item it must an array"))
       const item = await Promise.all(input.map(item => {
          if(collectionId){
             return  ItemModel.create({...item, collectionId: collectionId})
@@ -16,6 +16,7 @@ export const createItem = async (input: ICreateItem[], collectionId?: IItemColle
       }))
       return item
    } catch (error) {
+      logger.info(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -38,7 +39,6 @@ export const deleteItems = async (itemId : [{_id: string}]) => {
    }
 }
 
-// fix this function to be more flexible
 export const findItems = async (collectionPinnedToUser: IItemCollectionDocument | undefined): Promise<IItemDocument[] | undefined> => {
       if(!collectionPinnedToUser) return undefined
    try {

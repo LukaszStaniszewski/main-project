@@ -9,7 +9,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/navbar/navbar.component";
 import SignUp from "./pages/sign-up/sign-up.component";
 import SignIn from "./pages/sign-in/sign-in.component";
-import AdminPage from "./pages/admin-page/adminPage.component";
+import AdminPage from "./pages/admin-page/admin-page.component";
 import UserPageRoute from "./routes/user-page/user-page.route";
 import CollectionPageRoute from "./routes/collection-page/collection-page.route";
 import CreateContent from "./routes/create-content/create-content.route";

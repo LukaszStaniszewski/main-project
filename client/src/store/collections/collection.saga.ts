@@ -28,11 +28,11 @@ function* createCollectionWithItems({payload: {collectionWithItems, image}}: typ
    try {
       let payload = collectionWithItems;
       if(image) {
-         const {data} = yield* uploadImage(image)
+         const {data} = yield* call(uploadImage, image)
          payload = yield* appendImage(data, payload)
       }
       const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, payload)
-      yield* put(createCollectionWithItemsSuccess(response.data))
+      yield* put(createCollectionWithItemsSuccess())
    } catch (error) {
       yield* put(createCollectionWithItemsFailure(error as AxiosError))
    }

@@ -4,13 +4,13 @@ import { useParams, Link, useNavigate } from "react-router-dom"
 import { FolderAddIcon } from "@heroicons/react/outline"
 
 import { useSelector } from "react-redux"
-import { selectUserReducer, } from "../../../store/user/user.selector"
-import { getUserByCredentialsStart } from "../../../store/user/user.action"
-import {  getCollectionsWithoutItemsStart } from "../../../store/collections/collection.actions"
-import { selectCollectionErrorMessage, selectCollectionsWithoutItems,} from "../../../store/collections/collection.selector"
-import CustomTable from "../../../components/custom-table/customTable.component"
-import HeaderExtension from "../../../components/headerExtension/headerExtension.component"
-import { ICollectionWithoutItems } from "../../../store/collections/collection.types"
+import { selectUserReducer, } from "../../store/user/user.selector"
+import { getUserByCredentialsStart } from "../../store/user/user.action"
+import {  getCollectionsWithoutItemsStart } from "../../store/collections/collection.actions"
+import { selectCollectionErrorMessage, selectCollectionsWithoutItems,} from "../../store/collections/collection.selector"
+import CustomTable from "../../components/custom-table/custom-table.component"
+import HeaderExtension from "../../components/headerExtension/headerExtension.component"
+import { ICollectionWithoutItems } from "../../store/collections/collection.types"
 
 export interface ICustomizedCollections extends Omit<ICollectionWithoutItems, "image" | "owner"> {
    image: string | undefined,

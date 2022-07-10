@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import mongoose,{ Types} from "mongoose";
-import { ObjectId } from "mongoose";
 import { ICreateItem } from "../models/item.model";
 
 import { createItem, deleteItems, findItem } from "../services/item.service";

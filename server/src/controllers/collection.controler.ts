@@ -4,7 +4,6 @@ import { ICreateItemCollection } from "../models/collection.model"
 import { findCollectionsByUser,
          findAllCollections,
          createCollection,
-         deleteCollections,
          deleteCollection,
          findCollection
 } from "../services/collection.service"
@@ -13,12 +12,11 @@ import { uploadImage, } from "../utils/imageKit.utils"
 
 
 export const createCollectionHandler = async (req: Request<{}, {}, ICreateItemCollection>, res:Response) => {
-   const uploadedImage= req.file?.buffer
    try {
       const isTopicExisting = collectionTopics.find(topic => topic === req.body.topic)
       if(!isTopicExisting) return res.status(401).send({message: ErrorMessage.COLLECTION_TOPIC_ERROR})
 
-      const colletion = await createCollection(req.body, uploadedImage)
+      const colletion = await createCollection(req.body)
       return res.json({colletion})
    } catch (error) {
       res.sendStatus(400)

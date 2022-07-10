@@ -1,6 +1,6 @@
 import { Route, Routes} from "react-router-dom"
 
-import CollectionPage from "../../pages/collection-page/frame/collectionPage.component"
+import CollectionPage from "../../pages/collection-page/collection-page.component"
 
 const CollectionPageRoute = () => {
   return (

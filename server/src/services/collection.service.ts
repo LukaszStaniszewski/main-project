@@ -1,20 +1,13 @@
-import mongoose from "mongoose"
-
 import CollectionModel, {ICreateItemCollection, IItemCollectionDocument} from "../models/collection.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
-import { uploadImage} from "../utils/imageKit.utils"
 import { Values_TO_Omit } from "../config/constants.config"
 
-export const createCollection = async (collectionData: ICreateItemCollection, image?:Buffer): Promise<IItemCollectionDocument> => {
+export const createCollection = async (collectionData: ICreateItemCollection): Promise<IItemCollectionDocument> => {
    try {
-      if(image) {
-         const {url, fileId} = await uploadImage(image, collectionData.name)
-         const collection = await CollectionModel.create({...collectionData, image: {url: url, imageId: fileId}})
-         return collection
-      }
-      const collection = await CollectionModel.create({...collectionData})
+      console.log("collectionData", collectionData)
+      const collection = await CollectionModel.create(collectionData)
       return collection
    } catch (error) {
       throw new Error(getErrorMessage(error))
@@ -44,7 +37,6 @@ export const findCollection = async (collectionId: string): Promise<IItemCollect
 export const findAllCollections = async (): Promise<IItemCollectionDocument[]> => {
    try {
        const collections = await CollectionModel.find().lean()
-       console.log(collections)
        if(!collections) throw new Error("Collections not found")
        return collections
    } catch (error) {

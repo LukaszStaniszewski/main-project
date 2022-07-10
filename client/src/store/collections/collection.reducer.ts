@@ -49,7 +49,6 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
             collectionsWihoutItems: action.payload
          }
       case COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS:
-      case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS:
          return {
             ...state,
             collectionFetch: false,
