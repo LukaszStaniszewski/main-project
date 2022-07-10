@@ -1,7 +1,7 @@
 import path from "path";
 import express from "express"
 import dotenv from "dotenv"
-dotenv.config({debug: true});
+dotenv.config();
 import mongoose from "mongoose"
 import cors from "cors"
 import {Server} from "socket.io"
