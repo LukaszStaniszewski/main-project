@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect, Dispatch, SetStateAction, ChangeEvent} f
 import { useDispatch } from "react-redux"
 import { Reorder } from "framer-motion"
 
+
 import FormInput from "../form-input/form-input.componentx"
 import ChosenItemField from "./item-field/chosenItemField.component"
 import OptionalField from "./item-field/optionalField.component"
@@ -18,7 +19,7 @@ interface ICreateItemComponent {
 const defaultUserInputData = {
    id: "",
    name: "",
-   tags: [""],
+   tags: ["Books", "English"],
    topic: "",
 }
 
@@ -72,7 +73,7 @@ const CreateItem = ({collectionTopic, setItemData, buttonText = "Add item"}: ICr
 
    const handleChange = (event:ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
-     setUserInputData(prevState => ({...prevState, [name]: value, topic: collectionTopic}))
+     setUserInputData(prevState => ({...prevState, [name]: value, topic: collectionTopic, tags: ["books"]}))
    }
 
    const saveItemHandler = () => {
@@ -156,9 +157,10 @@ const CreateItem = ({collectionTopic, setItemData, buttonText = "Add item"}: ICr
                </button>
          
          </div>
-        
+       
          <div className="col-start-3 col-end-4 flex items-center justify-end gap-10 w-29vw">
                <button className="btn btn-sm">ADD TAGS</button>
+               
                <button className="btn btn-sm bg-green-600"
                   onClick={saveItemHandler}
                >{buttonText}</button>
