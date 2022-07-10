@@ -48,7 +48,7 @@ const TableRows = ({row, columns, selectAll, setSelectedItems, checkboxesAvaible
             return <td><img className="max-h-20" src={`${row[column]}`}/></td>
          }
          //@ts-ignore
-               // return <td className="break-words"  key={index}>{row[column]}</td> 
+
                return <td className="whitespace-normal break-words"  key={index}>{row[column]}</td> 
           } )
          }

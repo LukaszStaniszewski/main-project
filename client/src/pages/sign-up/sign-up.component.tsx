@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FormEvent } from "react"
+import { useState, ChangeEvent, FormEvent, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { FormattedMessage } from "react-intl"
 import { useDispatch, useSelector } from "react-redux"
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signUpStart } from "../../store/user/user.action"
-import { selectErrorMessage, selectLoadingState } from "../../store/user/user.selector"
+import { selectCurrentUser, selectErrorMessage} from "../../store/user/user.selector"
 
 
 const defaultFormFields = {
@@ -23,15 +23,20 @@ const SignUp = () => {
 
    const dispatch = useDispatch()
    const error = useSelector(selectErrorMessage)
-   const isLoading = useSelector(selectLoadingState)
+   const currentUser = useSelector(selectCurrentUser)
 
-   
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       if(password !== confirmPassword) return alert("passwords don't match") 
       dispatch(signUpStart({email, name, password}))
-      !isLoading && !error && navigate("/")
    }
+   console.log("currentUser", currentUser)
+
+   // useEffect(() => {
+   //    if(currentUser) {
+   //       navigate(`/user/${currentUser.name}`)
+   //    }   
+   // },[currentUser])
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target

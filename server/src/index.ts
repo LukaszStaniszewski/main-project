@@ -27,14 +27,12 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
    cors: {
-      // origin: ["http://localhost:3000"],
-      origin: "*",
+      origin: ["http://localhost:3000"],
       methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: ["Access-Control-Allow-Origin"],
       credentials: true
    },
 })
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
@@ -42,7 +40,7 @@ app.use(cors({
    methods: ["GET", "POST", "PATCH", "DELETE"],
   credentials: false,
 }))
-// app.use(deserialaizeUser) 
+app.use(deserialaizeUser) 
 
 app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)

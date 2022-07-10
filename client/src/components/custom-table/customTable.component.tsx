@@ -1,5 +1,4 @@
 import{ useState,} from 'react'
-import { Link } from "react-router-dom"
 
 import TableRows from "./table-rows/tableRows.component"
 import { ICustomTable, Columns, Rows } from "./table-types/table-types"
@@ -40,8 +39,8 @@ const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false,
    return (
    <div >
 
-      <table className="table bg-secondary table-normal w-full ">
-         <thead>
+      <table className="table bg-secondary table-normal w-full">
+         <thead >
             <tr>
                <th>
                   {checkboxesAvaible && <input className="checkbox" type="checkbox" name="selectAll" onClick={selectRowsHandler} />}
@@ -69,7 +68,7 @@ const CustomTable =  ({rows = [], customizedColumns,  checkboxesAvaible = false,
                }
             </tr>
          </thead>
-         <tbody>
+         <tbody >
             {
                sort(rows).map(row=> 
              

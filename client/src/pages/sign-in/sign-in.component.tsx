@@ -8,6 +8,13 @@ import SocialMediaAuthentication from "../../components/social-media-auth/social
 import { signInStart } from "../../store/user/user.action"
 import { selectErrorMessage} from "../../store/user/user.selector"
 import {selectUserReducer} from "../../store/user/user.selector"
+import Alert, {IAlert} from "../../components/alert/alert.component"
+
+const alertSettings:IAlert  = {
+   message: "",
+   toggle: false,
+   type: "info"
+}
 
 const defaultFormFields = {
    email: '',
@@ -16,25 +23,29 @@ const defaultFormFields = {
 
 const SignIn = () => {
    const [formFields, setFormFields] = useState(defaultFormFields)
+   const [alert, setAlert] = useState(alertSettings)
    const {email,password,} = formFields
    const dispatch = useDispatch()
    const {currentUser, isLoading} = useSelector(selectUserReducer)
    const navigate = useNavigate()
    const error = useSelector(selectErrorMessage)
    
-   useEffect(() => {
-      if(currentUser) {
-         navigate("/")
-      }   
-   },[])
- 
    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault()
       dispatch(signInStart(formFields))
-
-      !isLoading && error && navigate('/')
-
+     
    }
+
+   useEffect(() => {
+      if(currentUser) {
+         navigate(`/user/${currentUser.name}`)
+      }   
+   },[currentUser])
+
+   useEffect(() => {
+     if(!error) return
+      setAlert({toggle: true, message: error, type: "error"})
+   },[error])
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
@@ -51,7 +62,7 @@ const SignIn = () => {
             </figure>
 
             <section className="">
-               {!isLoading &&<h1>{error}</h1>}
+      
                <p className="text-center text-xl font-bold ">
                   <FormattedMessage 
                      id="authentication.signIn.messageOne"
@@ -64,13 +75,20 @@ const SignIn = () => {
                   />
                </p>
                
-               <SocialMediaAuthentication/>
-              
+               <div className={`${!alert.toggle && "opacity-0"}`}
+                  onClick={()=> setAlert(prevState => ({...prevState, toggle: false}))}
+               >
+                  <Alert
+                     message={alert.message}
+                     type = {alert.type}
+                  />
+                 
+               </div>
                <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
                   <p className="text-center text-xs font-light mx-4 mb-0">
                      <FormattedMessage
                         id="authentication.message"
-                        defaultMessage="OR USE YOUR EMAIL"
+                        defaultMessage="LOGIN WITH EMAIL"
                      />
                   </p>
                </div>

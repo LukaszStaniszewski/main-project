@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { TrashIcon } from "@heroicons/react/outline"
 
-
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import Spinner from "../../components/spinner/spinner.component"
 import {  ItemKey } from "../../components/create-item/item-types/itemTypes"
@@ -30,6 +29,8 @@ const ItemPage = () => {
    useEffect(() => {
       if(!id || item) return
       dispatch(getItemStart(id))
+      //@ts-ignore
+      // dispatch(getCommentsStart(item._id))
    }, [])
 
    useEffect(()=> {
@@ -37,16 +38,7 @@ const ItemPage = () => {
       dispatch(getCommentsStart(item._id))
    },[item])
 
-   useEffect(() => {
-      // dispatch(getCommentStart())
-   //   const socket = io(baseUrl)
-   //   socket.on("connect", ()=> {
-   //    console.log(socket.id)
-   //   })
-   },[])
-   const click = () => {
-      dispatch(getCommentStart())
-   }
+  
    useEffect(() => {
       if(!item?.optionalFields) return
       const fieldKey = Object.keys(item.optionalFields) as ItemKey[]
@@ -90,7 +82,6 @@ const ItemPage = () => {
                      <div>name: {item.name}</div>
                      <div>topic: {item.topic}</div>
                      <div>createdAt: {item.createdAt}</div>
-                     <button onClick={click} className="btn btn-xl">Open listner</button>
                  </div>
                  {
                   fieldKeys.length > 0 &&  

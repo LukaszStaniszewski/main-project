@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { IItem } from "../items/item.types";
-import { COMMENTS_ACTION_TYPES,CreateCommentSuccess, CreateCommentStart, IComment, ICreateComment, CreateCommentFailure, GetCommentStart, GetCommentsSuccess, GetCommentsFailure, DeleteCommentStart, DeleteCommentSuccess, DeleteCommentFailure, GetCommentsStart, SetComments } from "./comment.types";
+import { COMMENTS_ACTION_TYPES,CreateCommentSuccess, CreateCommentStart, IComment, ICreateComment, CreateCommentFailure, GetCommentStart, GetCommentsSuccess, GetCommentsFailure, DeleteCommentStart, DeleteCommentSuccess, DeleteCommentFailure, GetCommentsStart, SetComments, GetCommentSuccess, GetCommentFailure } from "./comment.types";
 
 
 export const createCommentStart = (comment: ICreateComment) : CreateCommentStart => ({
@@ -8,18 +8,29 @@ export const createCommentStart = (comment: ICreateComment) : CreateCommentStart
    payload: comment
 })
 
-export const createCommentSuccess = (comment: IComment[]): CreateCommentSuccess => ({
+export const createCommentSuccess = (comment: IComment): CreateCommentSuccess => ({
    type: COMMENTS_ACTION_TYPES.CREATE_COMMENT_SUCCESS,
    payload: comment,
 })
 
-export const createCommentFailure = (error: AxiosError) : CreateCommentFailure => ({
+export const createCommentFailure = (error: Error) : CreateCommentFailure => ({
    type: COMMENTS_ACTION_TYPES.CREATE_COMMENT_FAILURE,
    payload: error
 })
 
-export const getCommentStart = () :GetCommentStart => ({
+export const getCommentStart = (id: IItem["_id"]) :GetCommentStart => ({
    type: COMMENTS_ACTION_TYPES.GET_COMMENT_START,
+   payload: id, 
+})
+
+export const getCommentSuccess = (comment: IComment): GetCommentSuccess => ({
+   type: COMMENTS_ACTION_TYPES.GET_COMMENT_SUCCESS,
+   payload: comment
+})
+
+export const getCommentFailure = (error: Error): GetCommentFailure => ({
+   type: COMMENTS_ACTION_TYPES.GET_COMMENT_FAILURE,
+   payload: error
 })
 
 export const getCommentsStart = (id: IItem["_id"]): GetCommentsStart => ({
@@ -32,7 +43,7 @@ export const getCommentsSuccess = (comment: IComment[]): GetCommentsSuccess => (
    payload: comment
 })
 
-export const getCommentsFailure = (error: Error): GetCommentsFailure => ({
+export const getCommentsFailure = (error: AxiosError): GetCommentsFailure => ({
    type: COMMENTS_ACTION_TYPES.GET_COMMENTS_FAILURE,
    payload: error
 })

@@ -66,7 +66,7 @@ export const getUsersFailure = (error: AxiosError) : type.GetUsersFailure =>({
    payload: error
 })
 
-export const setCurrentUser = (user: ICurrentUser) : type.SetCurrentUser => ({
+export const setCurrentUser = (user: ICurrentUser | null) : type.SetCurrentUser => ({
    type: USER_ACTION_TYPES.SET_CURRENT_USER,
    payload: user
 })

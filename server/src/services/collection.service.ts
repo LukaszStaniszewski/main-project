@@ -24,7 +24,6 @@ export const createCollection = async (collectionData: ICreateItemCollection, im
 export const findCollectionsByUser = async (name : IUserDocument["name"]): Promise<IItemCollectionDocument[]> => {
    try {
        const collections = await CollectionModel.find({"owner.name": name}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST).lean()
-       if(!collections) throw new Error("Collection not found")
        return collections
    } catch (error) {
       throw new Error(getErrorMessage(error))

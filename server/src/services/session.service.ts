@@ -10,9 +10,12 @@ import { Values_TO_Omit } from "../config/constants.config"
 import * as key from "../config/keyes"
 
 export const authentication = async ({email, password}: {email: string, password: string}) => {
+   console.log("password", password, "email", email)
   const user = await findUser({email})
+  console.log("user", user)
   if(!user) return false
   const isPasswordValid = await user.comparePasswords(password)
+  console.log("isPasswordValid", isPasswordValid)
   if(!isPasswordValid) return false
   await user.updateLastLogin(email)
 

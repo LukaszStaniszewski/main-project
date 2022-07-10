@@ -9,6 +9,7 @@ import { ErrorMessage } from "../config/constants.config"
 
 
 export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+   console.log(req.body)
    const user = await authentication(req.body)
    console.log("user", user)
    if(!user) return res.status(401).send({message: ErrorMessage.NOT_AUTHENTICATED})

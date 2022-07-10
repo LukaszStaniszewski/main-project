@@ -43,7 +43,7 @@ export type LogOutStart = Action<USER_ACTION_TYPES.LOG_OUT_START>
 export type LogOutSuccess = Action<USER_ACTION_TYPES.LOG_OUT_SUCCESS>
 export type LogOutFailure= ActionWithPayload<USER_ACTION_TYPES.LOG_OUT_FAILURE, AxiosError>
 
-export type SetCurrentUser = ActionWithPayload<USER_ACTION_TYPES.SET_CURRENT_USER, ICurrentUser>
+export type SetCurrentUser = ActionWithPayload<USER_ACTION_TYPES.SET_CURRENT_USER, ICurrentUser | null>
 export type SetUsers = ActionWithPayload<USER_ACTION_TYPES.SET_USERS, ICurrentUser[]>
 
 export type GetUsersStart = Action<USER_ACTION_TYPES.GET_USERS_START>

@@ -41,10 +41,10 @@ export const getCollectionsPinnedToUser = async (req:Request, res: Response) => 
    const params = req.params.name
    try {
       const collections = await findCollectionsByUser(params)
-      if(!collections.length) res.status(406).send({message: "Haven't found collections owned by this user"})
+      if(!collections.length) return res.status(404).send({message: "Haven't found collections owned by this user"})
       res.json(collections)
    } catch (error) {
-      res.sendStatus(402)
+      res.sendStatus(404)
    }
 }
 

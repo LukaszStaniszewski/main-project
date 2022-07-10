@@ -6,9 +6,10 @@ api.defaults.headers.post['Content-Type'] = 'application/json'
 api.interceptors.request.use( (req) => {
   
   if (localStorage.getItem('token') && req.headers) {
-   // @ts-ignore
+   //@ts-ignore
     req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('token')).accessToken}`;
-     // @ts-ignore
+   //@ts-ignore
+
     req.headers["x-refresh"] = `${JSON.parse(localStorage.getItem('token')).refreshToken}`;
   }
   return req;
@@ -28,7 +29,6 @@ export enum API_URL {
    CREATE_COLLECTION_WITH_ITEMS = "api/collection",
    DELETE_COLLECTION = "api/collection/delete",
    GET_COLLECTION_WITH_ITEMS = "api/collection",
-   // GET_COLLECTIONS_WITH_ITEMS_BY_USER = `api/collection/item/user`,
    GET_COLLECTIONS_BY_USER = "api/collection/user",
    CREATE_ITEM = "api/item/new",
    DELETE_ITEM ="api/item/delete",

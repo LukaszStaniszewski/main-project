@@ -23,7 +23,7 @@ export const selectCollectionsWithoutItems = createSelector(
 
 export const selectCollectionErrorMessage = createSelector(
    selectCollectionReducer,
-   (state) => state.error
+   (state) => state.error?.response.data
 )
 
 export const selectCollectionLoadingState = createSelector(

@@ -16,10 +16,10 @@ export const createUser = async (input: IUserCredentials) => {
 
 export const deleteUsers = async(users : Array<IUserDocument>) => {
    try{
-      const user = await User.deleteMany(...users)
-      if(user.deletedCount === 0) throw new Error(getErrorMessage("User wasn't deleted"))
+      Promise.all(users.map(user => User.deleteOne(user)))
       return true
    } catch(error) {
+      console.log(error)
       throw new Error(getErrorMessage(error))
    }  
 }
@@ -36,5 +36,5 @@ export const updateUsers = async(users: Array<IUserDocument>) => {
 }
 
 export const findUser = async (query: FilterQuery<IUserDocument>, exclude?: FilterQuery<IUserDocument>) => {
-   return await User.findOne(query).select(exclude)
+   return await User.findOne(query)
 }

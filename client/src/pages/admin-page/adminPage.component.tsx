@@ -2,6 +2,7 @@ import {useEffect, useState,MouseEvent} from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { FormattedMessage } from "react-intl"
+import { Button } from "@material-tailwind/react";
 
 import CustomTable from "../../components/custom-table/customTable.component"
 import { getUsersStart, logOutStart } from "../../store/user/user.action"
@@ -9,6 +10,7 @@ import { selectUserReducer} from "../../store/user/user.selector"
 import { ICurrentUser } from "../../store/user/user.types"
 import useUpdateUsers from "../../hooks/user-session/updateUsers.hook"
 import useDeleteUsers from "../../hooks/user-session/deleteUsers.hook"
+import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 
 const AdminPage = () => {
    const {isLoading, users, currentUser} = useSelector(selectUserReducer)
@@ -50,43 +52,27 @@ const AdminPage = () => {
 
    return (
       <section className="relative z-0">
-      <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
-      <main className="w-80vw m-auto h-60vh bg-secondary pt-6 pb-4 px-4">
-         <div className="flex justify-around">
-            <div>
-               <p>Users</p>
-               <p>12</p>
+         <HeaderExtension/>
+         <main className="bg-secondary w-80vw m-auto screen-height p-4 rounded">
+            <div className="flex p-5 justify-around">
+               <Button size="sm" variant="outlined" value="status_blocked" onClick={updateSelectedUsers}>block user</Button>
+               <Button size="sm" variant="outlined" value="status_active" onClick={updateSelectedUsers}>unblock user</Button>
+               <Button size="sm" variant="outlined" value="role_user" onClick={updateSelectedUsers}>set role to user</Button>
+               <Button size="sm" variant="outlined" value="role_admin" onClick={updateSelectedUsers}>set role to admin</Button>
+               <Button size="sm" variant="outlined" color="red"  onClick={deleteSelectedUsers}>delete user</Button>
             </div>
-            <div>
-               <p>Categoies</p>
-               <p>12</p>
-            </div>
-            <div>
-               <p>Items</p>
-               <p>12</p>
-            </div>
-            <div>
-               <p>Posts</p>
-               <p>12</p>
-            </div>
-         </div>
-         <div className="flex gap-10">
-            <button value="status_blocked" onClick={updateSelectedUsers}>block user</button>
-            <button value="status_active" onClick={updateSelectedUsers}>unblock user</button>
-            <button value="role_user" onClick={updateSelectedUsers}>set role to user</button>
-            <button value="role_admin" onClick={updateSelectedUsers}>set role to admin</button>
-            <button  onClick={deleteSelectedUsers}>delete user</button>
-         </div>
-         {isLoading
-         ? <div>Loading....</div>
-         :<CustomTable 
-            rows={users} 
-            checkboxesAvaible={true} 
-            setSelectedItems={setSelectedUsers}
-         />
-         }
-      </main>
-   </section>
+            {isLoading
+            ? <div>Loading....</div>
+            :<div className="overflow-auto max-h-80vh">
+            :   <CustomTable 
+                  rows={users} 
+                  checkboxesAvaible={true} 
+                  setSelectedItems={setSelectedUsers}
+               />
+            :</div>
+            }
+         </main>
+      </section>
    )
 }
 

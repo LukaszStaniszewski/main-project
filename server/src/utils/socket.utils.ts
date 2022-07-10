@@ -1,13 +1,23 @@
 import {Socket, Server} from "socket.io"
 import logger from "./logger"
+import { createComment } from "../services/comment.service"
 
 const socket = ({io} : {io: Server}) => {
    logger.info("😊 Sockets enabled 😊")
 
-   io.on("connection", (socket) => {
+  io.on("connection", (socket : Socket) => {
       logger.info(`User connected ${socket.id}`)
-      console.log(socket.id)
-      socket.emit("comment", "hi im working!!!")
+
+         //@ts-ignore
+      // const getComment = (comment) => socket.emit("62c96bacd0cccdf3117ef724", comment)
+
+       socket.on("createComment", async (commentData, callback) => {
+         const comment =  await createComment(commentData)
+         // getComment(comment)
+         callback({
+            comment: comment
+         })
+      }) 
    })
 }
 

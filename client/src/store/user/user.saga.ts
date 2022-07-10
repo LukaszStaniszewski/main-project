@@ -9,15 +9,50 @@ import * as action from "./user.action"
 
 function* Authenticate(credentials:IUserFormValues,url:string) {
    try {
+      localStorage.removeItem("token")
       const {data} = yield* call(postRequest<ITokens>, url, credentials)
       localStorage.setItem('token', JSON.stringify(data))
-
-      yield* put(action.authenticationSuccess(decodeToken(data.accessToken)))
+      const userData = decodeToken(data.accessToken)
+      yield* put(action.authenticationSuccess(userData))
       
     } catch (error) {
       yield* put(action.authenticationFailure(error))
    }
 }
+
+// function* Authenticate(credentials:IUserFormValues,) {
+//    try {
+//       localStorage.removeItem("token")
+//       const {data} = yield* call(postRequest<ITokens>, API_URL.SIGN_IN, credentials)
+//       localStorage.setItem('token', JSON.stringify(data))
+
+//       yield* put(action.authenticationSuccess(decodeToken(data.accessToken)))
+      
+//     } catch (error) {
+//       yield* put(action.authenticationFailure(error))
+//    }
+// }
+
+
+// function* authorizeAndSignIn() {
+//    const token = JSON.parse(localStorage.getItem("token") as string)
+//    if(!token) return yield* put(action.setCurrentUser(null))
+//    // get user session and check if its valid
+//    try {
+      
+//    } catch (error) {
+      
+//    }
+// }
+
+// function* signUpWithEmail({payload: credentials}: SignUpStart) {
+//    const response = yield* call(postRequest, API_URL.SIGN_UP, credentials)
+//    //@ts-ignore
+//    const {password, email} = response.data
+//    //@ts-ignore
+//    yield* call(Authenticate, {password, email})
+//  }
+ 
 
 function* signInWithEmail({payload: credentials}: SignInStart) {
    yield* Authenticate(credentials, API_URL.SIGN_IN)
@@ -25,7 +60,7 @@ function* signInWithEmail({payload: credentials}: SignInStart) {
 
 
 function* signUpWithEmail({payload: credentials}: SignUpStart) {
-  yield* Authenticate(credentials, API_URL.SIGN_UP)
+  yield* call(Authenticate, credentials, API_URL.SIGN_UP)
 }
 
 function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url:string) {
@@ -67,6 +102,7 @@ function* getUsers() {
 }
 
 function* getUserByCredentials({payload: userName}: GetUserByCredentialsStart) {
+   if(!userName) return
    try {
       const response = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
       yield* put(action.GetUserByCredentialsSuccess(response.data))
