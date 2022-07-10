@@ -1,29 +1,41 @@
-import {useState, useEffect, Fragment} from 'react'
+import {useState, useEffect, Fragment, MouseEvent} from 'react'
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-// import {io, Socket} from "socket.io-client"
+import { TrashIcon } from "@heroicons/react/outline"
 
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import Spinner from "../../components/spinner/spinner.component"
-import { OptionalItemData, Topics, ItemKey } from "../../components/create-item/item-types/itemTypes"
+import {  ItemKey } from "../../components/create-item/item-types/itemTypes"
 import { getItemStart } from "../../store/items/item.actions"
 import { selectItem } from "../../store/items/item.selector"
-import { selectComment } from "../../store/comments/comment.selector"
-import { getCommentStart } from "../../store/comments/comment.action"
-import { baseUrl } from "../../api/axios-instance.api"
+import { selectComments } from "../../store/comments/comment.selector"
+import { createCommentStart, getCommentsStart, getCommentStart, setComments } from "../../store/comments/comment.action"
+import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component"
+import { selectCurrentUser } from "../../store/user/user.selector"
+import { IComment, ICreateComment } from "../../store/comments/comment.types"
+import useDeleteComment from "../../hooks/comments/delete-comment"
 
 const ItemPage = () => {
    const [fieldKeys, setFieldKeys] = useState<ItemKey[]>([])
+   const [commentText, setCommentText] = useState<{description: string}>()
+   const [deleteComment] = useDeleteComment()
    const dispatch = useDispatch()
    const item = useSelector(selectItem)
-   const comment = useSelector(selectComment)
+   const comments = useSelector(selectComments)
+   const currentUser = useSelector(selectCurrentUser)
    const {id} = useParams()
-   console.log("comment", comment)
+   console.log("comments", comments)
+  
    useEffect(() => {
       if(!id || item) return
       dispatch(getItemStart(id))
    }, [])
+
+   useEffect(()=> {
+      if(!item) return
+      dispatch(getCommentsStart(item._id))
+   },[item])
 
    useEffect(() => {
       // dispatch(getCommentStart())
@@ -37,11 +49,36 @@ const ItemPage = () => {
    }
    useEffect(() => {
       if(!item?.optionalFields) return
-
       const fieldKey = Object.keys(item.optionalFields) as ItemKey[]
       setFieldKeys(fieldKey)
    },[item])
-   console.log("item", fieldKeys)
+
+   useEffect(() => {
+      postCommentHandler()
+   }, [commentText])
+
+   const postCommentHandler = () => {
+      const comment = adjustCommentData()
+      if(!comment) return
+      dispatch(createCommentStart(comment))
+   }
+
+   const adjustCommentData = (): ICreateComment | null => {
+      if(!id || !commentText || !currentUser) return null
+      return ({body: commentText.description, itemId: id, postedBy: currentUser?.name})
+   }
+   
+   const deleteCommentHandler = (event :MouseEvent<HTMLButtonElement>) => {
+      const itemId = event.currentTarget.name
+      const comment = findCommentToDelete(itemId)
+      if(!comment || !comments) return
+      deleteComment(comments, comment)
+   }
+
+   const findCommentToDelete = (itemId: string): IComment | undefined => {
+      return comments?.find(comment => comment._id === itemId)
+   }
+
   return (
     <section className=" relative z-0 pb-4">
       <HeaderExtension/>
@@ -67,8 +104,36 @@ const ItemPage = () => {
                         }
                      })}
                   </div>
-               
                   }
+                  {
+                     comments &&  comments.map((comment) => 
+                        <div key={comment._id} className="border p-2 m-2">
+                           <div className="flex justify-between mb-1">
+                              <div className="flex gap-4 ">
+                                 <div className="font-semibold">{comment.postedBy}</div>
+                                 <div className="text-sm">{comment.createdAt}</div>
+                              </div>
+                              {comment.postedBy === currentUser?.name &&
+                                 <button  name={comment._id} onClick={deleteCommentHandler}>
+                                    <TrashIcon className="w-5"/>
+                                 </button>
+                              }
+                           </div>
+                           <div>{comment.body}</div>
+                         
+                        </div>
+                     )
+                    
+                  }
+                  <MarkdownTextArea
+                  //@ts-ignore
+                     setText={setCommentText}
+                     elementsText={
+                       { label: "Enter your comment",
+                        button: "Post comment",
+                        submited: "Your post has been created"}
+                     }
+                  />
                </Fragment>
 
             : <div className="left-1/2 absolute -ml-4 top-1/3">

@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { createCommentHandler, deleteCommentHandler } from "../controllers/comment.controller";
+import { createCommentHandler, deleteCommentHandler, sendCommentsHandler } from "../controllers/comment.controller";
 
 const commentRouter = Router()
 
 commentRouter.post("/new", createCommentHandler)
-commentRouter.delete("/delte", deleteCommentHandler)
+commentRouter.delete("/delete/:id", deleteCommentHandler)
+commentRouter.get("/:id", sendCommentsHandler)
 
 export default commentRouter

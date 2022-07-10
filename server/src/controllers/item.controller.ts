@@ -8,6 +8,7 @@ import { SuccessMessage, ErrorMessage } from "../config/constants.config";
 
 export const createItemHandler = async (req:Request<{},{}, ICreateItem[]>, res:Response) => {
    try {
+      console.log(req.body)
       const item = await createItem(req.body)
       res.json({item})
    } catch (error) {

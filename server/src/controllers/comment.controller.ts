@@ -1,22 +1,34 @@
 import { Response, Request } from "express";
-import { ICreateItem } from "../models/item.model";
-import { createComment, deleteComment } from "../services/comment.service";
+import { ICreateComment } from "../models/comment.model";
+import { createComment, deleteComment, findComments } from "../services/comment.service";
+import { ErrorMessage } from "../config/constants.config";
 
 
-export const createCommentHandler = async (req:Request<{}, {}, ICreateItem>, res: Response) => {
+export const createCommentHandler = async (req:Request<{}, {}, ICreateComment>, res: Response) => {
    try {
+      console.log(req.body)
       const comment = await createComment(req.body)
+      if(!comment) res.status(405).send({message: ErrorMessage.COMMENT_NOT_CREATED})
       res.json(comment)
    } catch (error) {
-      res.send(405)
+      res.status(405).send({message: ErrorMessage.COMMENT_NOT_CREATED})
    }
 }
 
-export const deleteCommentHandler = async (req:Request<{}, {}, string>, res: Response) => {
+export const deleteCommentHandler = async (req:Request<{id: string}, {}, {}>, res: Response) => {
    try {
-      await deleteComment(req.body)
+      await deleteComment(req.params.id)
    } catch (error) {
-      res.send(405)
+      res.sendStatus(405)
    }
 }
 
+export const sendCommentsHandler = async (req:Request<{id: string}, {}, {}>, res: Response) => {
+   try {
+      const comments = await findComments(req.params.id)
+      console.log("comments", comments)
+      res.json(comments)
+   } catch (error) {
+      res.sendStatus(405)
+   }
+}

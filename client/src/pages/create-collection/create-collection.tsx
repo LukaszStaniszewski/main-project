@@ -173,6 +173,11 @@ const CreateCollection = () => {
                   </div>
                   <MarkdownTextArea
                      setText={setCollectionFields}
+                     elementsText= {{
+                        label: "Enter your description",
+                        button: "Save description",
+                        submited: "Edit description",
+                     }}
                   />
                   </form>
 

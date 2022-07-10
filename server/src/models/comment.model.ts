@@ -3,14 +3,14 @@ import dayjs from "dayjs";
 import { IItemDocument } from "./item.model";
 
 
-export interface ICreateDocument {
+export interface ICreateComment {
    body: string,
    recipient: string,
    postedBy: string,
    itemId: IItemDocument["_id"],
 }
 
-export interface ICommentDocument extends ICreateDocument {
+export interface ICommentDocument extends ICreateComment {
    createdAt: string,
    updatedAt: string,
 }
@@ -26,14 +26,10 @@ const commentSchema = new Schema<ICommentDocument>({
       ref: 'user',
       required:true
    },
-   recipient: {
-      type: Schema.Types.String, 
-      ref: 'user',
-      required:true
-   },
    itemId: {
       type: Schema.Types.ObjectId,
-      ref: 'Item'
+      ref: 'Item',
+      required: true
    },
    createdAt: {
       type: String,

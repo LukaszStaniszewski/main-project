@@ -27,8 +27,8 @@ const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
    cors: {
-      origin: ["http://localhost:3000"],
-      // origin: "*",
+      // origin: ["http://localhost:3000"],
+      origin: "*",
       methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: ["Access-Control-Allow-Origin"],
       credentials: true
@@ -42,13 +42,13 @@ app.use(cors({
    methods: ["GET", "POST", "PATCH", "DELETE"],
   credentials: false,
 }))
-app.use(deserialaizeUser) 
+// app.use(deserialaizeUser) 
 
 app.use("/api/user", userRouter)
 app.use("/api/session", sessionRouter)
 app.use("/api/collection", collectionRouter)
 app.use("/api/item", itemRouter)
-app.use("api/comment", commentRouter)
+app.use("/api/comment", commentRouter)
 
 const PORT = 8000;
 

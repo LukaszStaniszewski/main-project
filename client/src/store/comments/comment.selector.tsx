@@ -4,7 +4,7 @@ import { ICommentState } from "./comment.reducer";
 
 export const selectCommentReducer = (state: AppState): ICommentState => state.comments
 
-export const selectComment = createSelector(
+export const selectComments = createSelector(
    selectCommentReducer,
-   (state) => state.comment
+   (state) => state.comments
 )

@@ -17,6 +17,7 @@ export enum ErrorMessage {
    ITEM_DELITION_FAILURE = "Item/s weren't deleted",
    COLLECTION_NOT_CREATED = "Collection was not created",
    GET_ITEM_FAILURE = "Item was not found",
+   COMMENT_NOT_CREATED = "Comment hasn't been created",
 }
 
 export enum SuccessMessage {

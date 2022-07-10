@@ -83,7 +83,7 @@ const UserPage = () => {
                <img src="#" alt="#" />
                <span>{currentUser?.name}</span>
             </figure>
-            <Link to="/new" className="btn btn-block bg-color-secondary hover:bg-color-primary outline-none">New Collection</Link>
+            <Link to="/new/collection" className="btn btn-block bg-color-secondary hover:bg-color-primary outline-none">New Collection</Link>
             {collectionsWihoutItems.length > 0 && <div>{collectionsWihoutItems.length} Collections</div>}
          </div>}
       </main>
