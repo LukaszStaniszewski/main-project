@@ -2,6 +2,8 @@ import {useState, useEffect, Fragment, MouseEvent} from 'react'
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { TrashIcon } from "@heroicons/react/outline"
+import ReactMarkdown from "react-markdown"
+
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 import Spinner from "../../components/spinner/spinner.component"
@@ -14,6 +16,7 @@ import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.co
 import { selectCurrentUser } from "../../store/user/user.selector"
 import { IComment, ICreateComment } from "../../store/comments/comment.types"
 import useDeleteComment from "../../hooks/comments/delete-comment"
+import socket from "../../api/socket"
 
 const ItemPage = () => {
    const [fieldKeys, setFieldKeys] = useState<ItemKey[]>([])
@@ -27,10 +30,8 @@ const ItemPage = () => {
    console.log("comments", comments)
   
    useEffect(() => {
-      if(!id || item) return
+      if(!id ) return
       dispatch(getItemStart(id))
-      //@ts-ignore
-      // dispatch(getCommentsStart(item._id))
    }, [])
 
    useEffect(()=> {
@@ -38,7 +39,11 @@ const ItemPage = () => {
       dispatch(getCommentsStart(item._id))
    },[item])
 
-  
+   useEffect(() => {
+      dispatch(getCommentStart())
+   }, [socket])
+
+
    useEffect(() => {
       if(!item?.optionalFields) return
       const fieldKey = Object.keys(item.optionalFields) as ItemKey[]
@@ -110,7 +115,7 @@ const ItemPage = () => {
                                  </button>
                               }
                            </div>
-                           <div>{comment.body}</div>
+                           <ReactMarkdown children={comment.body} />
                          
                         </div>
                      )

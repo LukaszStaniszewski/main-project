@@ -18,9 +18,8 @@ export const createCommentFailure = (error: Error) : CreateCommentFailure => ({
    payload: error
 })
 
-export const getCommentStart = (id: IItem["_id"]) :GetCommentStart => ({
+export const getCommentStart = () :GetCommentStart => ({
    type: COMMENTS_ACTION_TYPES.GET_COMMENT_START,
-   payload: id, 
 })
 
 export const getCommentSuccess = (comment: IComment): GetCommentSuccess => ({

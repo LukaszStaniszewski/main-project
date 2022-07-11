@@ -7,16 +7,20 @@ import { COMMENTS_ACTION_TYPES, CreateCommentStart, DeleteCommentStart, GetComme
 import { createCommentFailure, createCommentSuccess, deleteCommentFailure, deleteCommentSuccess, getCommentFailure, getCommentsFailure, getCommentsSuccess, getCommentSuccess } from "./comment.action";
 import { AxiosError } from "axios";
 import { IItem } from "../items/item.types";
+import socket from "../../api/socket";
 
 
-const receiveMessage = (socket: Socket, comment: ICreateComment) :EventChannel<IComment> => {
+
+const receiveMessage = () :EventChannel<IComment> => {
    socket.on("connect", () => {
      socket.connect();
      console.log('socket disconnected');
    });
    return eventChannel((emitter) => {
+      console.log("hit")
       //@ts-ignore
-     socket.emit("createComment" ,comment, (response) => {
+     socket.on("comment", (response) => {
+      console.log("response", response)
        emitter(response);
      });
      return () => {
@@ -24,23 +28,49 @@ const receiveMessage = (socket: Socket, comment: ICreateComment) :EventChannel<I
      }
    });
  };
+
+const createComment =  (comment : ICreateComment) :EventChannel<IComment> => {
+   socket.on("connect", () => {
+      socket.connect();
+   });
+   return eventChannel((emitter) => {
+
+      socket.emit("createComment", comment, (response: {data: IComment}) => {
+         emitter(response.data);
+      });
+      return () => {
+         emitter(END);
+      }
+   });
+ };
+
+
+function* createCommentSocket ({payload: comment}: CreateCommentStart) {
+   const data =yield* call(createComment, comment)
+   while (true) {
+      try {
+        const value = yield* take(data);
+        yield* put(createCommentSuccess(value));
+      } catch (error) {
+        console.error('socket error:', error)
+        yield* put(createCommentFailure(error as Error))
+      }
+    }
+}
  
- 
- function* getSocketData ({payload: comment}: CreateCommentStart) {
-   const socket = io(baseUrl);
-   const channel = yield* call(receiveMessage, socket, comment);
+function* getCommentFromSocket () {
+   console.log("hit")
+   const channel = yield* call(receiveMessage);
    while (true) {
      try {
        const value = yield* take(channel);
-         //@ts-ignore
-       yield* put(createCommentSuccess(value.comment));
+       yield* put(getCommentSuccess(value));
      } catch (error) {
        console.error('socket error:', error)
-       yield* put(createCommentFailure(error as Error))
+       yield* put(getCommentFailure(error as Error))
      }
    }
  };
-
 
 function* deleteComment ({payload: id}: DeleteCommentStart ){
    try {
@@ -59,13 +89,16 @@ function* getComments ({payload: id}: GetCommentsStart) {
       yield* put(getCommentsFailure(error as AxiosError))
    }
 }
+function* onGetCommentFromSocket() {
+   yield* takeLatest(COMMENTS_ACTION_TYPES.GET_COMMENT_START, getCommentFromSocket)
+}
 
 function* onGetCommentsStart() {
    yield* takeLatest(COMMENTS_ACTION_TYPES.GET_COMMENTS_START, getComments)
 }
 
 function* onCreateCommentStart() {
-   yield* takeLatest(COMMENTS_ACTION_TYPES.CREATE_COMMENT_START, getSocketData);
+   yield* takeLatest(COMMENTS_ACTION_TYPES.CREATE_COMMENT_START, createCommentSocket);
  }
 
 
@@ -79,6 +112,7 @@ export default function* commentSagas() {
    call(onCreateCommentStart),
    call(onDeleteCommentStart),
    call(onGetCommentsStart),
+   call(onGetCommentFromSocket),
   ])
    
 }

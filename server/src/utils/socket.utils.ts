@@ -14,8 +14,9 @@ const socket = ({io} : {io: Server}) => {
        socket.on("createComment", async (commentData, callback) => {
          const comment =  await createComment(commentData)
          // getComment(comment)
+         socket.broadcast.emit("comment", comment)
          callback({
-            comment: comment
+            data: comment
          })
       }) 
    })
