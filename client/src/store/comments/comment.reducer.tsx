@@ -17,6 +17,8 @@ const COMMENT_INITIAL_STATE: ICommentState = {
 const commentReducer = (state = COMMENT_INITIAL_STATE, action = {} as CommentActions) => {
    switch(action.type){
       case COMMENTS_ACTION_TYPES.CREATE_COMMENT_SUCCESS:
+      case COMMENTS_ACTION_TYPES.GET_COMMENT_SUCCESS:
+
          return {
             ...state,
             error: null,

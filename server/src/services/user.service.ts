@@ -35,5 +35,5 @@ export const updateUsers = async(users: Array<IUserDocument>) => {
 }
 
 export const findUser = async (query: FilterQuery<IUserDocument>, exclude?: FilterQuery<IUserDocument>) => {
-   return await User.findOne(query)
+   return await User.findOne(query).select(exclude)
 }

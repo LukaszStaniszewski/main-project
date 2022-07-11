@@ -37,12 +37,7 @@ const UserPage = () => {
       }
    },[name])
 
-   useEffect(() => {
-      if(!error) return
-   //   navigate("/")
-   console.log("error" , error)
-   },[error])
-
+ 
    const getCollections = async  () => {
       if(!name || collectionsWihoutItems.length) return
       dispatch(getCollectionsWithoutItemsStart(name))
@@ -72,11 +67,7 @@ const UserPage = () => {
          setWriteMode(false)
       } 
    }
-   const userNotFound = () => {
-      return (
-         <div>"userNotFound 404"</div>
-      )
-   }
+  
   return (
    <section className=" relative z-0 pb-4">
       <HeaderExtension/>

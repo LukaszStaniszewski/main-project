@@ -141,7 +141,6 @@ const CreateCollection = () => {
    setAlert({message: "You won't be able to change a topic, after you add an item.", toggle: true, type: "info"})
  },[])
 
-  console.log("collectionWithItems", collectionFields)
   return (
    <section className="relative z-0 pb-4" >
       <HeaderExtension/>
