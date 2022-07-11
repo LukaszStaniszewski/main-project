@@ -51,7 +51,7 @@ export type DeleteCommentStart = ActionWithPayload<COMMENTS_ACTION_TYPES.DELETE_
 export type DeleteCommentSuccess = Action<COMMENTS_ACTION_TYPES.DELETE_COMMENT_SUCCESS>
 export type DeleteCommentFailure = ActionWithPayload<COMMENTS_ACTION_TYPES.DELETE_COMMENT_FAILURE, AxiosError>
 
-export type GetCommentStart = Action<COMMENTS_ACTION_TYPES.GET_COMMENT_START>
+export type GetCommentStart = ActionWithPayload<COMMENTS_ACTION_TYPES.GET_COMMENT_START, IItem["_id"]>
 export type GetCommentSuccess = ActionWithPayload<COMMENTS_ACTION_TYPES.GET_COMMENT_SUCCESS, IComment>
 export type GetCommentFailure = ActionWithPayload<COMMENTS_ACTION_TYPES.GET_COMMENT_FAILURE, Error>
 

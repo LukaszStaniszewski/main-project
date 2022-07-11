@@ -27,8 +27,7 @@ const ItemPage = () => {
    const comments = useSelector(selectComments)
    const currentUser = useSelector(selectCurrentUser)
    const {id} = useParams()
-   console.log("comments", comments)
-  
+
    useEffect(() => {
       if(!id ) return
       dispatch(getItemStart(id))
@@ -40,7 +39,8 @@ const ItemPage = () => {
    },[item])
 
    useEffect(() => {
-      dispatch(getCommentStart())
+      if(!id ) return
+      dispatch(getCommentStart(id))
    }, [socket])
 
 

@@ -6,7 +6,6 @@ import { Values_TO_Omit } from "../config/constants.config"
 
 export const createCollection = async (collectionData: ICreateItemCollection): Promise<IItemCollectionDocument> => {
    try {
-      console.log("collectionData", collectionData)
       const collection = await CollectionModel.create(collectionData)
       return collection
    } catch (error) {
@@ -25,7 +24,6 @@ export const findCollectionsByUser = async (name : IUserDocument["name"]): Promi
 export const findCollection = async (collectionId: string): Promise<IItemCollectionDocument> => {
    try {
        const collection = await CollectionModel.findOne({_id: collectionId}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
-       console.log(collection)
        if(!collection) throw new Error("Collection not found")
        return collection
    } catch (error) {

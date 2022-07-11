@@ -33,7 +33,7 @@ const defaultCollectionValues:ICollection = {
 
 const CollectionPage = () => {
    const [collectionWihoutItems, setCollectionWithoutItems] = useState<ICollectionWithoutItems>(defaultCollectionValues)
-   const {name, topic, image, createdAt, description, owner} = collectionWihoutItems
+   const {name, topic, image,  description, owner} = collectionWihoutItems
    const [columns, setColumns] = useState([""])
    const [writeMode, setWriteMode] = useState(false)
 
