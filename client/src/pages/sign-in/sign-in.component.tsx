@@ -9,6 +9,7 @@ import { signInStart } from "../../store/user/user.action"
 import { selectErrorMessage} from "../../store/user/user.selector"
 import {selectUserReducer} from "../../store/user/user.selector"
 import Alert, {IAlert} from "../../components/alert/alert.component"
+import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 
 const alertSettings:IAlert  = {
    message: "",
@@ -54,9 +55,9 @@ const SignIn = () => {
 
   return (
     <section className="relative  z-0">
-         <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
+         <HeaderExtension></HeaderExtension>
          
-         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
+         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 screen-height rounded-lg pt-6 pb-4 px-4">
             <figure className="mt-2">
                 <img src="https://i.ibb.co/c2X3Vj5/Screen-Shot-2022-06-16-at-20-45-15-PM.png" alt="" />
             </figure>

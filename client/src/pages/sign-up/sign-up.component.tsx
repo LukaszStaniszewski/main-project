@@ -7,6 +7,7 @@ import FormInput from "../../components/form-input/form-input.componentx"
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
 import { signUpStart } from "../../store/user/user.action"
 import { selectCurrentUser, selectErrorMessage} from "../../store/user/user.selector"
+import HeaderExtension from "../../components/headerExtension/headerExtension.component"
 
 
 const defaultFormFields = {
@@ -30,13 +31,12 @@ const SignUp = () => {
       if(password !== confirmPassword) return alert("passwords don't match") 
       dispatch(signUpStart({email, name, password}))
    }
-   console.log("currentUser", currentUser)
 
-   // useEffect(() => {
-   //    if(currentUser) {
-   //       navigate(`/user/${currentUser.name}`)
-   //    }   
-   // },[currentUser])
+   useEffect(() => {
+      if(currentUser) {
+         navigate(`/user/${currentUser.name}`)
+      }   
+   },[currentUser])
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const {name, value} = event.target
@@ -45,9 +45,9 @@ const SignUp = () => {
 
   return (
     <section className="relative z-0">
-         <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
+         <HeaderExtension/>
          
-         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
+         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 screen-height rounded-lg pt-6 pb-4 px-4">
             <figure className="mt-2">
                <img src="https://i.ibb.co/BTWS1xQ/Screen-Shot-2022-06-16-at-13-12-20-PM.png" alt="sign-up-picture" />
             </figure>
