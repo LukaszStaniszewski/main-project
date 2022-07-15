@@ -3,6 +3,7 @@ import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
 import { Values_TO_Omit } from "../config/constants.config"
+import ItemModel from "../models/item.model"
 
 export const createCollection = async (collectionData: ICreateItemCollection): Promise<IItemCollectionDocument> => {
    try {
@@ -21,6 +22,23 @@ export const findCollectionsByUser = async (name : IUserDocument["name"]): Promi
       throw new Error(getErrorMessage(error))
    }
 }
+
+export const findLargestCollections = async (limit: number) => {
+   try {
+      const items = await ItemModel.aggregate([
+         {$sortByCount: "$collectionId"},
+         {$limit: limit}
+      ])
+      const collections = Promise.all(items.map(async item =>{
+         const collection = await CollectionModel.findById(item._id).lean()
+         return  {...collection, itemCount: item.count}
+      }))
+      return collections
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+   }
+}
+
 export const findCollection = async (collectionId: string): Promise<IItemCollectionDocument> => {
    try {
        const collection = await CollectionModel.findOne({_id: collectionId}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST)

@@ -1,5 +1,5 @@
-import { IItemCollectionDocument } from "../models/collection.model"
-import ItemModel, {ICreateItem, IItemDocument} from "../models/item.model"
+import CollectionModel, { IItemCollectionDocument } from "../models/collection.model"
+import ItemModel, {ICreateItem, IItemDocument, ILatestItems} from "../models/item.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import logger from "../utils/logger"
 import { Values_TO_Omit } from "../config/constants.config"
@@ -57,4 +57,51 @@ export const findItem = async (itemId : string) => {
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }
+}
+
+export const findLatestItems = async (limit: number) => {
+   try {
+      const items = await ItemModel.aggregate<ILatestItems>([
+         {
+            $project:{
+               _id: 1,
+               name: 1,
+               tags: 1,
+               topic: 1,
+               collectionId: 1,
+               createdAt: 1,
+            },     
+         },
+         {$sort: {createdAt: -1}}, 
+         {$limit: limit}
+      ])
+      return items
+   } catch (error) {
+      throw new Error(getErrorMessage(error))
+   }
+}
+
+
+
+export const assignCollectionNameToItem = async (items: ILatestItems[]) : Promise<ILatestItems[]> => {
+   const collections  = await CollectionModel.aggregate([
+      {
+         $project: {
+            _id: 1,
+            name: 1,
+            owner: 1,
+         }
+      }
+   ])
+   for(let item = 0; item < items.length; item++) {
+      for(let collection = 0; collection < collections.length; collection++) {
+         const itemId = collections[collection]._id.toString()
+         const collectionId = items[item].collectionId.toString()
+         if(collectionId === itemId) {
+            items[item].collection = collections[collection].name
+            items[item].owner = collections[collection].owner.name
+         }
+      }
+   }
+   return [...items]
 }

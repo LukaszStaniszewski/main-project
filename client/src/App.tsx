@@ -14,6 +14,7 @@ import UserPageRoute from "./routes/user-page/user-page.route";
 import CollectionPageRoute from "./routes/collection-page/collection-page.route";
 import CreateContent from "./routes/create-content/create-content.route";
 import ItemPageRoute from "./routes/item-page/item-page.route";
+import HomePage from "./pages/home-page/hompe-page.component";
 import LangProvider from "./language/langProvider.component";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <LangProvider>
          <Routes>
             <Route path="/" element={<Navbar/>}>
+               <Route index element={<HomePage/>}/>
                <Route path="/signup" element={<SignUp/>}/>
                <Route path="/signin" element={<SignIn/>}/>
                <Route path="/admin" element={<AdminPage/>}/>
