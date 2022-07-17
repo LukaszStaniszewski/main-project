@@ -30,6 +30,10 @@ export interface IItemCollectionDocument extends ICreateItemCollection {
    
 }
 
+export interface ILargestCollection extends IItemCollectionDocument {
+   itemCount: number,
+}
+
 const userCollectionSchema = new Schema<IItemCollectionDocument>({
    name: {
       type: String,

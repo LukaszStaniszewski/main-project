@@ -37,6 +37,8 @@ export enum API_URL {
    CREATE_COMMENT = "api/comment/new",
    GET_COMMENTS = "api/comment/",
    DELETE_COMMENT ="api/comment/delete",
+   GET_LATEST_ITEMS = "api/item",
+   GET_LARGEST_COLLECTIONS = "api/collection"
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsDefault)

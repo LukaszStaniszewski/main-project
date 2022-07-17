@@ -36,7 +36,7 @@ export const sendItemHandler = async (req: Request<{id: string}>, res: Response)
 
 export const sendLatestItemsHandler = async (req: Request, res: Response) => {
    try {
-      const items = await findLatestItems(5)
+      const items = await findLatestItems(10)
       const modifiedItems = await assignCollectionNameToItem(items)
       res.json(modifiedItems)
    } catch (error) {

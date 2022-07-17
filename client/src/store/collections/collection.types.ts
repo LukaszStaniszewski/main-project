@@ -26,6 +26,10 @@ export enum COLLECTION_ACTION_TYPES {
    GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS = "GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS",
    GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE = "GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE",
 
+   GET_LARGEST_COLLECTIONS_START = "GET_LARGEST_COLLECTIONS_START",
+   GET_LARGEST_COLLECTIONS_SUCCESS = "GET_LARGEST_COLLECTIONS_SUCCESS",
+   GET_LARGEST_COLLECTIONS_FAILURE = "GET_LARGEST_COLLECTIONS_FAILURE",
+
    SET_COLLECTION = "SET_COLLECTION"
    
 }
@@ -43,6 +47,10 @@ export interface ICollection extends Omit<ICreateCollection, "image"| "items">{
 
 export interface ICollectionWithoutItems extends Omit<ICollection, "items"> {}
 
+export interface ILargestCollection extends ICollectionWithoutItems {
+   itemCount: number,
+}
+
 
 export type CollectionActions = 
 CreateCollectionStart | CreateCollectionSuccess | CreateCollectionFailure |
@@ -50,6 +58,7 @@ DeleteCollectionStart | DeleteCollectionSuccess | DeleteCollectionFailure |
 CreateCollectionWithItemsStart | CreateCollectionWithItemsSuccess | CreateCollectionWithItemsFailure |
 GetCollectionWithItemsStart | GetCollectionWithItemsSuccess | GetCollectionWithItemsFailure |
 GetCollectionsWithoutItemsStart | GetCollectionsWithoutItemsSuccess | GetCollectionsWithoutItemsFailure |
+GetLargestCollectionsStart | GetLargestCollectionsSuccess | GetLargestCollectionsFailure |
 SetCollection
 
 
@@ -72,5 +81,9 @@ export type GetCollectionWithItemsFailure = ActionWithPayload<COLLECTION_ACTION_
 export type GetCollectionsWithoutItemsStart = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START, ICurrentUser["name"]>
 export type GetCollectionsWithoutItemsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS, ICollectionWithoutItems>
 export type GetCollectionsWithoutItemsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE, AxiosError>
+
+export type GetLargestCollectionsStart = Action<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START>
+export type GetLargestCollectionsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS, ILargestCollection[]>
+export type GetLargestCollectionsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE, AxiosError>
 
 export type SetCollection = ActionWithPayload<COLLECTION_ACTION_TYPES.SET_COLLECTION, any>

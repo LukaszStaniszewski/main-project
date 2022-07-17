@@ -28,7 +28,7 @@ export interface ILatestItems {
   topic: IItemCollectionDocument["topic"],
   createdAt: string,
   collection?: ICollectionWithItems["name"],
-  owner?: IUserDocument["name"]
+  createdBy?: IUserDocument["name"]
  
 }
 

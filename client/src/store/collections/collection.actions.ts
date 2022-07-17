@@ -1,7 +1,7 @@
  import { AxiosError } from "axios"
 
 import { ICreateCollection } from "../../pages/create-collection/create-collection"
-import { ICollection, COLLECTION_ACTION_TYPES } from "./collection.types"
+import { ICollection, COLLECTION_ACTION_TYPES, ILargestCollection } from "./collection.types"
 import { IError } from "../user/user.reducer"
 import * as give from "./collection.types"
 import { ICurrentUser } from "../user/user.types"
@@ -86,3 +86,18 @@ export const setCollection = (collection: any):give.SetCollection => ({
    type: COLLECTION_ACTION_TYPES.SET_COLLECTION,
    payload: collection
 })
+
+export const getLargestCollectionsStart = () :give.GetLargestCollectionsStart =>({
+   type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START
+})
+
+export const getLargestCollectionsSuccess = (collections: ILargestCollection[]) :give.GetLargestCollectionsSuccess=>({
+   type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS,
+   payload: collections
+})
+
+export const getLargestCollectionsFailure = (error: AxiosError ) :give.GetLargestCollectionsFailure =>({
+   type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE,
+   payload: error
+})
+

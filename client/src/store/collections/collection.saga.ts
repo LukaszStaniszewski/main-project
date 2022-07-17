@@ -1,6 +1,6 @@
 import {takeLatest, put, all, call} from "typed-redux-saga/macro"
-import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems} from "./collection.types"
-import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure } from "./collection.actions"
+import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ILargestCollection} from "./collection.types"
+import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure } from "./collection.actions"
 import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
@@ -80,6 +80,19 @@ function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWit
    }
 }
 
+function* getLargestCollections() {
+   try {
+      const repsonse = yield* call(getRequest<ILargestCollection[]>, API_URL.GET_LARGEST_COLLECTIONS)
+      yield* put(getLargestCollectionsSuccess(repsonse.data))
+   } catch (error) {
+      yield* put(getLargestCollectionsFailure(error as  AxiosError))
+   }
+}
+
+function* onGetLargestCollections() {
+   yield* takeLatest(COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START, getLargestCollections)
+}
+
 function* onGetCollectionsWihoutItemStart() {
    yield* takeLatest(COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START,getCollectionsWithoutItems)
 }
@@ -106,6 +119,7 @@ export default function* collectionSagas() {
       call(onDeleteCollectionStart),
       call(onCreateCollectionWithItemsStart),
       call(onGetCollectionWithItemsStart),
-      call(onGetCollectionsWihoutItemStart)
+      call(onGetCollectionsWihoutItemStart),
+      call(onGetLargestCollections)
    ])
 }

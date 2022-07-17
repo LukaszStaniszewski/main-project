@@ -1,4 +1,4 @@
-import CollectionModel, {ICreateItemCollection, IItemCollectionDocument} from "../models/collection.model"
+import CollectionModel, {ICreateItemCollection, IItemCollectionDocument, ILargestCollection} from "../models/collection.model"
 import { IUserDocument } from "../models/user.model"
 import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
@@ -23,17 +23,17 @@ export const findCollectionsByUser = async (name : IUserDocument["name"]): Promi
    }
 }
 
-export const findLargestCollections = async (limit: number) => {
+export const findLargestCollections = async (limit: number): Promise<ILargestCollection[]> => {
    try {
       const items = await ItemModel.aggregate([
          {$sortByCount: "$collectionId"},
          {$limit: limit}
       ])
-      const collections = Promise.all(items.map(async item =>{
-         const collection = await CollectionModel.findById(item._id).lean()
+      const collections = Promise.all(items.map(async( item: {_id: string, count: number} )=>{
+         const collection: IItemCollectionDocument = await CollectionModel.findById(item._id).select("-__v").lean()
          return  {...collection, itemCount: item.count}
       }))
-      return collections
+      return collections 
    } catch (error) {
       throw new Error(getErrorMessage(error))
    }

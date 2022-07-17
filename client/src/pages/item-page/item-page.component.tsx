@@ -76,13 +76,17 @@ const ItemPage = () => {
       return comments?.find(comment => comment._id === itemId)
    }
 
+   if(!item) {
+      return <div className="flex justify-center items-center h-full"><Spinner/></div>
+   }
+
   return (
     <section className=" relative z-0 pb-4">
       <HeaderExtension/>
       <main className="bg-secondary w-90vw m-auto screen-height p-4 rounded">
-         {
-            item
-            ?  <Fragment>
+        
+           
+            <Fragment>
                   <div className="flex justify-between">
                      <div className="text-lg ">Theme / {item.topic}</div>
                      <div className="text-lg font-semibold">{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</div>
@@ -97,9 +101,12 @@ const ItemPage = () => {
                            return <img className="max-h-50vh" src={`${item.optionalFields[key]}`} alt="" />
                         } else {
                            return <div className="p-1" key={index}>
-                                       <span className="font-semibold">{key}</span>
-                                          {/* @ts-ignore */}
-                                    : {item.optionalFields[key].toString()}
+                                       <span className="font-semibold">{key}: </span>
+                                     {typeof item.optionalFields[key] === "boolean"
+                                     //@ts-ignore
+                                      ? item.optionalFields[key].toString()
+                                      : item.optionalFields[key]
+                                     }
                                  </div>   
                         }
                      })}
@@ -136,10 +143,7 @@ const ItemPage = () => {
                   />
                </Fragment>
 
-            : <div className="left-1/2 absolute -ml-4 top-1/3">
-               <Spinner/>
-              </div>
-         }
+       
       </main>
     </section>
   )

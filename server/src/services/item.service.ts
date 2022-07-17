@@ -4,6 +4,7 @@ import getErrorMessage from "../utils/getErrorMessage"
 import logger from "../utils/logger"
 import { Values_TO_Omit } from "../config/constants.config"
 
+
 export const createItem = async (input: ICreateItem[], collectionId?: IItemCollectionDocument["_id"]):Promise<IItemDocument[]> => {
    try{
       if(!input.length) throw new Error(getErrorMessage("To create item it must an array"))
@@ -26,6 +27,7 @@ export const deleteItemsByCollection = async (collectionId : IItemCollectionDocu
       await ItemModel.deleteMany({collectionId: collectionId})
       return true
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -35,6 +37,7 @@ export const deleteItems = async (itemId : [{_id: string}]) => {
       Promise.all(itemId.map(id => ItemModel.deleteMany({_id: id._id}))) 
       return true
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -46,6 +49,7 @@ export const findItems = async (collectionPinnedToUser: IItemCollectionDocument 
      if(!items) throw new Error("collection and items not found")
      return items
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -55,6 +59,7 @@ export const findItem = async (itemId : string) => {
       const item = await ItemModel.findById(itemId)
       return item
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -66,17 +71,18 @@ export const findLatestItems = async (limit: number) => {
             $project:{
                _id: 1,
                name: 1,
-               tags: 1,
                topic: 1,
                collectionId: 1,
                createdAt: 1,
             },     
          },
+
          {$sort: {createdAt: -1}}, 
          {$limit: limit}
       ])
       return items
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -98,8 +104,8 @@ export const assignCollectionNameToItem = async (items: ILatestItems[]) : Promis
          const itemId = collections[collection]._id.toString()
          const collectionId = items[item].collectionId.toString()
          if(collectionId === itemId) {
-            items[item].collection = collections[collection].name
-            items[item].owner = collections[collection].owner.name
+            items[item]["collection"] = collections[collection].name
+            items[item]["createdBy"] = collections[collection].owner.name
          }
       }
    }

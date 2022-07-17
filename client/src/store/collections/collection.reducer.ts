@@ -1,10 +1,11 @@
-import { CollectionActions, ICollection, COLLECTION_ACTION_TYPES, ICollectionWithoutItems } from "./collection.types";
+import { CollectionActions, ICollection, COLLECTION_ACTION_TYPES, ICollectionWithoutItems, ILargestCollection } from "./collection.types";
 import { IError } from "../user/user.reducer";
 
 export interface ICollectionState {
    collection: ICollection,
    collections: ICollection[],
    collectionsWihoutItems: ICollectionWithoutItems[]
+   largestCollections: ILargestCollection[]
    collectionFetch: boolean,
    error: IError
    successMessage: IError
@@ -14,6 +15,7 @@ const COLLECTION_INITIAL_STATE = {
    collection: null,
    collections: [],
    collectionsWihoutItems: [],
+   largestColletions: [],
    collectionFetch: false,
    error: null,
    successMessage: null
@@ -26,10 +28,17 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
       case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START:
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START:
       case COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START:
+      case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START:
          return {
             ...state,
             error: null,
             collectionFetch: true,
+         }
+      case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS:
+         return {
+            ...state,
+            largestCollections: action.payload,
+            collectionFetch: false,
          }
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_SUCCESS:
       case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_SUCCESS:
@@ -46,6 +55,7 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
          }
       case COLLECTION_ACTION_TYPES.SET_COLLECTION:
          return {
+            ...state,
             collectionsWihoutItems: action.payload
          }
       case COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS:
@@ -59,6 +69,7 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
       case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_FAILURE:
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_FAILURE:
       case COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE:
+      case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE:
          return{
             ...state,
             collectionFetch :false,
