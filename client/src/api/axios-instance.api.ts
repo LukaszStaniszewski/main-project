@@ -38,7 +38,8 @@ export enum API_URL {
    GET_COMMENTS = "api/comment/",
    DELETE_COMMENT ="api/comment/delete",
    GET_LATEST_ITEMS = "api/item",
-   GET_LARGEST_COLLECTIONS = "api/collection"
+   GET_LARGEST_COLLECTIONS = "api/collection",
+   AUTOCOMPLETE = "api/collection/autocomplete"
 }
 
 export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> => api.post(url, payload, optionsDefault)
@@ -49,6 +50,7 @@ export const deleteRequest = (url: string): AxiosPromise => api.delete(url, opti
 
 const optionsDefault = {
   withCredentials: false,
+
 }
 
 export const optionsUploadImage = {

@@ -30,6 +30,10 @@ export enum COLLECTION_ACTION_TYPES {
    GET_LARGEST_COLLECTIONS_SUCCESS = "GET_LARGEST_COLLECTIONS_SUCCESS",
    GET_LARGEST_COLLECTIONS_FAILURE = "GET_LARGEST_COLLECTIONS_FAILURE",
 
+   AUTOCOMPLETE_START = "AUTOCOMPLETE_START",
+   AUTOCOMPLETE_SUCCESS = "AUTOCOMPLETE_SUCCESS",
+   AUTOCOMPLETE_FAILURE = "AUTOCOMPLETE_FAILURE",
+
    SET_COLLECTION = "SET_COLLECTION"
    
 }
@@ -59,6 +63,7 @@ CreateCollectionWithItemsStart | CreateCollectionWithItemsSuccess | CreateCollec
 GetCollectionWithItemsStart | GetCollectionWithItemsSuccess | GetCollectionWithItemsFailure |
 GetCollectionsWithoutItemsStart | GetCollectionsWithoutItemsSuccess | GetCollectionsWithoutItemsFailure |
 GetLargestCollectionsStart | GetLargestCollectionsSuccess | GetLargestCollectionsFailure |
+AutocompleteStart | AutocompleteSuccess | AutoCompleteFailure |
 SetCollection
 
 
@@ -85,5 +90,9 @@ export type GetCollectionsWithoutItemsFailure = ActionWithPayload<COLLECTION_ACT
 export type GetLargestCollectionsStart = Action<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START>
 export type GetLargestCollectionsSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS, ILargestCollection[]>
 export type GetLargestCollectionsFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE, AxiosError>
+
+export type AutocompleteStart = ActionWithPayload<COLLECTION_ACTION_TYPES.AUTOCOMPLETE_START, {query: string}>
+export type AutocompleteSuccess = ActionWithPayload<COLLECTION_ACTION_TYPES.AUTOCOMPLETE_SUCCESS, any>
+export type AutoCompleteFailure = ActionWithPayload<COLLECTION_ACTION_TYPES.AUTOCOMPLETE_FAILURE, AxiosError>
 
 export type SetCollection = ActionWithPayload<COLLECTION_ACTION_TYPES.SET_COLLECTION, any>

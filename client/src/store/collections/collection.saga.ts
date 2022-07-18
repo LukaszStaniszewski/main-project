@@ -1,6 +1,6 @@
-import {takeLatest, put, all, call} from "typed-redux-saga/macro"
+import {takeLatest, put, all, call, throttle} from "typed-redux-saga/macro"
 import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ILargestCollection} from "./collection.types"
-import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure } from "./collection.actions"
+import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure, autocompleteSuccess, autocompeleteFailure } from "./collection.actions"
 import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
@@ -52,7 +52,6 @@ function* appendImage (data: ImageResponse, itemsCollection: ICreateCollection) 
 function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure) {
    try {
       const response = yield* call(deleteRequest,`${API_URL.DELETE_COLLECTION}/${collectionId}`)
-      //@ts-ignore
       yield* put(deleteCollectionSuccess(response.data))
    } catch (error) {
       yield* put(deleteColletionFailure(error as AxiosError))
@@ -89,7 +88,20 @@ function* getLargestCollections() {
    }
 }
 
-function* onGetLargestCollections() {
+function* autocomplete ({payload: query}: type.AutocompleteStart) {
+   try {
+      const response = yield* call(postRequest, API_URL.AUTOCOMPLETE, query)
+      yield* put(autocompleteSuccess(response.data))
+   } catch (error) {
+      yield* put(autocompeleteFailure(error as AxiosError))
+   }
+}
+
+function* onAutocompleteStart() {
+   yield* throttle(1000, COLLECTION_ACTION_TYPES.AUTOCOMPLETE_START, autocomplete)
+}
+
+function* onGetLargestCollectionsStart() {
    yield* takeLatest(COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START, getLargestCollections)
 }
 
@@ -120,6 +132,7 @@ export default function* collectionSagas() {
       call(onCreateCollectionWithItemsStart),
       call(onGetCollectionWithItemsStart),
       call(onGetCollectionsWihoutItemStart),
-      call(onGetLargestCollections)
+      call(onGetLargestCollectionsStart),
+      call(onAutocompleteStart)
    ])
 }

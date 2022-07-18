@@ -4,7 +4,9 @@ import logger from "../utils/logger"
 import CollectionModel, { IItemCollectionDocument } from "../models/collection.model"
 import { Values_TO_Omit } from "../config/constants.config"
 import { createCollectionWithItems, ICollectionWithItems } from "../services/collection&Items.service"
-import { findItems} from "../services/item.service"
+import { findItems, autoCompleteItem} from "../services/item.service"
+import { autoCompleteCollection } from "../services/collection.service"
+import { autoCompleteUser } from "../services/user.service"
 import getErrorMessage from "../utils/getErrorMessage"
 import { ErrorMessage } from "../config/constants.config"
 
@@ -32,3 +34,14 @@ export const getCollectionWithItemsById= async (req:Request, res:Response) => {
    }
 }
 
+export const autoCompleteHandler =  async (req:Request, res:Response) => {
+   try {
+     const collection = await autoCompleteCollection(req.body.query)
+     const item = await autoCompleteItem(req.body.query)
+     const user = await autoCompleteUser(req.body.query)
+
+     res.json([...item, ...collection, ...user])
+   } catch(error){
+      res.status(401)
+   }
+}

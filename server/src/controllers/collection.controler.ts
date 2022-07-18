@@ -6,7 +6,7 @@ import { findCollectionsByUser,
          createCollection,
          deleteCollection,
          findCollection,
-         findLargestCollections
+         findLargestCollections,
 } from "../services/collection.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
 import { uploadImage, } from "../utils/imageKit.utils"

@@ -6,6 +6,7 @@ export interface ICollectionState {
    collections: ICollection[],
    collectionsWihoutItems: ICollectionWithoutItems[]
    largestCollections: ILargestCollection[]
+   autocomplete: [],
    collectionFetch: boolean,
    error: IError
    successMessage: IError
@@ -16,6 +17,7 @@ const COLLECTION_INITIAL_STATE = {
    collections: [],
    collectionsWihoutItems: [],
    largestColletions: [],
+   autocomplete: [],
    collectionFetch: false,
    error: null,
    successMessage: null
@@ -29,9 +31,16 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START:
       case COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START:
       case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START:
+      case COLLECTION_ACTION_TYPES.AUTOCOMPLETE_START:
          return {
             ...state,
             error: null,
+            collectionFetch: true,
+         }
+      case COLLECTION_ACTION_TYPES.AUTOCOMPLETE_SUCCESS:
+         return {
+            ...state, 
+            autocomplete: action.payload,
             collectionFetch: true,
          }
       case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS:
@@ -70,6 +79,7 @@ const collectionReducer = (state = COLLECTION_INITIAL_STATE , action = {} as Col
       case COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_FAILURE:
       case COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE:
       case COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE:
+      case COLLECTION_ACTION_TYPES.AUTOCOMPLETE_FAILURE:
          return{
             ...state,
             collectionFetch :false,

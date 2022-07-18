@@ -101,3 +101,18 @@ export const getLargestCollectionsFailure = (error: AxiosError ) :give.GetLarges
    payload: error
 })
 
+export const autocompleteStart = (query: {query: string}): give.AutocompleteStart => ({
+   type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_START,
+   payload: query
+})
+
+export const autocompleteSuccess = (result: any): give.AutocompleteSuccess => ({
+   type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_SUCCESS,
+   payload: result
+})
+
+export const autocompeleteFailure = (error: AxiosError):give.AutoCompleteFailure => ({
+   type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_FAILURE,
+   payload: error
+})
+

@@ -1,18 +1,73 @@
-import React from 'react'
+import {useState, useEffect} from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
+
+import { autocompleteStart } from "../../store/collections/collection.actions";
+import { selectAutocomplete} from "../../store/collections/collection.selector";
+
+const optionsDefault = [
+   {
+      value: "",
+      label: "Type to see results"
+   }
+]
 
 const SearchBar = () => {
-  return (
-   <section className="flex justify-center px-2"> 
-      <div className="w-50vw flex items-center ">
-         {/* <label htmlFor="simple-search" className="sr-only">Search</label> */}
-         <div className="relative w-full">
-            <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <svg className="w-5 h-5 text-primary :text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
-            </div>
-            <input autoFocus type="text" id="simple-search" className="bg-gray-50 bg-opacity-40 border border-color-border-primary text-primary text-sm rounded-lg focus:ring-color-secondary focus:border-color-secondary block w-full pl-10 p-2.5" placeholder="Search" required/>
-         </div>
-         <button type="submit" className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></button>
-      </div>
+   const [searchResult, setSearchResult] = useState({value: "", label: ""});
+   const [inputValue, setInputValue] = useState("")
+   const [options, setOptions] = useState(optionsDefault)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+   const autocomplete = useSelector(selectAutocomplete)
+  
+
+    useEffect(() => {
+      if(!inputValue) {
+        return setOptions(optionsDefault)
+      }
+      setOptions(optionsDefault)
+      dispatch(autocompleteStart({query: inputValue}))
+    }, [inputValue])
+
+    useEffect(() => {
+      if(!autocomplete.length) {
+         return setOptions(optionsDefault)
+      }
+      setOptions(autocomplete)
+   }, [autocomplete])
+
+   useEffect(() => {
+      if(!searchResult?.value) return
+      redirectToSearchResult()
+   }, [searchResult])
+
+   const redirectToSearchResult = () => {
+      const resultType = searchResult.label.split(" - ")
+      if(resultType[1] === "User") {
+        navigate(`/user/${searchResult.value}`)
+      } else if(resultType[1] === "Collection") {
+        navigate(`/collection/${searchResult.value}`)
+      } else if(resultType[1] === "Item") {
+         navigate(`/item/${searchResult.value}`)
+      }
+   }
+   
+   return (
+   <section className="w-50vw outline-none focus:ring-0"> 
+      <Select  
+         inputValue={inputValue}
+         onInputChange= {setInputValue}
+         //@ts-ignore
+         onChange={setSearchResult}
+         options={options}
+         noOptionsMessage={() => "Type to see results"}
+         placeholder= "Search..."
+         autoFocus
+         isClearable
+         //@ts-ignore
+         filterOption={(options, inputValue, searchResult)=> options}
+      />
    </section>  
   )
 }

@@ -111,3 +111,28 @@ export const assignCollectionNameToItem = async (items: ILatestItems[]) : Promis
    }
    return [...items]
 }
+
+export const autoCompleteItem =  async (query: string) => {
+   try {
+      const result = await ItemModel.aggregate([
+         {$search: {
+            index: "autocompleteItems",
+            autocomplete: {
+               query: query,
+               path: "name",
+               fuzzy: {maxEdits: 1}
+            }
+         }},
+         {$limit: 7},
+         {$project: {
+            _id: 0,
+            value: "$_id",
+            label: "$name"
+         }}
+      ])
+      return result.map(item => ({...item, label: item.label + " - Item"}))
+   } catch (error) {
+      logger.error(error)
+      throw new Error(getErrorMessage(error))
+   }
+}

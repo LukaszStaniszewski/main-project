@@ -4,12 +4,14 @@ import getErrorMessage from "../utils/getErrorMessage"
 import { deleteItemsByCollection } from "./item.service"
 import { Values_TO_Omit } from "../config/constants.config"
 import ItemModel from "../models/item.model"
+import logger from "../utils/logger"
 
 export const createCollection = async (collectionData: ICreateItemCollection): Promise<IItemCollectionDocument> => {
    try {
       const collection = await CollectionModel.create(collectionData)
       return collection
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -19,6 +21,7 @@ export const findCollectionsByUser = async (name : IUserDocument["name"]): Promi
        const collections = await CollectionModel.find({"owner.name": name}).select(Values_TO_Omit.SEND_COLLECTION_REQUEST).lean()
        return collections
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -35,6 +38,7 @@ export const findLargestCollections = async (limit: number): Promise<ILargestCol
       }))
       return collections 
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -45,6 +49,7 @@ export const findCollection = async (collectionId: string): Promise<IItemCollect
        if(!collection) throw new Error("Collection not found")
        return collection
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -56,6 +61,7 @@ export const findAllCollections = async (): Promise<IItemCollectionDocument[]> =
        if(!collections) throw new Error("Collections not found")
        return collections
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -70,6 +76,7 @@ export const deleteCollections = async (name : IUserDocument["name"]) => {
       if(collection.deletedCount === 0) throw new Error(getErrorMessage("collection wasn't deleted"))
       return true
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
    }
 }
@@ -80,8 +87,44 @@ export const deleteCollection = async (collectionId: string) => {
       await CollectionModel.findByIdAndDelete(collectionId)
       return true
    } catch (error) {
+      logger.error(error)
       throw new Error(getErrorMessage(error))
-      
    }
 }
 
+
+export const autoCompleteCollection =  async (query: string) => {
+   try {
+      const result = await CollectionModel.aggregate([
+         {$search: {
+            index: "autoCompleteCollections",
+            compound: {
+               should: [
+                  {autocomplete: {
+                     query: query,
+                     path: "name",
+                     fuzzy: {maxEdits: 1}
+                  }},
+                  {autocomplete: {
+                     query: query,
+                     path: "topic",
+                     fuzzy: {maxEdits: 1}
+                  }},
+               ],
+               minimumShouldMatch: 1,
+            },
+        
+         }},
+         {$limit: 7},
+         {$project: {
+            _id: 0,
+            value: "$_id",
+            label: "$name"
+         }}
+      ])
+      return result.map(collection => ({...collection, label: collection.label + " - Collection"}))
+   } catch (error) {
+      logger.error(error)
+      throw new Error(getErrorMessage(error))
+   }
+}
