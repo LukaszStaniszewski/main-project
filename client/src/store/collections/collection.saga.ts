@@ -7,7 +7,7 @@ import { AxiosError } from "axios"
 import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { setItems } from "../items/item.actions"
 
-type ImageResponse = {
+export type ImageResponse = {
    image: {
       url: string,
       fileId: string
@@ -24,12 +24,12 @@ function* createCollection({payload: collectionData}: type.CreateCollectionStart
 }
 
 
-function* createCollectionWithItems({payload: {collectionWithItems, image}}: type.CreateCollectionWithItemsStart){
+export function* createCollectionWithItems({payload: {collectionWithItems, image}}: type.CreateCollectionWithItemsStart){
    try {
       let payload = collectionWithItems;
       if(image) {
          const {data} = yield* call(uploadImage, image)
-         payload = yield* appendImage(data, payload)
+         payload = appendImage(data, payload)
       }
       const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, payload)
       yield* put(createCollectionWithItemsSuccess())
@@ -38,18 +38,18 @@ function* createCollectionWithItems({payload: {collectionWithItems, image}}: typ
    }
 }
 
-function* uploadImage(image: File) {
+export function* uploadImage(image: File) {
    return yield* call(uploadFile<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
 }
 
-function* appendImage (data: ImageResponse, itemsCollection: ICreateCollection) {
+export function appendImage (data: ImageResponse, itemsCollection: ICreateCollection) {
    const url = data.image.url
    const imageId = data.image.fileId
    return {...itemsCollection, image: {url: url, imageId: imageId}}
 }
 
 
-function* deleteCollection({payload: collectionId}: type.DeleteCollectionFailure) {
+export function* deleteCollection({payload: collectionId}: type.DeleteCollectionStart) {
    try {
       const response = yield* call(deleteRequest,`${API_URL.DELETE_COLLECTION}/${collectionId}`)
       yield* put(deleteCollectionSuccess(response.data))

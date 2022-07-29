@@ -7,12 +7,12 @@ import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpS
 import * as action from "./user.action"
 
 
-function* Authenticate(credentials:IUserFormValues,url:string) {
+export function* Authenticate(credentials:IUserFormValues,url:string) {
    try {
       localStorage.removeItem("token")
       const {data} = yield* call(postRequest<ITokens>, url, credentials)
       localStorage.setItem('token', JSON.stringify(data))
-      const userData = decodeToken(data.accessToken)
+      const userData = yield* call(decodeToken, data.accessToken)
       yield* put(action.authenticationSuccess(userData))
       
     } catch (error) {
@@ -21,16 +21,16 @@ function* Authenticate(credentials:IUserFormValues,url:string) {
 }
 
 
-function* signInWithEmail({payload: credentials}: SignInStart) {
+export function* signInWithEmail({payload: credentials}: SignInStart) {
    yield* call(Authenticate,credentials, API_URL.SIGN_IN)
 }
 
 
-function* signUpWithEmail({payload: credentials}: SignUpStart) {
+export function* signUpWithEmail({payload: credentials}: SignUpStart) {
   yield* call(Authenticate, credentials, API_URL.SIGN_UP)
 }
 
-function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url:string) {
+export function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url: typeof API_URL.UPDATE_USERS | typeof API_URL.DELETE_USERS) {
    try {
       yield* call(requestType, url, usersToUpdate)
       yield* put(action.updateUsersSuccess())
@@ -39,15 +39,15 @@ function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], u
    }
 }
 
-function* updateUsers({payload: users}: UpdateUsersStart) {
-   yield* updateOrDeleteUsers(patchRequest, users, API_URL.UPDATE_USERS)
+export function* updateUsers({payload: users}: UpdateUsersStart) {
+   yield* call(updateOrDeleteUsers, patchRequest, users, API_URL.UPDATE_USERS)
 }
 
-function* deleteUsers({payload: users}: DeleteUsersStart) {
-   yield* updateOrDeleteUsers(postRequest, users, API_URL.DELETE_USERS)
+export function* deleteUsers({payload: users}: DeleteUsersStart) {
+   yield* call(updateOrDeleteUsers, postRequest, users, API_URL.DELETE_USERS)
 }
 
-function* logOut() {
+export function* logOut() {
    try {
       const {status} = yield* call(deleteRequest, API_URL.LOG_OUT)
       if(status === 200) {
@@ -55,24 +55,25 @@ function* logOut() {
          yield* put(action.logOutSuccess())
       }
    } catch(error) {
+      localStorage.removeItem("token")
       yield* put(action.logOutFailure(error as AxiosError))
    }
 }
 
-function* getUsers() {
+export function* getUsers() {
    try {
-      const repsonse = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS)
-      yield* put(action.getUsersSuccess(repsonse.data))
+      const response = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS)
+      yield* put(action.getUsersSuccess(response.data))
    } catch (error) {
       yield* put(action.getUsersFailure(error as AxiosError))
    }
 }
 
-function* getUserByCredentials({payload: userName}: GetUserByCredentialsStart) {
+export function* getUserByCredentials({payload: userName}: GetUserByCredentialsStart) {
    if(!userName) return
    try {
-      const response = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
-      yield* put(action.GetUserByCredentialsSuccess(response.data))
+      const {data} = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
+      yield* put(action.GetUserByCredentialsSuccess(data))
    } catch (error) {
       yield* put(action.GetUserByCredentialsFailure(error as AxiosError))
    }
