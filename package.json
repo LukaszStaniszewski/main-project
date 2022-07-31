@@ -5,27 +5,26 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-     "start": "node server/build/index.js",
-     "client:install": "cd client && npm install",
-     "server:install": "cd server && npm install",
-     "installFake": "npm run client:install && npm run server:install",
-     "install": " npm install --prefix client && npm install --prefix server",
-     "server": "npx tsc --project ./server",
-     "client": "cd client && npm run build",
-     "compile": "npm run server && npm run client",
-     "build": "npm run install && npm run compile",
-     "test": "cd server && npx --package typescript tsc --init --project ./server"
+      "start": "node server/build/index.js",
+      "client:install": "cd client && npm install",
+      "server:install": "cd server && npm install",
+      "installFake": "npm run client:install && npm run server:install",
+      "install": " npm install --prefix client && npm install --prefix server",
+      "server": "npx tsc --project ./server",
+      "client": "cd client && npm run build",
+      "compile": "npm run server && npm run client",
+      "build": "npm run install && npm run compile",
+      "test": "cd server && npx --package typescript tsc --init --project ./server"
    },
    "dependencies": {
-     "@types/node": "^18.0.3",
-     "ts-node": "^10.8.2",
-     "ts-node-dev": "^2.0.0",
-     "typescript": "^4.7.4"
+      "@types/node": "^18.0.3",
+      "ts-node": "^10.8.2",
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^4.7.4"
    },
    "engines": {
-     "node": "16.x"
+      "node": "16.x"
    },
    "keywords": [],
    "license": "ISC"
- }
- 
+}

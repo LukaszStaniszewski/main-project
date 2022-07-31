@@ -30,24 +30,31 @@ export const authenticate = async (
    const refreshToken = signJwt(
       { ...user, sessionId: session._id },
       key.privateRefreshKey,
-      "1d"
+      "14d"
    );
 
    res.json({ accessToken, refreshToken });
 };
 
 export const getUserSessions = async (req: Request, res: Response<ISessionDocument>) => {
-   const userId = res.locals.user._id;
-   const session = await findSession({ user: userId, valid: true });
-
-   res.send(session);
+   const userId = res.locals?.user?._id;
+   try {
+      const session = await findSession({ user: userId, valid: true });
+      res.send(session);
+   } catch (error) {
+      res.status(418);
+   }
 };
 
 export const deleteSessions = async (req: Request, res: Response) => {
-   const sessionId = res.locals.user.sessionId;
-   await updateSession({ _id: sessionId }, { valid: false });
-   return res.send({
-      accessToken: null,
-      refreshToken: null,
-   });
+   const sessionId = res.locals?.user?.sessionId;
+   try {
+      await updateSession({ _id: sessionId }, { valid: false });
+      return res.send({
+         accessToken: null,
+         refreshToken: null,
+      });
+   } catch (error) {
+      res.status(500);
+   }
 };
