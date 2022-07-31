@@ -36,21 +36,14 @@ describe("create item", () => {
    });
 
    test("show error toast after server error", () => {
-      return (
-         expectSaga(createItems, createItemsStart)
-            .provide([
-               [
-                  matchers.call(
-                     postRequest,
-                     API_URL.CREATE_ITEM,
-                     createItemsStart.payload
-                  ),
-                  throwError(new Error("it did not work")),
-               ],
-            ])
-            // .put(showToast({message: "it did not work", type: "error"}))
-            .run()
-      );
+      return expectSaga(createItems, createItemsStart)
+         .provide([
+            [
+               matchers.call(postRequest, API_URL.CREATE_ITEM, createItemsStart.payload),
+               throwError(new Error("it did not work")),
+            ],
+         ])
+         .run();
    });
 });
 

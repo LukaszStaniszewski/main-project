@@ -31,6 +31,7 @@ import {
    logOut,
 } from "./user.saga";
 import { currentUser, successMessage } from "../../test-utils/fake-data";
+import { AxiosError } from "axios";
 
 const response = { data: { accessToken: "secredcode4324" } };
 
@@ -73,6 +74,13 @@ const getUserByNameAction: GetUserByCredentialsStart = {
    payload: "admin",
 };
 
+const error = {
+   response: {
+      data: {
+         message: "wrong credentials",
+      },
+   },
+};
 describe("sign in flow", () => {
    test("sign in success", () => {
       return expectSaga(signInWithEmail, signInStart)
@@ -85,24 +93,30 @@ describe("sign in flow", () => {
          .run();
    });
 
+   test("when user enters wrong credentials recives info toast", () => {
+      return expectSaga(signInWithEmail, signInStart)
+         .provide([
+            [
+               matchers.call(postRequest, API_URL.SIGN_IN, signInCredentials),
+               throwError(new Error("wrong credentials")),
+            ],
+         ])
+         .call(Authenticate, signInStart.payload, API_URL.SIGN_IN)
+         .put(
+            action.showToast({
+               type: "warning",
+               message: `Sign in failed: wrong credentials`,
+            })
+         )
+         .run();
+   });
+
    test("logout success", () => {
       return expectSaga(logOut)
          .provide([[matchers.call(deleteRequest, API_URL.LOG_OUT), { status: 200 }]])
          .put(action.logOutSuccess())
          .run();
    });
-   // test("logout error", () => {
-   //    const error = { message: "something went wrong" } as AxiosError;
-   //    return expectSaga(logOut)
-   //       .provide([
-   //          [
-   //             matchers.call(deleteRequest, API_URL.LOG_OUT),
-   //             throwError(new Error("something went wrong")),
-   //          ],
-   //       ])
-   //       .put(action.logOutFailure("something went wrong"))
-   //       .run();
-   // });
 });
 
 describe("sign up flow", () => {

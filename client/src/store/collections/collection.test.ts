@@ -92,9 +92,12 @@ describe("create collection", () => {
 
 describe("update collections", () => {
    test("delete collection success", () => {
-      return expectSaga(deleteCollection, deleteCollectionAction)
-         .provide([[matchers.call.fn(deleteRequest), successMessage]])
-         .put(deleteCollectionSuccess(successMessage.data))
-         .run();
+      return (
+         expectSaga(deleteCollection, deleteCollectionAction)
+            .provide([[matchers.call.fn(deleteRequest), successMessage]])
+            //@ts-ignore
+            .put(deleteCollectionSuccess(successMessage.data))
+            .run()
+      );
    });
 });

@@ -1,4 +1,4 @@
-import { ICurrentUser, USER_ACTION_TYPES } from "./user.types";
+import { ICurrentUser, USER_ACTION_TYPES, IToast } from "./user.types";
 import { UserAction } from "./user.types";
 
 export interface IError {
@@ -14,18 +14,21 @@ export interface IUserState {
    users: ICurrentUser[];
    user: ICurrentUser | null;
    isLoading: boolean;
-   error: IError | null;
+   toast: IToast | null;
 }
 
 const USER_INITIAL_STATE: IUserState = {
    currentUser: null,
    user: null,
-   error: null,
+   toast: null,
    users: [],
    isLoading: true,
 };
 
-const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
+const userReducer = (
+   state = USER_INITIAL_STATE,
+   action = {} as UserAction
+): IUserState => {
    switch (action.type) {
       case USER_ACTION_TYPES.SIGN_IN_START:
       case USER_ACTION_TYPES.SIGN_UP_START:
@@ -35,7 +38,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
          return {
             ...state,
             isLoading: true,
-            error: null,
+            toast: null,
          };
       case USER_ACTION_TYPES.AUTHENTICATION_SUCCESS:
          return {
@@ -54,7 +57,7 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             ...state,
             currentUser: null,
             isLoading: false,
-            error: null,
+            toast: null,
          };
       case USER_ACTION_TYPES.GET_USERS_SUCCESS:
       case USER_ACTION_TYPES.SET_USERS:
@@ -68,13 +71,18 @@ const userReducer = (state = USER_INITIAL_STATE, action = {} as UserAction) => {
             ...state,
             currentUser: action.payload,
          };
-      case USER_ACTION_TYPES.AUTHENTICATION_FAILURE:
-      case USER_ACTION_TYPES.LOG_OUT_FAILURE:
+      case USER_ACTION_TYPES.CLOSE_TOAST:
+         return {
+            ...state,
+            toast: null,
+            isLoading: false,
+         };
+      case USER_ACTION_TYPES.START_TOAST:
       case USER_ACTION_TYPES.GET_USERS_FAILURE:
       case USER_ACTION_TYPES.UPDATE_USERS_FAILURE:
          return {
             ...state,
-            error: action.payload,
+            toast: action.payload,
             isLoading: false,
          };
       default:

@@ -1,5 +1,4 @@
 import {takeLatest, put, all, call, } from "typed-redux-saga/macro"
-import{ AxiosError}  from "axios"
 
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
@@ -13,10 +12,14 @@ export function* Authenticate(credentials:IUserFormValues,url:string) {
       const {data} = yield* call(postRequest<ITokens>, url, credentials)
       localStorage.setItem('token', JSON.stringify(data))
       const userData = yield* call(decodeToken, data.accessToken)
-      yield* put(action.authenticationSuccess(userData))
-      
-    } catch (error) {
-      yield* put(action.authenticationFailure(error))
+      yield* all([
+          put(action.authenticationSuccess(userData)),
+          put(action.showToast({message: `Sign up as ${userData.name}`, type: "success"}))
+     ]);
+   } catch (error) {
+      const act = credentials.name ? "up" : "in"
+      //@ts-ignore
+      yield* put(action.showToast({message: `Sign ${act} failed: ${error.response.data.message}`, type: "warning"}))
    }
 }
 
@@ -30,12 +33,12 @@ export function* signUpWithEmail({payload: credentials}: SignUpStart) {
   yield* call(Authenticate, credentials, API_URL.SIGN_UP)
 }
 
-export function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url: typeof API_URL.UPDATE_USERS | typeof API_URL.DELETE_USERS) {
+export function* updateOrDeleteUsers (requestType:any, usersToUpdate: ICurrentUser[], url: string) {
    try {
       yield* call(requestType, url, usersToUpdate)
       yield* put(action.updateUsersSuccess())
    } catch (error) {
-      yield* put(action.updateUsersFailure(error as AxiosError))
+      // yield* put(action.updateUsersFailure(error as AxiosError))
    }
 }
 
@@ -56,7 +59,7 @@ export function* logOut() {
       }
    } catch(error) {
       localStorage.removeItem("token")
-      yield* put(action.logOutFailure(error as AxiosError))
+      // yield* put(action.logOutFailure(error as AxiosError))
    }
 }
 
@@ -65,7 +68,7 @@ export function* getUsers() {
       const response = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS)
       yield* put(action.getUsersSuccess(response.data))
    } catch (error) {
-      yield* put(action.getUsersFailure(error as AxiosError))
+      // yield* put(action.getUsersFailure(error as AxiosError))
    }
 }
 
@@ -75,7 +78,7 @@ export function* getUserByCredentials({payload: userName}: GetUserByCredentialsS
       const {data} = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
       yield* put(action.GetUserByCredentialsSuccess(data))
    } catch (error) {
-      yield* put(action.GetUserByCredentialsFailure(error as AxiosError))
+      // yield* put(action.GetUserByCredentialsFailure(error as AxiosError))
    }
 }
 

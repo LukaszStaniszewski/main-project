@@ -29,7 +29,6 @@ const receiveMessage = (itemId: string) :EventChannel<IComment> => {
        const value = yield* take(channel);
        yield* put(getCommentSuccess(value));
      } catch (error) {
-       console.error('socket error:', error)
        yield* put(getCommentFailure(error as Error))
      }
    }
