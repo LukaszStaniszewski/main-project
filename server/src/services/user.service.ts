@@ -3,6 +3,7 @@ import { FilterQuery } from "mongoose";
 
 import User, {IUserCredentials, IUserDocument} from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
+import logger from "../utils/logger";
 import { Values_TO_Omit } from "../config/constants.config";
 
 export const createUser = async (input: IUserCredentials) => {
@@ -35,5 +36,32 @@ export const updateUsers = async(users: Array<IUserDocument>) => {
 }
 
 export const findUser = async (query: FilterQuery<IUserDocument>, exclude?: FilterQuery<IUserDocument>) => {
-   return await User.findOne(query)
+   return await User.findOne(query).select(exclude)
+}
+
+
+export const autoCompleteUser =  async (query: string) => {
+   try {
+      const result = await User.aggregate([
+         {$search: {
+            index: "autocompleteUsers",
+            autocomplete: {
+               query: query,
+               path: "name",
+               fuzzy: {maxEdits: 1}
+            },
+                 
+         }},     
+         {$limit: 7},
+         {$project: {
+            _id: 0,
+            value: "$name",
+            label: "$name"
+         }}
+      ])
+      return result.map(user => ({...user, label: user.label + " - User"}))
+   } catch (error) {
+      logger.error(error)
+      throw new Error(getErrorMessage(error))
+   }
 }

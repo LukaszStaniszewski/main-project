@@ -2,9 +2,6 @@ import jwt from "jsonwebtoken";
 import { IUserDocument } from "../models/user.model";
 import { ISessionDocument } from "../models/session.model";
 
-import getErrorMessage from "./getErrorMessage";
-import logger from "./logger";
-
 export const signJwt = (payload: Object, privateKey: string, options: string) => {
 
    return jwt.sign(payload, privateKey, {expiresIn: options, algorithm: "RS256"})
@@ -28,7 +25,7 @@ export const verifyToken = (token: string, publicKey: string) => {
          isValid: false,
          expired: true,
          decoded: null,
-         message: logger.error(getErrorMessage("jwt-expired"))
+         message: "jwt-expired"
       })
    }
 }

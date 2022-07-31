@@ -5,7 +5,8 @@ import { findCollectionsByUser,
          findAllCollections,
          createCollection,
          deleteCollection,
-         findCollection
+         findCollection,
+         findLargestCollections,
 } from "../services/collection.service"
 import {ErrorMessage, SuccessMessage,collectionTopics} from "../config/constants.config"
 import { uploadImage, } from "../utils/imageKit.utils"
@@ -51,6 +52,16 @@ export const getAllCollections = async (req: Request, res: Response) => {
       const collections = await findAllCollections();
       res.json({collections})
    } catch(error) {
+      res.sendStatus(405)
+   }
+}
+
+
+export const getLargestCollections = async (req: Request, res: Response) => {
+   try {
+      const collections = await findLargestCollections(5)
+      res.json(collections)
+   } catch (error) {
       res.sendStatus(405)
    }
 }

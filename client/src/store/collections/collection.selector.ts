@@ -31,4 +31,13 @@ export const selectCollectionLoadingState = createSelector(
    (state) => state.collectionFetch
 )
 
+export const selectLargestCollections = createSelector(
+   selectCollectionReducer,
+   (state) => state.largestCollections
+)
+
+export const selectAutocomplete = createSelector(
+   selectCollectionReducer,
+   (state) => state.autocomplete
+)
 

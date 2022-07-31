@@ -20,7 +20,7 @@ const AdminPage = () => {
    const [deleteUsers] = useDeleteUsers()
 
    useEffect(() => {
-      if((!isLoading) && (!currentUser || currentUser?.role !== "admin")) return navigate("/")
+      if( !currentUser || currentUser?.role !== "admin") return navigate("/")
    }, [])
 
    useEffect(() => {

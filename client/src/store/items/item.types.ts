@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { ICreateItem } from "../../components/create-item/item-types/itemTypes";
+import { CollectionTopic, ICreateItem } from "../../components/create-item/item-types/itemTypes";
 import { Action, ActionWithPayload } from "../../utils/store.utils";
 import { ICollection } from "../collections/collection.types";
 
@@ -14,6 +14,9 @@ export enum ITEM_TYPES {
    GET_ITEM_START = "GET_ITEM_START",
    GET_ITEM_SUCCESS = "GET_ITEM_SUCCESS",
    GET_ITEM_FAILURE = "GET_ITEM_FAILURE",
+   GET_LATEST_ITEMS_START = "GET_LATEST_ITEMS_START",
+   GET_LATEST_ITEMS_SUCCESS = "GET_LATEST_ITEMS_SUCCESS",
+   GET_LATEST_ITEMS_FAILURE = "GET_LATEST_ITEMS_FAILURE",
 }
 
 
@@ -24,11 +27,23 @@ export interface IItem extends ICreateItem {
    collectionId: ICollection["_id"]
 }
 
+
+export interface ILatestItem {
+   _id: string,
+   name: string,
+   tags: string[],
+   collectionId: string,
+   createdAt: string,
+   collection: string,
+   createdBy: string,
+}
+
 export type ItemActionTypes = 
    CreateItemsStart | CreateItemsSuccess | CreateItemsFailure |
    SetItems |
    DelteItemsStart | DelteItemsSuccess | DelteItemsFailure |
-   GetItemStart | GetItemSuccess | GetItemFailure
+   GetItemStart | GetItemSuccess | GetItemFailure |
+   GetLatestItemsStart | GetLatestItemsSuccess | GetLatestItemsFailure
 
 export type CreateItemsStart = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_START, ICreateItem[]>
 export type CreateItemsSuccess = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_SUCCESS, IItem[]>
@@ -44,3 +59,6 @@ export type GetItemStart = ActionWithPayload<ITEM_TYPES.GET_ITEM_START, IItem["_
 export type GetItemSuccess = ActionWithPayload<ITEM_TYPES.GET_ITEM_SUCCESS, IItem>
 export type GetItemFailure = ActionWithPayload<ITEM_TYPES.GET_ITEM_FAILURE, AxiosError>
 
+export type GetLatestItemsStart = Action<ITEM_TYPES.GET_LATEST_ITEMS_START>
+export type GetLatestItemsSuccess = ActionWithPayload<ITEM_TYPES.GET_LATEST_ITEMS_SUCCESS, ILatestItem[]>
+export type GetLatestItemsFailure = ActionWithPayload<ITEM_TYPES.GET_LATEST_ITEMS_FAILURE, AxiosError>

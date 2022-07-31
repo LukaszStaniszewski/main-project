@@ -6,12 +6,17 @@ export const selectItemReducer = (state: AppState) : IItemState => state.item
 
 export const selectAdjustedItems = createSelector(
    [selectItemReducer],
-   (item) => item.items?.map(item => {
+   (state) => state.items?.map(item => {
       return {...item, ...item.optionalFields, optionalFields: undefined}
    })
 )
 
 export const selectItem = createSelector(
    [selectItemReducer],
-   (item) => item.item
+   (state) => state.item
+)
+
+export const selectLatestItems = createSelector(
+   [selectItemReducer],
+   (state) => state.latestItems
 )

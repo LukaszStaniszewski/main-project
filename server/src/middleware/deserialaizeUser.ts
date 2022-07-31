@@ -22,7 +22,6 @@ const deserialaizeUser = async (req: Request, res: Response, next: NextFunction)
       res.locals.user = decoded;
       return next()
    }
-  
    if(expired && refreshToken) {
       const newAccessToken = await reIssueAccessToken(refreshToken);
 
@@ -33,9 +32,10 @@ const deserialaizeUser = async (req: Request, res: Response, next: NextFunction)
          res.locals.user = {...decoded?._doc, sessionId: decoded?.sessionId}
          return next()
       }
-   
+      
    }
-   res.sendStatus(403)
+   // res.sendStatus(403)
+   next()
 }
 
 export default deserialaizeUser

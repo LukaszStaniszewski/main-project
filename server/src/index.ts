@@ -30,7 +30,7 @@ const io = new Server(httpServer, {
    cors: {
       origin: ["http://localhost:3000"],
       methods: ["GET", "POST", "PATCH", "DELETE"],
-      allowedHeaders: ["Access-Control-Allow-Origin"],
+      allowedHeaders: ["Content-type", "Authorization", "x-refresh",], 
       credentials: true
    },
 })
@@ -38,8 +38,10 @@ const io = new Server(httpServer, {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cors({
+   origin: ["http://localhost:3000"],
    methods: ["GET", "POST", "PATCH", "DELETE"],
   credentials: false,
+  allowedHeaders: ["Content-type", "Authorization", "x-refresh",],
 }))
 app.use(deserialaizeUser) 
 

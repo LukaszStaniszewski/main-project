@@ -1,81 +1,101 @@
-import {Request, Response} from "express"
-import { createUser, deleteUsers, findUser, updateUsers } from "../services/user.service"
-import { updateUsersSession } from "../services/session.service"
-import User, { IUserCredentials, IUserDocument} from "../models/user.model"
-import getErrorMessage from "../utils/getErrorMessage"
-import logger from "../utils/logger"
-import { signJwt } from "../utils/jtw.utils"
-import * as key from "../config/keyes"
-import {createSession} from "../services/session.service"
-import { Values_TO_Omit, ErrorMessage } from "../config/constants.config"
+import { Request, Response } from "express";
+import { createUser, deleteUsers, findUser, updateUsers } from "../services/user.service";
+import { updateUsersSession } from "../services/session.service";
+import User, { IUserCredentials, IUserDocument } from "../models/user.model";
+import getErrorMessage from "../utils/getErrorMessage";
+import logger from "../utils/logger";
+import { signJwt } from "../utils/jtw.utils";
+import * as key from "../config/keyes";
+import { createSession } from "../services/session.service";
+import { Values_TO_Omit, ErrorMessage } from "../config/constants.config";
 
-
-export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+export const registerAndSignIn = async (
+   req: Request<{}, {}, IUserCredentials>,
+   res: Response
+) => {
    try {
-      const user = await createUser(req.body)
-      const session = await createSession(user._id)
+      const user = await createUser(req.body);
+      const session = await createSession(user._id);
 
-      const accessToken = signJwt({...user, sessionId: session._id}, key.privateAccessKey, "60s")
-      const refreshToken = signJwt({...user, sessionId: session._id}, key.privateRefreshKey, "1d")
-      if(accessToken && refreshToken) 
-      res.json({accessToken, refreshToken})
+      const accessToken = signJwt(
+         { ...user, sessionId: session._id },
+         key.privateAccessKey,
+         "60s"
+      );
+      const refreshToken = signJwt(
+         { ...user, sessionId: session._id },
+         key.privateRefreshKey,
+         "1d"
+      );
+      if (accessToken && refreshToken) res.json({ accessToken, refreshToken });
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.status(409).send({error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN})
+      logger.error(getErrorMessage(error));
+      res.status(409).send({ error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN });
    }
-}
+};
 
-export const registerUser = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+export const registerUser = async (
+   req: Request<{}, {}, IUserCredentials>,
+   res: Response
+) => {
    try {
-      const user = await createUser(req.body)
-      res.json(user)
+      const user = await createUser(req.body);
+      res.json(user);
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.status(409).send({error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN})
+      logger.error(getErrorMessage(error));
+      res.status(409).send({ error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN });
    }
-}
+};
 
-export const deleteUserOrUsers = async (req: Request<{}, {}, Array<IUserDocument>>, res: Response) => {
-   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
+export const deleteUserOrUsers = async (
+   req: Request<{}, {}, Array<IUserDocument>>,
+   res: Response
+) => {
+   if (res.locals.user.role !== "admin")
+      return res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });
    try {
-      await deleteUsers(req.body)
+      await deleteUsers(req.body);
 
-      await updateUsersSession(req.body, {valid: false})
+      await updateUsersSession(req.body, { valid: false });
 
-      res.sendStatus(200)
+      res.sendStatus(200);
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.status(404).send({message: ErrorMessage.USER_DELETION_FAILURE})
+      logger.error(getErrorMessage(error));
+      res.status(404).send({ message: ErrorMessage.USER_DELETION_FAILURE });
    }
-}
+};
 
-export const updateUserOrUsers = async (req: Request<{}, {},  Array<IUserDocument>>, res: Response) => {
-   if(res.locals.user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
+export const updateUserOrUsers = async (
+   req: Request<{}, {}, Array<IUserDocument>>,
+   res: Response
+) => {
+   if (res.locals.user.role !== "admin")
+      return res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });
    try {
-       const isUpdated = await updateUsers(req.body)
-       res.sendStatus(200)
+      const isUpdated = await updateUsers(req.body);
+      res.sendStatus(200);
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.status(406).send({message: ErrorMessage.USER_UPDATE_FAILURE})
+      logger.error(getErrorMessage(error));
+      res.status(406).send({ message: ErrorMessage.USER_UPDATE_FAILURE });
    }
-}
+};
 
-export const sendUsers = async (req: Request, res: Response< Array<IUserDocument> >) => {
+export const sendUsers = async (req: Request, res: Response<Array<IUserDocument>>) => {
    try {
-      const data = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST)
-      res.json(data)
+      const data = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST);
+      res.json(data);
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.sendStatus(400)
+      logger.error(getErrorMessage(error));
+      res.sendStatus(400);
    }
-}
+};
 
-export const sendUser = async (req: Request<{},{}, IUserDocument>, res: Response) => {
+export const sendUser = async (req: Request<{}, {}, IUserDocument>, res: Response) => {
    try {
-      const user = await findUser(req.body, Values_TO_Omit.SEND_USERS_REQUEST)
-      res.json(user)
+      const user = await findUser(req.body, Values_TO_Omit.SEND_USERS_REQUEST);
+      res.json(user);
    } catch (error) {
-      logger.error(getErrorMessage(error))
-      res.sendStatus(400)
+      logger.error(getErrorMessage(error));
+      res.sendStatus(400);
    }
-}
+};

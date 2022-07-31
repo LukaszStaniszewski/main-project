@@ -10,8 +10,11 @@ const socket = ({io} : {io: Server}) => {
 
        socket.on("createComment", async (commentData, callback) => {
          const comment =  await createComment(commentData)
+         const channel =  comment.itemId?.toString()
+         if(channel)
+         socket.broadcast.emit(channel, comment)
          callback({
-            comment: comment
+            data: comment
          })
       }) 
    })

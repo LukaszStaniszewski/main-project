@@ -90,7 +90,7 @@ const Navbar = () => {
    <Fragment>
         <nav className="bg-gradient-to-r from-color-primary to-color-secondary min-h-max pt-4 pb-6">
     
-            <section className="flex items-center justify-between w-100vw border-b border-color-border-primary pb-4 px-9 ">
+            <section className="flex items-center justify-between w-100vw px-9 ">
          
              
                <div className="flex gap-10 items-center">

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { ICreateItem } from "../models/item.model";
 
-import { createItem, deleteItems, findItem } from "../services/item.service";
+
+import { createItem, deleteItems, findItem, findLatestItems, assignCollectionNameToItem } from "../services/item.service";
 import { SuccessMessage, ErrorMessage } from "../config/constants.config";
 
 export const createItemHandler = async (req:Request<{},{}, ICreateItem[]>, res:Response) => {
@@ -32,3 +33,13 @@ export const sendItemHandler = async (req: Request<{id: string}>, res: Response)
       res.status(404).send({message: ErrorMessage.GET_ITEM_FAILURE})
    }
 }
+
+export const sendLatestItemsHandler = async (req: Request, res: Response) => {
+   try {
+      const items = await findLatestItems(10)
+      const modifiedItems = await assignCollectionNameToItem(items)
+      res.json(modifiedItems)
+   } catch (error) {
+      res.status(404).send({message: ErrorMessage.GET_ITEM_FAILURE})
+   }
+} 

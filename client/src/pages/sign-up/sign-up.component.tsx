@@ -1,63 +1,64 @@
-import { useState, ChangeEvent, FormEvent, useEffect } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { FormattedMessage } from "react-intl"
-import { useDispatch, useSelector } from "react-redux"
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
+import { useDispatch, useSelector } from "react-redux";
 
-import FormInput from "../../components/form-input/form-input.componentx"
-import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component"
-import { signUpStart } from "../../store/user/user.action"
-import { selectCurrentUser, selectErrorMessage} from "../../store/user/user.selector"
-
-
+import FormInput from "../../components/form-input/form-input.componentx";
+import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component";
+import { signUpStart, closeToast } from "../../store/user/user.action";
+import { selectCurrentUser, selectToast } from "../../store/user/user.selector";
+import HeaderExtension from "../../components/headerExtension/headerExtension.component";
+import Alert from "../../components/alert/alert.component";
 const defaultFormFields = {
-   email: '',
-   name: '',
-   password: '',
-   confirmPassword: '',
-}
+   email: "",
+   name: "",
+   password: "",
+   confirmPassword: "",
+};
 
 const SignUp = () => {
-   const [userCredentials, setUserCredentials] = useState(defaultFormFields)
-   const {email, name, password, confirmPassword} = userCredentials
-   const navigate = useNavigate()
+   const [userCredentials, setUserCredentials] = useState(defaultFormFields);
+   const { email, name, password, confirmPassword } = userCredentials;
+   const navigate = useNavigate();
 
-   const dispatch = useDispatch()
-   const error = useSelector(selectErrorMessage)
-   const currentUser = useSelector(selectCurrentUser)
+   const dispatch = useDispatch();
+   const currentUser = useSelector(selectCurrentUser);
 
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-      if(password !== confirmPassword) return alert("passwords don't match") 
-      dispatch(signUpStart({email, name, password}))
-   }
-   console.log("currentUser", currentUser)
+      event.preventDefault();
+      if (password !== confirmPassword) return alert("passwords don't match");
+      dispatch(signUpStart({ email, name, password }));
+   };
 
-   // useEffect(() => {
-   //    if(currentUser) {
-   //       navigate(`/user/${currentUser.name}`)
-   //    }   
-   // },[currentUser])
+   useEffect(() => {
+      if (currentUser) {
+         navigate(`/user/${currentUser.name}`);
+      }
+   }, [currentUser]);
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-      const {name, value} = event.target
-      setUserCredentials((prevState) => ({...prevState, [name]: value}))
-   }
+      const { name, value } = event.target;
+      setUserCredentials((prevState) => ({ ...prevState, [name]: value }));
+   };
 
-  return (
-    <section className="relative z-0">
-         <div className="bg-gradient-to-r from-color-primary to-color-secondary h-20 w-full absolute -z-10"></div>
-         
-         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 h-min-max rounded-lg pt-6 pb-4 px-4">
+   return (
+      <section className="relative z-0">
+         <HeaderExtension />
+
+         <main className=" bg-secondary xl:w-80vw w-60vw m-auto grid grid-cols-2 gap-x-20 screen-height rounded-lg pt-6 pb-4 px-4">
             <figure className="mt-2">
-               <img src="https://i.ibb.co/BTWS1xQ/Screen-Shot-2022-06-16-at-13-12-20-PM.png" alt="sign-up-picture" />
+               <img
+                  src="https://i.ibb.co/BTWS1xQ/Screen-Shot-2022-06-16-at-13-12-20-PM.png"
+                  alt="sign-up-picture"
+               />
             </figure>
-           
+
             <section className="">
                <p className="text-center text-xl font-bold ">
-                 <FormattedMessage
+                  <FormattedMessage
                      id="authentication.signUp.messageOne"
                      defaultMessage="Welcome"
-                 />
+                  />
                </p>
                <p className="text-center text-lg mt-3 mb-5">
                   <FormattedMessage
@@ -65,9 +66,9 @@ const SignUp = () => {
                      defaultMessage="Join our community"
                   />
                </p>
-               
-               <SocialMediaAuthentication/>
-              
+
+               <SocialMediaAuthentication />
+
                <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
                   <p className="text-center text-xs font-light mx-4 mb-0">
                      <FormattedMessage
@@ -78,7 +79,7 @@ const SignUp = () => {
                </div>
 
                <div>
-                  <form onSubmit={handleSubmit} >
+                  <form onSubmit={handleSubmit}>
                      <FormInput
                         label="Email"
                         type="email"
@@ -88,7 +89,7 @@ const SignUp = () => {
                         componentName="authentication"
                         required
                      />
-               
+
                      <FormInput
                         label="Username"
                         type="text"
@@ -98,7 +99,7 @@ const SignUp = () => {
                         componentName="authentication"
                         required
                      />
-               
+
                      <FormInput
                         label="Password"
                         type="password"
@@ -108,7 +109,7 @@ const SignUp = () => {
                         componentName="authentication"
                         required
                      />
-               
+
                      <FormInput
                         label="ConfirmPassword"
                         type="password"
@@ -124,10 +125,12 @@ const SignUp = () => {
                            defaultMessage="REGISTER"
                         />
                      </button>
-                     
                   </form>
                   <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
-                     <Link to='/signin' className="text-center font-light text-xs mx-4 mb-0 hover:underline">
+                     <Link
+                        to="/signin"
+                        className="text-center font-light text-xs mx-4 mb-0 hover:underline"
+                     >
                         <FormattedMessage
                            id="authentication.link.signUp"
                            defaultMessage=" DO YOU HAVE AN ACCOUNT?"
@@ -136,12 +139,9 @@ const SignUp = () => {
                   </div>
                </div>
             </section>
-           
          </main>
-    </section>
-  )
-}
+      </section>
+   );
+};
 
-export default SignUp
-
-
+export default SignUp;

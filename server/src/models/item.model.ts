@@ -2,6 +2,8 @@ import { Schema, model, Types} from "mongoose";
 import dayjs from "dayjs";
 
 import {IItemCollectionDocument} from "./collection.model"
+import { ICollectionWithItems } from "../services/collection&Items.service";
+import { IUserDocument } from "./user.model";
 
 export interface ICreateItem {
    id: string,
@@ -17,6 +19,19 @@ export interface IItemDocument extends ICreateItem {
    createdAt: string,
    updatedAt: string,
 }
+
+export interface ILatestItems {
+  _id: Types.ObjectId,
+  name: string,
+  tags: string[],
+  collectionId: IItemCollectionDocument["_id"],
+  topic: IItemCollectionDocument["topic"],
+  createdAt: string,
+  collection?: ICollectionWithItems["name"],
+  createdBy?: IUserDocument["name"]
+ 
+}
+
 
 type OptionalFields = {[key:string]: string | number | Date}
 

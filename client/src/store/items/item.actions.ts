@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { ICreateItem } from "../../components/create-item/item-types/itemTypes";
-import { ITEM_TYPES, CreateItemsStart, IItem} from "./item.types"
+import { ITEM_TYPES, CreateItemsStart, IItem, ILatestItem} from "./item.types"
 import * as get from "./item.types"
  
 export const createItemsStart = (items: ICreateItem[]): CreateItemsStart => ({
@@ -49,5 +49,19 @@ export const getItemSuccess = (item: IItem): get.GetItemSuccess => ({
 
 export const getItemFailure = (error: AxiosError): get.GetItemFailure => ({
    type: ITEM_TYPES.GET_ITEM_FAILURE,
+   payload: error
+})
+
+export const getLatestItemsStart = (): get.GetLatestItemsStart => ({
+   type: ITEM_TYPES.GET_LATEST_ITEMS_START
+})
+
+export const getLatestItemsSuccess = (items: ILatestItem[]): get.GetLatestItemsSuccess => ({
+   type: ITEM_TYPES.GET_LATEST_ITEMS_SUCCESS,
+   payload: items
+})
+
+export const getLatestItemsFailure = (error: AxiosError): get.GetLatestItemsFailure => ({
+   type: ITEM_TYPES.GET_LATEST_ITEMS_FAILURE,
    payload: error
 })
