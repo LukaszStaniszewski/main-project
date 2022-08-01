@@ -27,7 +27,7 @@ export enum API_URL {
    LOG_OUT = "/api/session",
    SIGN_UP = "/api/user/register",
    GET_USERS = "/api/user",
-   GET_USER_SEND_CREDENTIALS = "api/user",
+   GET_USER_SEND_URL = "api/user",
    UPDATE_USERS = "/api/user",
    DELETE_USERS = "/api/user/delete",
    CREATE_COLLECTION = "api/collection/new",

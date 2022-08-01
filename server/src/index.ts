@@ -17,7 +17,7 @@ import socket from "./utils/socket.utils";
 import commentRouter from "./routes/comment.route";
 
 mongoose
-   .connect(process.env.MONGO_URL_CLOUD as string)
+   .connect(process.env.MONGO_URL_CLOUD as string, { socketTimeoutMS: 45000 })
    .catch((error) => logger.error(error));
 
 const db = mongoose.connection;

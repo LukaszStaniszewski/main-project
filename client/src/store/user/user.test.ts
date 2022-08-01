@@ -172,11 +172,11 @@ describe("get users from DB", () => {
          .run();
    });
 
-   test("successfuly get user by his name", () => {
+   test("successfuly get user by url params", () => {
       return expectSaga(getUserByCredentials, getUserByNameAction)
          .provide([
             [
-               matchers.call(postRequest, API_URL.GET_USER_SEND_CREDENTIALS, {
+               matchers.call(getRequest, API_URL.GET_USER_SEND_URL, {
                   name: "admin",
                }),
                user,

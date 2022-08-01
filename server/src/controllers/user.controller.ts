@@ -34,19 +34,6 @@ export const registerAndSignIn = async (
    }
 };
 
-export const registerUser = async (
-   req: Request<{}, {}, IUserCredentials>,
-   res: Response
-) => {
-   try {
-      const user = await createUser(req.body);
-      res.json(user);
-   } catch (error) {
-      logger.error(getErrorMessage(error));
-      res.status(409).send({ error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN });
-   }
-};
-
 export const deleteUserOrUsers = async (
    req: Request<{}, {}, Array<IUserDocument>>,
    res: Response
@@ -90,9 +77,12 @@ export const sendUsers = async (req: Request, res: Response<Array<IUserDocument>
    }
 };
 
-export const sendUser = async (req: Request<{}, {}, IUserDocument>, res: Response) => {
+export const sendUser = async (req: Request, res: Response) => {
    try {
-      const user = await findUser(req.body, Values_TO_Omit.SEND_USERS_REQUEST);
+      const user = await User.findOne(req.params).select(
+         Values_TO_Omit.SEND_USERS_REQUEST
+      );
+      if (!user) throw new Error("user wasn't found");
       res.json(user);
    } catch (error) {
       logger.error(getErrorMessage(error));
