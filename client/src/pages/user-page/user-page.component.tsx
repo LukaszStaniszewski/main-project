@@ -37,21 +37,16 @@ const UserPage = () => {
 
    useEffect(() => {
       if (!name) return;
-      if (currentUser && currentUser.name === name) {
-         getCollections();
-      } else {
-         dispatch(getUserByCredentialsStart(name));
-         getCollections();
-      }
+      getCollections();
    }, [name]);
 
    const getCollections = async () => {
-      if (!name || collectionsWihoutItems.length) return;
+      if (!name) return;
       dispatch(getCollectionsWithoutItemsStart(name));
    };
 
    useEffect(() => {
-      if (!collectionsWihoutItems.length) return;
+      if (!collectionsWihoutItems.length) return setColumns([""]);
       const columns = customizeColumns();
       setColumns(columns);
    }, [collectionsWihoutItems]);
@@ -75,6 +70,12 @@ const UserPage = () => {
       }
    };
 
+   useEffect(() => {
+      if (toast) {
+         setToggle(true);
+      }
+   }, [toast]);
+
    const closeToastHandler = () => {
       setToggle(!toggle);
       dispatch(closeToast());
@@ -89,7 +90,7 @@ const UserPage = () => {
          <HeaderExtension />
          <main className="grid grid-cols-8 bg-secondary w-90vw m-auto max-w-90vw relative screen-height p-4">
             <div className="col-start-1 col-end-7 overflow-x-auto">
-               {columns.length > 1 && (
+               {columns.length > 1 && collectionsWihoutItems.length && (
                   <CustomTable
                      rows={collectionsWihoutItems}
                      url="collection"
@@ -111,10 +112,11 @@ const UserPage = () => {
                   >
                      New Collection
                   </Link>
-                  {collectionsWihoutItems.length > 0 && (
-                     <div>{collectionsWihoutItems.length} Collections</div>
-                  )}
-                  {!collectionsWihoutItems.length && (
+                  {collectionsWihoutItems.length > 0 ? (
+                     <div className="text-center py-4">
+                        <span>{collectionsWihoutItems.length} Collections</span>
+                     </div>
+                  ) : (
                      <div className="text-middle whitespace-nowrap flex flex-col justify-center items-center pt-4">
                         <FolderAddIcon className="w-7 font-light" />
                         <p className="font-bold py-1">No projects</p>

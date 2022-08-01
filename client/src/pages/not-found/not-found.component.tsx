@@ -1,11 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
+import { show404Page } from "../../store/local/local.action";
 
 const NotFound = () => {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
 
-   const redirectToPreviousUrl = () => navigate("/");
+   const redirectToPreviousUrl = () => {
+      dispatch(show404Page(false));
+      navigate("/");
+   };
 
    const reloadPage = () => window.location.reload();
 

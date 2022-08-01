@@ -1,12 +1,15 @@
-import {takeLatest, put, all, call, throttle} from "typed-redux-saga/macro"
+import {takeLatest, put, all, call, throttle, select} from "typed-redux-saga/macro"
 import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ILargestCollection} from "./collection.types"
-import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure, autocompleteSuccess, autocompeleteFailure } from "./collection.actions"
+import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure, autocompleteSuccess, autocompeleteFailure, setCollection } from "./collection.actions"
 import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
 import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { setItems } from "../items/item.actions"
 import { show404Page } from "../local/local.action"
+import { selectToast } from "../user/user.selector"
+import { showToast, closeToast } from "../user/user.action"
+
 
 export type ImageResponse = {
    image: {
@@ -64,22 +67,34 @@ function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectio
       const response = yield* call(getRequest<ICollection>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
       const collectionWithItems = response.data
       const {items, ...collection} = collectionWithItems
-      yield* put(getCollectionWithItemsSuccess(collection))
+      yield* all([
+         put(show404Page(false)),
+         put(getCollectionWithItemsSuccess(collection)),
+      ])
       if(items) yield* put(setItems(items))
    } catch (error) {
-      yield* put(getCollectionWithItemsFailure(error as AxiosError))
+      yield* put(show404Page(true))
+      // yield* put(getCollectionWithItemsFailure(error as AxiosError))
    }
 }
 
 function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWithoutItemsStart) {
    try {
       const repsonse = yield* call(getRequest<ICollectionWithoutItems>, `${API_URL.GET_COLLECTIONS_BY_USER}/${userName}`)
+      const toast = yield* select(selectToast)
+      if(toast?.type !== "success") {
+         yield* put(closeToast())
+      }
       yield* all([ 
-         put(getCollectionsWihoutItemsSuccess(repsonse.data)),
-         put(show404Page(false))
+         put(show404Page(false)),
+         put(getCollectionsWihoutItemsSuccess(repsonse.data))
       ])
    } catch (error) {
-      yield* put(getCollectionsWihoutItemsFailure(error as  AxiosError))
+      yield* all([ 
+         put(setCollection([])),
+         put(showToast({message: "This user has no collections", type: "warning"}))
+      ])
+      // yield* put(getCollectionsWihoutItemsFailure(error as  AxiosError))
    }
 }
 
