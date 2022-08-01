@@ -5,6 +5,7 @@ import { FolderAddIcon } from "@heroicons/react/outline";
 
 import { useSelector } from "react-redux";
 import { selectToast, selectUserReducer } from "../../store/user/user.selector";
+import { selectIs404PageActive } from "../../store/local/local.selector";
 import { getUserByCredentialsStart, closeToast } from "../../store/user/user.action";
 import { getCollectionsWithoutItemsStart } from "../../store/collections/collection.actions";
 import {
@@ -15,6 +16,7 @@ import CustomTable from "../../components/custom-table/custom-table.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import { ICollectionWithoutItems } from "../../store/collections/collection.types";
 import Alert from "../../components/alert/alert.component";
+import NotFound from "../not-found/not-found.component";
 
 export interface ICustomizedCollections
    extends Omit<ICollectionWithoutItems, "image" | "owner"> {
@@ -28,6 +30,7 @@ const UserPage = () => {
    const [toggle, setToggle] = useState(true);
    const { currentUser } = useSelector(selectUserReducer);
    const collectionsWihoutItems = useSelector(selectCollectionsWithoutItems);
+   const is404PageActive = useSelector(selectIs404PageActive);
    const dispatch = useDispatch();
    const { name } = useParams();
    const toast = useSelector(selectToast);
@@ -76,6 +79,10 @@ const UserPage = () => {
       setToggle(!toggle);
       dispatch(closeToast());
    };
+
+   if (is404PageActive) {
+      return <NotFound />;
+   }
 
    return (
       <section className=" relative z-0 pb-4">

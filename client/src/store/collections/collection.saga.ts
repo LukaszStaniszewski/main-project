@@ -6,6 +6,7 @@ import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, delet
 import { AxiosError } from "axios"
 import { ICreateCollection } from "../../pages/create-collection/create-collection"
 import { setItems } from "../items/item.actions"
+import { show404Page } from "../local/local.action"
 
 export type ImageResponse = {
    image: {
@@ -73,7 +74,10 @@ function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectio
 function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWithoutItemsStart) {
    try {
       const repsonse = yield* call(getRequest<ICollectionWithoutItems>, `${API_URL.GET_COLLECTIONS_BY_USER}/${userName}`)
-      yield* put(getCollectionsWihoutItemsSuccess(repsonse.data))
+      yield* all([ 
+         put(getCollectionsWihoutItemsSuccess(repsonse.data)),
+         put(show404Page(false))
+      ])
    } catch (error) {
       yield* put(getCollectionsWihoutItemsFailure(error as  AxiosError))
    }

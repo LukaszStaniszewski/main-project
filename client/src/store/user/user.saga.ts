@@ -3,6 +3,7 @@ import {takeLatest, put, all, call, } from "typed-redux-saga/macro"
 import { decode as decodeToken } from "../../utils/userToken.utils"
 import {API_URL, postRequest, deleteRequest, ITokens, getRequest, patchRequest} from "../../api/axios-instance.api"
 import { USER_ACTION_TYPES, IUserFormValues,  ICurrentUser, SignInStart, SignUpStart, UpdateUsersStart, DeleteUsersStart, GetUserByCredentialsStart} from "./user.types"
+import { show404Page } from "../local/local.action"
 import * as action from "./user.action"
 
 
@@ -73,12 +74,14 @@ export function* getUsers() {
 }
 
 export function* getUserByCredentials({payload: userName}: GetUserByCredentialsStart) {
-   if(!userName) return
    try {
-      const {data} = yield* call(postRequest<ICurrentUser>, API_URL.GET_USER_SEND_CREDENTIALS, {name: userName})
-      yield* put(action.GetUserByCredentialsSuccess(data))
+      const {data} = yield* call(getRequest<ICurrentUser>, `${API_URL.GET_USER_SEND_URL}/${userName}`)
+      yield* all([
+         put(action.GetUserByCredentialsSuccess(data)), 
+         put(show404Page(false))
+      ])
    } catch (error) {
-      // yield* put(action.GetUserByCredentialsFailure(error as AxiosError))
+      yield* put(show404Page(true))
    }
 }
 
