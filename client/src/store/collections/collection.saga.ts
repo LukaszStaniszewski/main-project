@@ -90,11 +90,19 @@ function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWit
          put(getCollectionsWihoutItemsSuccess(repsonse.data))
       ])
    } catch (error) {
-      yield* all([ 
-         put(setCollection([])),
-         put(showToast({message: "This user has no collections", type: "warning"}))
-      ])
-      // yield* put(getCollectionsWihoutItemsFailure(error as  AxiosError))
+      //@ts-ignore
+      if(error.message?.match(/409/g)) {
+         yield* all([ 
+            put(setCollection([])),
+            put(show404Page(true))
+         ])
+      } else {
+         yield* all([ 
+            put(show404Page(false)),
+            put(setCollection([])),
+            put(showToast({message: "This user has no collections", type: "warning"}))
+         ])
+      }
    }
 }
 
