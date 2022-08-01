@@ -8,7 +8,6 @@ import { Menu, MenuHandler, MenuList, MenuItem, Button } from "@material-tailwin
 import { getCollectionWithItemsStart } from "../../store/collections/collection.actions";
 import {
    selectCollection,
-   selectCollectionErrorMessage,
    selectCollectionsWithoutItems,
 } from "../../store/collections/collection.selector";
 import {
@@ -23,6 +22,8 @@ import useDeleteItems from "../../hooks/items/delete-items.hook";
 import { IItem } from "../../store/items/item.types";
 import useDeleteCollection from "../../hooks/collection/delete-collections.hook";
 import { selectCurrentUser } from "../../store/user/user.selector";
+import { selectIs404PageActive } from "../../store/local/local.selector";
+import NotFound from "../not-found/not-found.component";
 
 const defaultCollectionValues: ICollection = {
    _id: "",
@@ -54,6 +55,7 @@ const CollectionPage = () => {
    const currentUser = useSelector(selectCurrentUser);
    const collectionsWihoutItems = useSelector(selectCollectionsWithoutItems);
    const items = useSelector(selectAdjustedItems);
+   const Is404PageActive = useSelector(selectIs404PageActive);
    const navigate = useNavigate();
 
    useEffect(() => {
@@ -63,7 +65,7 @@ const CollectionPage = () => {
    useEffect(() => {
       if (!collection) return;
       authorization();
-   }, []);
+   }, [collection]);
 
    const authorization = () => {
       if (
@@ -115,14 +117,16 @@ const CollectionPage = () => {
       navigate(`/user/${collection?.owner.name}`);
    };
 
-   if (!collection) {
+   if (!collection && !Is404PageActive) {
       return (
-         <div className="flex justify-center items-center h-full">
+         <div className="flex justify-center items-center screen-height">
             <Spinner />
          </div>
       );
    }
-
+   if (Is404PageActive) {
+      return <NotFound />;
+   }
    return (
       <section className=" relative z-0 pb-4">
          <HeaderExtension />
@@ -183,7 +187,7 @@ const CollectionPage = () => {
                      //@ts-ignore
                      rows={items}
                      customizedColumns={columns}
-                     checkboxesAvaible={true}
+                     checkboxesAvaible={writeMode}
                      //@ts-ignore
                      setSelectedItems={setSelectedItems}
                      url="item"
