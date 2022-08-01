@@ -50,7 +50,12 @@ export const getCollectionsPinnedToUser = async (req: Request, res: Response) =>
       const collections = await findCollectionsByUser(params);
       res.json(collections);
    } catch (error) {
-      res.sendStatus(404);
+      //@ts-ignore
+      if (error.message === "User not found") {
+         res.sendStatus(409);
+      } else {
+         res.sendStatus(403);
+      }
    }
 };
 

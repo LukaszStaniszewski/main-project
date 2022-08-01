@@ -7,6 +7,7 @@ import { IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import { deleteItemsByCollection } from "./item.service";
 import { Values_TO_Omit } from "../config/constants.config";
+import { findUser } from "./user.service";
 import ItemModel from "../models/item.model";
 import logger from "../utils/logger";
 
@@ -26,6 +27,8 @@ export const findCollectionsByUser = async (
    name: IUserDocument["name"]
 ): Promise<IItemCollectionDocument[]> => {
    try {
+      const user = await findUser({ name: name });
+      if (!user) throw new Error("User not found");
       const collections = await CollectionModel.find({ "owner.name": name })
          .select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
          .lean();
