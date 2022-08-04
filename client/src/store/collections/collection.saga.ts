@@ -90,25 +90,22 @@ function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWit
          put(getCollectionsWihoutItemsSuccess(repsonse.data))
       ])
    } catch (error) {
+      yield* put(setCollection([]))
       //@ts-ignore
       if(error.message?.match(/409/g)) {
-         yield* all([ 
-            put(setCollection([])),
-            put(show404Page(true))
-         ])
+         yield* put(show404Page(true))
       } else {
          yield* all([ 
             put(show404Page(false)),
-            put(setCollection([])),
             put(showToast({message: "This user has no collections", type: "warning"}))
          ])
       }
    }
 }
 
-function* getLargestCollections() {
+function* getLargestCollections({payload: amount}: type.GetLargestCollectionsStart) {
    try {
-      const repsonse = yield* call(getRequest<ILargestCollection[]>, API_URL.GET_LARGEST_COLLECTIONS)
+      const repsonse = yield* call(getRequest<ILargestCollection[]>, `${API_URL.GET_LARGEST_COLLECTIONS}/${amount}`)
       yield* put(getLargestCollectionsSuccess(repsonse.data))
    } catch (error) {
       yield* put(getLargestCollectionsFailure(error as  AxiosError))

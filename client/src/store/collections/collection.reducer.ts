@@ -8,21 +8,21 @@ import {
 import { IError } from "../user/user.reducer";
 
 export interface ICollectionState {
-   collection: ICollection;
+   collection: ICollection | null;
    collections: ICollection[];
    collectionsWihoutItems: ICollectionWithoutItems[];
-   largestCollections: ILargestCollection[];
+   largestCollections: ILargestCollection[] | null;
    autocomplete: [];
    collectionFetch: boolean;
-   error: IError;
-   successMessage: IError;
+   error: IError | null;
+   successMessage: IError | null;
 }
 
-const COLLECTION_INITIAL_STATE = {
+const COLLECTION_INITIAL_STATE: ICollectionState = {
    collection: null,
    collections: [],
    collectionsWihoutItems: [],
-   largestColletions: [],
+   largestCollections: [],
    autocomplete: [],
    collectionFetch: false,
    error: null,

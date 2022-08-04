@@ -1,118 +1,156 @@
- import { AxiosError } from "axios"
+import { AxiosError } from "axios";
 
-import { ICreateCollection } from "../../pages/create-collection/create-collection"
-import { ICollection, COLLECTION_ACTION_TYPES, ILargestCollection } from "./collection.types"
-import { IError } from "../user/user.reducer"
-import * as give from "./collection.types"
-import { ICurrentUser } from "../user/user.types"
+import { ICreateCollection } from "../../pages/create-collection/create-collection";
+import {
+   ICollection,
+   COLLECTION_ACTION_TYPES,
+   ILargestCollection,
+} from "./collection.types";
+import { IError } from "../user/user.reducer";
+import * as give from "./collection.types";
+import { ICurrentUser } from "../user/user.types";
 
-
-
-export const createCollectionStart = (collectionData : ICreateCollection): give.CreateCollectionStart => ({
+export const createCollectionStart = (
+   collectionData: ICreateCollection
+): give.CreateCollectionStart => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_START,
-   payload: collectionData
-})
+   payload: collectionData,
+});
 
-export const createCollectionSuccess = (collection: ICollection): give.CreateCollectionSuccess => ({
+export const createCollectionSuccess = (
+   collection: ICollection
+): give.CreateCollectionSuccess => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_SUCCESS,
-   payload: collection
-})
+   payload: collection,
+});
 
-export const createCollectionFailure = (error: AxiosError): give.CreateCollectionFailure => ({
+export const createCollectionFailure = (
+   error: AxiosError
+): give.CreateCollectionFailure => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_FAILURE,
-   payload: error
-})
+   payload: error,
+});
 
-export const deleteCollectionStart = (collectionId : ICollection["_id"]): give.DeleteCollectionStart => ({
+export const deleteCollectionStart = (
+   collectionId: ICollection["_id"]
+): give.DeleteCollectionStart => ({
    type: COLLECTION_ACTION_TYPES.DELETE_COLLECTION_START,
-   payload: collectionId
-})
+   payload: collectionId,
+});
 
-export const deleteCollectionSuccess = (successMessage: IError): give.DeleteCollectionSuccess => ({
+export const deleteCollectionSuccess = (
+   successMessage: IError
+): give.DeleteCollectionSuccess => ({
    type: COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS,
-   payload: successMessage
-})
+   payload: successMessage,
+});
 
-export const deleteColletionFailure = (error : AxiosError): give.DeleteCollectionFailure => ({
+export const deleteColletionFailure = (
+   error: AxiosError
+): give.DeleteCollectionFailure => ({
    type: COLLECTION_ACTION_TYPES.DELETE_COLLECTION_FAILURE,
-   payload: error
-})
+   payload: error,
+});
 
-export const createCollectionWithItemsStart = (itemsCollection: {collectionWithItems: ICreateCollection, image?: File}): give.CreateCollectionWithItemsStart => ({
+export const createCollectionWithItemsStart = (itemsCollection: {
+   collectionWithItems: ICreateCollection;
+   image?: File;
+}): give.CreateCollectionWithItemsStart => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_START,
-   payload: itemsCollection
-})
+   payload: itemsCollection,
+});
 
-export const createCollectionWithItemsSuccess = (): give.CreateCollectionWithItemsSuccess => ({
-   type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS
-})
+export const createCollectionWithItemsSuccess =
+   (): give.CreateCollectionWithItemsSuccess => ({
+      type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS,
+   });
 
-export const createCollectionWithItemsFailure = (error: AxiosError): give.CreateCollectionWithItemsFailure => ({
+export const createCollectionWithItemsFailure = (
+   error: AxiosError
+): give.CreateCollectionWithItemsFailure => ({
    type: COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_FAILURE,
-   payload: error
-})
+   payload: error,
+});
 
-export const getCollectionWithItemsStart = (collectionId: ICollection["_id"]): give.GetCollectionWithItemsStart => ({
+export const getCollectionWithItemsStart = (
+   collectionId: ICollection["_id"]
+): give.GetCollectionWithItemsStart => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_START,
-   payload: collectionId
-})
+   payload: collectionId,
+});
 
-export const getCollectionWithItemsSuccess = (itemsCollections: ICollection): give.GetCollectionWithItemsSuccess =>({
+export const getCollectionWithItemsSuccess = (
+   itemsCollections: ICollection
+): give.GetCollectionWithItemsSuccess => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_SUCCESS,
-   payload: itemsCollections
-})
+   payload: itemsCollections,
+});
 
-export const getCollectionWithItemsFailure = (error: AxiosError): give.GetCollectionWithItemsFailure => ({
+export const getCollectionWithItemsFailure = (
+   error: AxiosError
+): give.GetCollectionWithItemsFailure => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTION_WITH_ITEMS_FAILURE,
-   payload: error
-})
+   payload: error,
+});
 
-export const getCollectionsWithoutItemsStart = (userName: ICurrentUser["name"]) : give.GetCollectionsWithoutItemsStart => ({
+export const getCollectionsWithoutItemsStart = (
+   userName: ICurrentUser["name"]
+): give.GetCollectionsWithoutItemsStart => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_START,
-   payload: userName
-})
+   payload: userName,
+});
 
-export const getCollectionsWihoutItemsSuccess = (collections: give.ICollectionWithoutItems) : give.GetCollectionsWithoutItemsSuccess => ({
+export const getCollectionsWihoutItemsSuccess = (
+   collections: give.ICollectionWithoutItems
+): give.GetCollectionsWithoutItemsSuccess => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_SUCCESS,
    payload: collections,
-})
+});
 
-export const getCollectionsWihoutItemsFailure = (error: AxiosError) : give.GetCollectionsWithoutItemsFailure => ({
+export const getCollectionsWihoutItemsFailure = (
+   error: AxiosError
+): give.GetCollectionsWithoutItemsFailure => ({
    type: COLLECTION_ACTION_TYPES.GET_COLLECTIONS_WIHOUT_ITEMS_FAILURE,
    payload: error,
-})
+});
 
-export const setCollection = (collection: any):give.SetCollection => ({
+export const setCollection = (collection: any): give.SetCollection => ({
    type: COLLECTION_ACTION_TYPES.SET_COLLECTION,
-   payload: collection
-})
+   payload: collection,
+});
 
-export const getLargestCollectionsStart = () :give.GetLargestCollectionsStart =>({
-   type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START
-})
+export const getLargestCollectionsStart = (
+   amount: number
+): give.GetLargestCollectionsStart => ({
+   type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_START,
+   payload: amount,
+});
 
-export const getLargestCollectionsSuccess = (collections: ILargestCollection[]) :give.GetLargestCollectionsSuccess=>({
+export const getLargestCollectionsSuccess = (
+   collections: ILargestCollection[]
+): give.GetLargestCollectionsSuccess => ({
    type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_SUCCESS,
-   payload: collections
-})
+   payload: collections,
+});
 
-export const getLargestCollectionsFailure = (error: AxiosError ) :give.GetLargestCollectionsFailure =>({
+export const getLargestCollectionsFailure = (
+   error: AxiosError
+): give.GetLargestCollectionsFailure => ({
    type: COLLECTION_ACTION_TYPES.GET_LARGEST_COLLECTIONS_FAILURE,
-   payload: error
-})
+   payload: error,
+});
 
-export const autocompleteStart = (query: {query: string}): give.AutocompleteStart => ({
+export const autocompleteStart = (query: { query: string }): give.AutocompleteStart => ({
    type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_START,
-   payload: query
-})
+   payload: query,
+});
 
 export const autocompleteSuccess = (result: any): give.AutocompleteSuccess => ({
    type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_SUCCESS,
-   payload: result
-})
+   payload: result,
+});
 
-export const autocompeleteFailure = (error: AxiosError):give.AutoCompleteFailure => ({
+export const autocompeleteFailure = (error: AxiosError): give.AutoCompleteFailure => ({
    type: COLLECTION_ACTION_TYPES.AUTOCOMPLETE_FAILURE,
-   payload: error
-})
-
+   payload: error,
+});

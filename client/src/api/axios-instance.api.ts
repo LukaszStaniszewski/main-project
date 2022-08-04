@@ -43,7 +43,7 @@ export enum API_URL {
    GET_COMMENTS = "api/comment/",
    DELETE_COMMENT = "api/comment/delete",
    GET_LATEST_ITEMS = "api/item",
-   GET_LARGEST_COLLECTIONS = "api/collection",
+   GET_LARGEST_COLLECTIONS = "api/collection/largest",
    AUTOCOMPLETE = "api/collection/autocomplete",
 }
 

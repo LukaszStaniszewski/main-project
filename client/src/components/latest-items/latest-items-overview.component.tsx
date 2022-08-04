@@ -1,31 +1,50 @@
-import {useEffect} from 'react'
-import { useDispatch, useSelector } from "react-redux"
+import { useRef, Fragment } from "react";
 
-import Spinner from "../spinner/spinner.component"
-import { selectLatestItems } from "../../store/items/item.selector"
-import { getLatestItemsStart } from "../../store/items/item.actions"
-import LatestItem from "./latest-item.component"
+import { selectItemLoading, selectLatestItems } from "../../store/items/item.selector";
+import { getLatestItemsStart } from "../../store/items/item.actions";
+import LatestItem from "./latest-item.component";
+import useLazyLoad from "../../hooks/useLazyLoad";
+import { Spinner, SpinningDots } from "../spinner/export-helper";
+
+const initialAmount = window.screen.height > 1000 ? 12 : 8;
+const itemsOnScroll = window.screen.height > 1000 ? 6 : 4;
+
+const options = {
+   INITIAL_ITEMS_NUMBER: initialAmount,
+   ITEMS_ON_SCROLL: itemsOnScroll,
+   SCROLL_LIMIT: 8,
+};
+type selectType = ReturnType<typeof selectLatestItems>;
 
 const LatestItemsOverview = () => {
-   const dispatch = useDispatch()
-   const latestItems = useSelector(selectLatestItems)
+   const triggerRef = useRef<HTMLHeadingElement>(null);
+   const { items, loading } = useLazyLoad<selectType>(
+      triggerRef,
+      {
+         action: getLatestItemsStart,
+         loadingSelector: selectItemLoading,
+         stateSelector: selectLatestItems,
+      },
+      options
+   );
 
-   useEffect(() => {
-      dispatch(getLatestItemsStart())
-   },[])
-
-
-   if(!latestItems) {
-      return <div><Spinner/></div>
+   if (!items) {
+      return (
+         <div className="flex justify-center">
+            <Spinner />
+         </div>
+      );
    }
 
-  return (
-   <div> 
-      {latestItems.map(item => 
-         <LatestItem key={item._id} item={item}/>
-      )}
-   </div>
-  )
-}
+   return (
+      <Fragment>
+         {items.map((item) => (
+            <LatestItem key={item._id} item={item} />
+         ))}
+         <div ref={triggerRef}></div>
+         {loading && <SpinningDots />}
+      </Fragment>
+   );
+};
 
-export default LatestItemsOverview
+export default LatestItemsOverview;

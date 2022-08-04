@@ -8,7 +8,12 @@ import {
    deleteItemsSuccess,
    getLatestItemsSuccess,
 } from "./item.actions";
-import { CreateItemsStart, ITEM_TYPES, DelteItemsStart } from "./item.types";
+import {
+   CreateItemsStart,
+   ITEM_TYPES,
+   DelteItemsStart,
+   GetLatestItemsStart,
+} from "./item.types";
 import { createItems, deleteItems, getLatestItems } from "./item.saga";
 import { dataToCreateItem, itemCreated, latestItems } from "../../test-utils/fake-data";
 
@@ -20,6 +25,11 @@ const createItemsStart: CreateItemsStart = {
 const deleteItemsStart: DelteItemsStart = {
    type: ITEM_TYPES.DELETE_ITEMS_START,
    payload: ["2134", "1234"],
+};
+
+const getLatestItemsStart: GetLatestItemsStart = {
+   type: ITEM_TYPES.GET_LATEST_ITEMS_START,
+   payload: 4,
 };
 
 describe("create item", () => {
@@ -66,8 +76,16 @@ describe("update items", () => {
 
 describe("get items from server", () => {
    test("latest items recived successfuly", () => {
-      expectSaga(getLatestItems)
-         .provide([[matchers.call(getRequest, API_URL.GET_LATEST_ITEMS), latestItems]])
+      expectSaga(getLatestItems, getLatestItemsStart)
+         .provide([
+            [
+               matchers.call(
+                  getRequest,
+                  `${API_URL.GET_LATEST_ITEMS}/${getLatestItemsStart.payload}}`
+               ),
+               latestItems,
+            ],
+         ])
          .put(getLatestItemsSuccess(latestItems.data))
          .run();
    });

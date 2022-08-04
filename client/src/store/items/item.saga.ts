@@ -1,8 +1,8 @@
 import { AxiosError } from "axios"
-import {takeLatest, put, all, call} from "typed-redux-saga/macro"
+import {takeLatest, put, all, call,} from "typed-redux-saga/macro"
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
 import { createItemsFailure, createItemsSuccess, deleteItemsFailure, deleteItemsSuccess, getItemFailure, getItemSuccess, getLatestItemsFailure, getLatestItemsSuccess } from "./item.actions"
-import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem} from "./item.types"
+import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem, GetLatestItemsStart} from "./item.types"
 
 export function* createItems({payload: item}:CreateItemsStart) {
    try {
@@ -31,9 +31,10 @@ function* getItem({payload: itemId}: GetItemStart) {
    }  
 }
 
-export function* getLatestItems() {
+export function* getLatestItems({payload: amount}: GetLatestItemsStart) {
+ 
    try {
-      const response = yield* call(getRequest<ILatestItem[]>, API_URL.GET_LATEST_ITEMS)
+      const response = yield* call(getRequest<ILatestItem[]>, `${API_URL.GET_LATEST_ITEMS}/${amount}`)
       yield* put(getLatestItemsSuccess(response.data))
    } catch (error) {
       yield* put(getLatestItemsFailure(error as AxiosError))

@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { createItemHandler, deleteItemsHandler, sendItemHandler, sendLatestItemsHandler } from "../controllers/item.controller";
+import {
+   createItemHandler,
+   deleteItemsHandler,
+   sendItemHandler,
+   sendLatestItemsHandler,
+} from "../controllers/item.controller";
 
-const itemRouter = Router()
+const itemRouter = Router();
 
-itemRouter.post("/new", createItemHandler)
-itemRouter.post("/delete", deleteItemsHandler)
-itemRouter.get("/get/:id", sendItemHandler)
-itemRouter.get("/", sendLatestItemsHandler)
+itemRouter.post("/new", createItemHandler);
+itemRouter.post("/delete", deleteItemsHandler);
+itemRouter.get("/get/:id", sendItemHandler);
+itemRouter.get("/:number", sendLatestItemsHandler);
 
-
-export default itemRouter
+export default itemRouter;

@@ -1,20 +1,35 @@
-import { Fragment, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Fragment, useRef } from "react";
 
-import Spinner from "../spinner/spinner.component";
-import { selectLargestCollections } from "../../store/collections/collection.selector";
+import { Spinner, SpinningDots } from "../spinner/export-helper";
+import {
+   selectLargestCollections,
+   selectCollectionLoadingState,
+} from "../../store/collections/collection.selector";
 import { getLargestCollectionsStart } from "../../store/collections/collection.actions";
 import LargestCollection from "./largest-collection.component";
+import useLazyLoad from "../../hooks/useLazyLoad";
 
+const options = {
+   INITIAL_ITEMS_NUMBER: 3,
+   ITEMS_ON_SCROLL: 2,
+   SCROLL_LIMIT: 2,
+};
+
+type selectType = ReturnType<typeof selectLargestCollections>;
 const LargestCollectionsOverview = () => {
-   const dispatch = useDispatch();
-   const largestCollections = useSelector(selectLargestCollections);
+   const triggerRef = useRef<HTMLHeadingElement>(null);
 
-   useEffect(() => {
-      dispatch(getLargestCollectionsStart());
-   }, []);
+   const { items, loading } = useLazyLoad<selectType>(
+      triggerRef,
+      {
+         action: getLargestCollectionsStart,
+         loadingSelector: selectCollectionLoadingState,
+         stateSelector: selectLargestCollections,
+      },
+      options
+   );
 
-   if (!largestCollections) {
+   if (!items) {
       return (
          <div className="flex justify-center items-center h-full">
             <Spinner />
@@ -24,9 +39,11 @@ const LargestCollectionsOverview = () => {
 
    return (
       <Fragment>
-         {largestCollections.map((collection) => (
+         {items.map((collection) => (
             <LargestCollection key={collection._id} collection={collection} />
          ))}
+         <div ref={triggerRef}></div>
+         {loading && <SpinningDots />}
       </Fragment>
    );
 };

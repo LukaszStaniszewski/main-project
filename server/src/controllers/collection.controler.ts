@@ -69,8 +69,10 @@ export const getAllCollections = async (req: Request, res: Response) => {
 };
 
 export const getLargestCollections = async (req: Request, res: Response) => {
+   console.log("hit");
+   const amount = req.params.number;
    try {
-      const collections = await findLargestCollections(5);
+      const collections = await findLargestCollections(Number(amount));
       res.json(collections);
    } catch (error) {
       res.sendStatus(405);

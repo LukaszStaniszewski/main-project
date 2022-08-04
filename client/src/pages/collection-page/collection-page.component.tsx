@@ -17,7 +17,7 @@ import {
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
 import CustomTable from "../../components/custom-table/custom-table.component";
-import { selectAdjustedItems } from "../../store/items/item.selector";
+import { AdjustedItems, selectAdjustedItems } from "../../store/items/item.selector";
 import useDeleteItems from "../../hooks/items/delete-items.hook";
 import { IItem } from "../../store/items/item.types";
 import useDeleteCollection from "../../hooks/collection/delete-collections.hook";
@@ -81,12 +81,12 @@ const CollectionPage = () => {
    useEffect(() => {
       if (!collection) return;
       setCollectionWithoutItems(collection);
-      if (!items.length) return;
-      const columns = customizeColumns();
+      if (!items?.length) return;
+      const columns = customizeColumns(items);
       setColumns(columns);
    }, [collection]);
 
-   const customizeColumns = () => {
+   const customizeColumns = (items: AdjustedItems) => {
       return [
          ...Object.keys(items[0]).filter(
             (value) =>
@@ -103,6 +103,7 @@ const CollectionPage = () => {
 
    const deleteSelectedItems = () => {
       deleteItems(
+         //@ts-ignore
          items,
          //@ts-ignore
          selectedItems.filter((v) => v !== "")
@@ -173,7 +174,7 @@ const CollectionPage = () => {
                      <Button onClick={toCreateItemPage} variant="outlined">
                         new item
                      </Button>
-                     {items.length > 0 && (
+                     {items && items.length > 0 && (
                         <Button onClick={deleteSelectedItems} variant="outlined">
                            delete item
                         </Button>
