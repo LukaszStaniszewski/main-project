@@ -1,6 +1,7 @@
 import { AxiosError } from "axios"
 import {takeLatest, put, all, call,} from "typed-redux-saga/macro"
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
+import { show404Page } from "../local/local.action"
 import { createItemsFailure, createItemsSuccess, deleteItemsFailure, deleteItemsSuccess, getItemFailure, getItemSuccess, getLatestItemsFailure, getLatestItemsSuccess } from "./item.actions"
 import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem, GetLatestItemsStart} from "./item.types"
 
@@ -25,9 +26,16 @@ export function* deleteItems({payload: itemsId}:DelteItemsStart) {
 function* getItem({payload: itemId}: GetItemStart) {
    try {
       const response = yield* call(getRequest<IItem>, `${API_URL.GET_ITEM}/${itemId}`)
-      yield* put(getItemSuccess(response.data))
+      yield* all([
+         put(show404Page(false)),
+         put(getItemSuccess(response.data))
+      ]) 
    } catch (error) {
-      yield* put(getItemFailure(error as AxiosError))
+      
+      yield* all([
+         put(show404Page(true)),
+         put(getItemFailure(error as AxiosError)),
+      ]) 
    }  
 }
 

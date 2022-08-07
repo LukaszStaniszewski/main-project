@@ -1,26 +1,33 @@
-import { ICollection, ICollectionWithoutItems } from "../../../store/collections/collection.types"
-import { ICurrentUser } from "../../../store/user/user.types"
-import { ICustomizedCollections } from "../../../pages/user-page/user-page.component"
+export type SortedBy<T extends RequiredProps> = {
+   column: Column<T>;
+   ascending: boolean;
+};
 
-export type Columns = Array<keyof ICurrentUser> 
-export type Rows = ICurrentUser[] | ICustomizedCollections[]
-export type Row = ICurrentUser | ICustomizedCollections
+export type Columns<T> = Array<keyof T>;
+export type Column<T> = keyof T;
 
-interface ITableAdmin{
-   setSelectedItems?: React.Dispatch<React.SetStateAction<ICurrentUser[]>>
-   checkboxesAvaible?: boolean,
+export type Rows<T extends RequiredProps> = Array<T>;
+
+export type Row<T extends RequiredProps> = T;
+
+interface IAdminTable<T extends RequiredProps> {
+   setSelectedItems?: React.Dispatch<React.SetStateAction<T[]>>;
+   checkboxesAvaible?: boolean;
 }
 
-export interface ICustomTable extends ITableAdmin {
-   rows: Rows,
-   customizedColumns?: string[]
-   url?: string
+export type RequiredProps = {
+   _id: string;
+};
+
+export interface ICustomTable<T extends RequiredProps> extends IAdminTable<T> {
+   rows: Rows<T>;
+   customizedColumns?: string[];
+   url?: string;
 }
 
-export interface ITableRows extends ITableAdmin {
-   row: Row,
-   columns: Columns
-   selectAll: boolean,
-   url?: string
+export interface ITableRows<T extends RequiredProps> extends IAdminTable<T> {
+   row: Row<T>;
+   columns: Columns<T>;
+   selectAll: boolean;
+   url?: string;
 }
-

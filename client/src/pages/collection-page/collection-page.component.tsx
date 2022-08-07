@@ -10,10 +10,7 @@ import {
    selectCollection,
    selectCollectionsWithoutItems,
 } from "../../store/collections/collection.selector";
-import {
-   ICollection,
-   ICollectionWithoutItems,
-} from "../../store/collections/collection.types";
+import { ICollection, ICollectionWithoutItems } from "../../store/collections/collection.types";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
 import CustomTable from "../../components/custom-table/custom-table.component";
@@ -43,10 +40,10 @@ const CollectionPage = () => {
    const [collectionWihoutItems, setCollectionWithoutItems] =
       useState<ICollectionWithoutItems>(defaultCollectionValues);
    const { name, topic, image, description, owner } = collectionWihoutItems;
-   const [columns, setColumns] = useState([""]);
+   const [columns, setColumns] = useState<string[]>([]);
    const [writeMode, setWriteMode] = useState(false);
 
-   const [selectedItems, setSelectedItems] = useState<IItem[] | [""]>([""]);
+   const [selectedItems, setSelectedItems] = useState<IItem[]>([]);
    const [deleteItems] = useDeleteItems();
    const [deleteCollection] = useDeleteCollection();
    const params = useParams();
@@ -68,10 +65,8 @@ const CollectionPage = () => {
    }, [collection]);
 
    const authorization = () => {
-      if (
-         currentUser?.name == collection?.owner.name ||
-         currentUser?.status === "admin"
-      ) {
+      console.log("currentUser", currentUser);
+      if (currentUser?.name == collection?.owner.name || currentUser?.status === "admin") {
          setWriteMode(true);
       } else {
          setWriteMode(false);
@@ -81,10 +76,13 @@ const CollectionPage = () => {
    useEffect(() => {
       if (!collection) return;
       setCollectionWithoutItems(collection);
+   }, [collection]);
+
+   useEffect(() => {
       if (!items?.length) return;
       const columns = customizeColumns(items);
       setColumns(columns);
-   }, [collection]);
+   }, [items]);
 
    const customizeColumns = (items: AdjustedItems) => {
       return [
@@ -102,23 +100,19 @@ const CollectionPage = () => {
    };
 
    const deleteSelectedItems = () => {
-      deleteItems(
-         //@ts-ignore
-         items,
-         //@ts-ignore
-         selectedItems.filter((v) => v !== "")
-      );
+      if (!items) return;
+      deleteItems(items, selectedItems);
    };
 
    const toCreateItemPage = () => navigate("/new/item");
 
    const deleteCurrentCollection = () => {
-      //@ts-ignore
+      if (!collectionsWihoutItems || !collection) return;
       deleteCollection(collectionsWihoutItems, collection);
       navigate(`/user/${collection?.owner.name}`);
    };
 
-   if (!collection && !Is404PageActive) {
+   if ((!collection || !items?.length || columns.length < 1) && !Is404PageActive) {
       return (
          <div className="flex justify-center items-center screen-height">
             <Spinner />
@@ -146,10 +140,7 @@ const CollectionPage = () => {
                      </MenuHandler>
                      <MenuList>
                         <MenuItem className="text-black">Update Collection</MenuItem>
-                        <MenuItem
-                           onClick={deleteCurrentCollection}
-                           className="text-black"
-                        >
+                        <MenuItem onClick={deleteCurrentCollection} className="text-black">
                            Delete Collection
                         </MenuItem>
                      </MenuList>
@@ -183,9 +174,8 @@ const CollectionPage = () => {
                )}
             </div>
             <div>
-               {items && columns.length > 1 && (
+               {items?.length && (
                   <CustomTable
-                     //@ts-ignore
                      rows={items}
                      customizedColumns={columns}
                      checkboxesAvaible={writeMode}

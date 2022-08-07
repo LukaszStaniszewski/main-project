@@ -6,20 +6,16 @@ import { FolderAddIcon } from "@heroicons/react/outline";
 import { useSelector } from "react-redux";
 import { selectToast, selectUserReducer } from "../../store/user/user.selector";
 import { selectIs404PageActive } from "../../store/local/local.selector";
-import { getUserByCredentialsStart, closeToast } from "../../store/user/user.action";
+import { closeToast } from "../../store/user/user.action";
 import { getCollectionsWithoutItemsStart } from "../../store/collections/collection.actions";
-import {
-   selectCollectionErrorMessage,
-   selectCollectionsWithoutItems,
-} from "../../store/collections/collection.selector";
+import { selectCollectionsWithoutItems } from "../../store/collections/collection.selector";
 import CustomTable from "../../components/custom-table/custom-table.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import { ICollectionWithoutItems } from "../../store/collections/collection.types";
 import Alert from "../../components/alert/alert.component";
 import NotFound from "../not-found/not-found.component";
 
-export interface ICustomizedCollections
-   extends Omit<ICollectionWithoutItems, "image" | "owner"> {
+export interface ICustomizedCollections extends Omit<ICollectionWithoutItems, "image" | "owner"> {
    image: string | undefined;
    owner: string;
 }
@@ -54,6 +50,7 @@ const UserPage = () => {
    useEffect(() => {
       authorization();
    }, [name, []]);
+
    const customizeColumns = () => {
       return [
          ...Object.keys(collectionsWihoutItems[0]).filter(
@@ -120,9 +117,7 @@ const UserPage = () => {
                      <div className="text-middle whitespace-nowrap flex flex-col justify-center items-center pt-4">
                         <FolderAddIcon className="w-7 font-light" />
                         <p className="font-bold py-1">No projects</p>
-                        <p className="text-sm font-light">
-                           Get started by creating a new project
-                        </p>
+                        <p className="text-sm font-light">Get started by creating a new project</p>
                      </div>
                   )}
                </div>

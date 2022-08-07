@@ -3,17 +3,8 @@ import * as matchers from "redux-saga-test-plan/matchers";
 import { throwError } from "redux-saga-test-plan/providers";
 
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api";
-import {
-   createItemsSuccess,
-   deleteItemsSuccess,
-   getLatestItemsSuccess,
-} from "./item.actions";
-import {
-   CreateItemsStart,
-   ITEM_TYPES,
-   DelteItemsStart,
-   GetLatestItemsStart,
-} from "./item.types";
+import { createItemsSuccess, deleteItemsSuccess, getLatestItemsSuccess } from "./item.actions";
+import { CreateItemsStart, ITEM_TYPES, DelteItemsStart, GetLatestItemsStart } from "./item.types";
 import { createItems, deleteItems, getLatestItems } from "./item.saga";
 import { dataToCreateItem, itemCreated, latestItems } from "../../test-utils/fake-data";
 
@@ -24,7 +15,7 @@ const createItemsStart: CreateItemsStart = {
 
 const deleteItemsStart: DelteItemsStart = {
    type: ITEM_TYPES.DELETE_ITEMS_START,
-   payload: ["2134", "1234"],
+   payload: [{ _id: "1234" }, { _id: "321" }],
 };
 
 const getLatestItemsStart: GetLatestItemsStart = {
@@ -61,10 +52,7 @@ describe("update items", () => {
    test("items has been deleted successfuly", () => {
       return expectSaga(deleteItems, deleteItemsStart)
          .provide([
-            [
-               matchers.call(postRequest, API_URL.DELETE_ITEM, deleteItemsStart.payload),
-               null,
-            ],
+            [matchers.call(postRequest, API_URL.DELETE_ITEM, deleteItemsStart.payload), null],
          ])
          .put(deleteItemsSuccess())
          .run();

@@ -43,19 +43,22 @@ const useLazyLoad = <T>(
          intersectionRect.bottom - boundingRect.bottom <= INTERSECTION_THRESHOLD &&
          state.currentPage <= options.SCROLL_LIMIT
       ) {
-         //@ts-ignore
-         if (!items?.length) {
-            dispatch(redux.action(options.INITIAL_ITEMS_NUMBER));
+         if (Array.isArray(items)) {
+            if (!items.length) {
+               dispatch(redux.action(options.INITIAL_ITEMS_NUMBER));
+            } else {
+               dispatch(
+                  redux.action(
+                     options.INITIAL_ITEMS_NUMBER + options.ITEMS_ON_SCROLL * state.currentPage
+                  )
+               );
+               setState((prevState) => ({
+                  ...prevState,
+                  currentPage: prevState.currentPage + 1,
+               }));
+            }
          } else {
-            dispatch(
-               redux.action(
-                  options.INITIAL_ITEMS_NUMBER +
-                     options.ITEMS_ON_SCROLL * state.currentPage
-               )
-            );
-            setState((prevState) => ({
-               currentPage: prevState.currentPage + 1,
-            }));
+            throw new Error("state selector must return array");
          }
       }
    };

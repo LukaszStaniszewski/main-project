@@ -7,15 +7,12 @@ export interface ILocalState {
 }
 
 const LOCAL_INITIAL_STATE: ILocalState = {
-   currentLanguage: "",
+   currentLanguage: "en",
    topicDropdownState: false,
    notFoundPage: false,
 };
 
-const localReducer = (
-   state = LOCAL_INITIAL_STATE,
-   action = {} as LocalAction
-): ILocalState => {
+const localReducer = (state = LOCAL_INITIAL_STATE, action = {} as LocalAction): ILocalState => {
    switch (action.type) {
       case LOCAL_ACTION_TYPES.SET_LANGUAGE:
          return {

@@ -1,9 +1,5 @@
 import CollectionModel, { IItemCollectionDocument } from "../models/collection.model";
-import ItemModel, {
-   ICreateItem,
-   IItemDocument,
-   ILatestItems,
-} from "../models/item.model";
+import ItemModel, { ICreateItem, IItemDocument, ILatestItems } from "../models/item.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import logger from "../utils/logger";
 import { Values_TO_Omit } from "../config/constants.config";
@@ -13,8 +9,7 @@ export const createItem = async (
    collectionId?: IItemCollectionDocument["_id"]
 ): Promise<IItemDocument[]> => {
    try {
-      if (!input.length)
-         throw new Error(getErrorMessage("To create item it must an array"));
+      if (!input.length) throw new Error(getErrorMessage("To create item it must an array"));
       const item = await Promise.all(
          input.map((item) => {
             if (collectionId) {
@@ -43,9 +38,9 @@ export const deleteItemsByCollection = async (
    }
 };
 
-export const deleteItems = async (itemId: [{ _id: string }]) => {
+export const deleteItems = async (itemId: { _id: string }[]) => {
    try {
-      Promise.all(itemId.map((id) => ItemModel.deleteMany({ _id: id._id })));
+      Promise.all(itemId.map((id) => ItemModel.deleteOne(id)));
       return true;
    } catch (error) {
       logger.error(error);

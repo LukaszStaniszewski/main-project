@@ -12,7 +12,7 @@ const itemsOnScroll = window.screen.height > 1000 ? 6 : 4;
 const options = {
    INITIAL_ITEMS_NUMBER: initialAmount,
    ITEMS_ON_SCROLL: itemsOnScroll,
-   SCROLL_LIMIT: 8,
+   SCROLL_LIMIT: 3,
 };
 type selectType = ReturnType<typeof selectLatestItems>;
 

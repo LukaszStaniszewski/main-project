@@ -1,24 +1,25 @@
 import { useState } from "react";
 
 import TableRows from "./table-rows/table-rows.component";
-import { ICustomTable, Columns, Rows } from "./table-types/table-types";
+import { ICustomTable, Columns, Rows, RequiredProps, SortedBy } from "./table-types/table-types";
 
-const CustomTable = ({
+const CustomTable = <T extends RequiredProps>({
    rows = [],
    customizedColumns,
    checkboxesAvaible = false,
    setSelectedItems,
    url,
-}: ICustomTable) => {
-   let columns: string[];
+}: ICustomTable<T>) => {
+   let columns: Columns<T>;
    if (customizedColumns) {
+      //@ts-ignore
       columns = customizedColumns;
    } else {
-      columns = Object.keys(rows[0]).filter((value) => value !== "_id") as Columns;
+      columns = Object.keys(rows[0]).filter((value) => value !== "_id") as Columns<T>;
    }
 
    const [checkbox, setCheckbox] = useState(false);
-   const [sortedBy, setSortedBy] = useState({
+   const [sortedBy, setSortedBy] = useState<SortedBy<T>>({
       column: columns[0],
       ascending: true,
    });
@@ -27,7 +28,7 @@ const CustomTable = ({
       setCheckbox(!checkbox);
    };
 
-   const sort = (rows: Rows) => {
+   const sort = (rows: Rows<T>) => {
       const { column, ascending } = sortedBy;
       return rows.sort((a, b) => {
          //@ts-ignore
@@ -59,7 +60,6 @@ const CustomTable = ({
                   </th>
                   {columns.map((column, index) => (
                      <th key={index}>
-                        {/* @ts-ignore */}
                         {rows[0][column] && (
                            <div
                               className="flex items-center gap-2 cursor-pointer"
@@ -70,7 +70,7 @@ const CustomTable = ({
                                  }))
                               }
                            >
-                              <div>{column}</div>
+                              <div>{column.toString()}</div>
                               {sortedBy.column === column &&
                                  (sortedBy.ascending ? <div>▲</div> : <div>▼</div>)}
                            </div>
@@ -84,7 +84,6 @@ const CustomTable = ({
                   <TableRows
                      key={row._id}
                      row={row}
-                     //@ts-ignore
                      columns={columns}
                      selectAll={checkbox}
                      setSelectedItems={setSelectedItems}

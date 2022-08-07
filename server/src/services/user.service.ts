@@ -4,12 +4,27 @@ import { FilterQuery } from "mongoose";
 import User, { IUserCredentials, IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import logger from "../utils/logger";
-import { Values_TO_Omit } from "../config/constants.config";
+import { ErrorMessage, Values_TO_Omit } from "../config/constants.config";
+import { findCollection } from "./collection.service";
 
 export const createUser = async (input: IUserCredentials) => {
    try {
       const user = await User.create(input);
       return omit(user.toJSON(), ...Values_TO_Omit.USER_LOGGED_IN);
+   } catch (error) {
+      throw new Error(getErrorMessage(error));
+   }
+};
+
+export const authorize = async (query: string, user: IUserDocument) => {
+   try {
+      const { owner } = await findCollection(query);
+      console.log("owner", owner);
+      if (owner?.name === user?.name || user?.role === "admin") {
+         return true;
+      } else {
+         throw new Error(ErrorMessage.NOT_AUTHORIZED);
+      }
    } catch (error) {
       throw new Error(getErrorMessage(error));
    }

@@ -1,15 +1,15 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ITableRows } from "../table-types/table-types";
+import { ITableRows, RequiredProps } from "../table-types/table-types";
 
-const TableRows = ({
+const TableRows = <T extends RequiredProps>({
    row,
    columns,
    selectAll,
    setSelectedItems,
    checkboxesAvaible,
    url,
-}: ITableRows) => {
+}: ITableRows<T>) => {
    const [checkbox, setCheckbox] = useState(false);
    const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const TableRows = ({
    const addItemsToUpdate = (checkbox: boolean) => {
       if (!setSelectedItems) return;
       if (!checkbox) return removeFromUpdating();
-      //@ts-ignore
+
       setSelectedItems((prevState) => [...new Set([...prevState, row])]);
    };
 
@@ -56,7 +56,6 @@ const TableRows = ({
             )}
          </td>
          {columns.map((column, index) => {
-            //@ts-ignore
             if (column === "image" && row[column]) {
                return (
                   <td>
