@@ -9,23 +9,16 @@ import * as key from "../config/keyes";
 import { createSession } from "../services/session.service";
 import { Values_TO_Omit, ErrorMessage } from "../config/constants.config";
 
-export const registerAndSignIn = async (
-   req: Request<{}, {}, IUserCredentials>,
-   res: Response
-) => {
+export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
    try {
       const user = await createUser(req.body);
       const session = await createSession(user._id);
 
-      const accessToken = signJwt(
-         { ...user, sessionId: session._id },
-         key.privateAccessKey,
-         "60s"
-      );
+      const accessToken = signJwt({ ...user, sessionId: session._id }, key.privateAccessKey, "60s");
       const refreshToken = signJwt(
          { ...user, sessionId: session._id },
          key.privateRefreshKey,
-         "1d"
+         "30d"
       );
       if (accessToken && refreshToken) res.json({ accessToken, refreshToken });
    } catch (error) {
@@ -79,9 +72,7 @@ export const sendUsers = async (req: Request, res: Response<Array<IUserDocument>
 
 export const sendUser = async (req: Request, res: Response) => {
    try {
-      const user = await User.findOne(req.params).select(
-         Values_TO_Omit.SEND_USERS_REQUEST
-      );
+      const user = await User.findOne(req.params).select(Values_TO_Omit.SEND_USERS_REQUEST);
       if (!user) throw new Error("user wasn't found");
       res.json(user);
    } catch (error) {

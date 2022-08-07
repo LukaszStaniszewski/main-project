@@ -10,7 +10,7 @@ const HomePage = () => {
    return (
       <section className=" relative z-0 pb-4">
          <HeaderExtension />
-         <main className="bg-secondary w-90vw m-auto screen-height p-4 rounded grid grid-cols-4 max-h-300vh">
+         <main className="bg-secondary w-90vw m-auto screen-height p-4 rounded grid grid-cols-4">
             <figure className="col-start-1 col-end-4 mt-6 mr-2 pr-2 border-r-2 ">
                <h2 className="pb-4">Top collections</h2>
                <div ref={ref}>
@@ -19,7 +19,7 @@ const HomePage = () => {
             </figure>
             <aside className="col-start-4 col-end-5">
                <h2 className="py-5">Latest Items</h2>
-               <div className="overflow-y-auto max-h-300vh">
+               <div className="overflow-y-auto">
                   <LatestItemsOverview />
                </div>
             </aside>

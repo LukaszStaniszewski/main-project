@@ -36,9 +36,15 @@ export function* createCollectionWithItems({payload: {collectionWithItems, image
          payload = appendImage(data, payload)
       }
       const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, payload)
-      yield* put(createCollectionWithItemsSuccess())
+      yield* all([
+         put(createCollectionWithItemsSuccess()),
+         put(showToast({type: "success", message: "Collection has been saved"}))
+      ])
    } catch (error) {
-      yield* put(createCollectionWithItemsFailure(error as AxiosError))
+      yield* all ([
+         put(showToast({type: "error", message: "Collection couldn't be created"})),
+         put(createCollectionWithItemsFailure(error as AxiosError))
+      ])
    }
 }
 

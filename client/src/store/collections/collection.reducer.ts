@@ -29,10 +29,7 @@ const COLLECTION_INITIAL_STATE: ICollectionState = {
    successMessage: null,
 };
 
-const collectionReducer = (
-   state = COLLECTION_INITIAL_STATE,
-   action = {} as CollectionActions
-) => {
+const collectionReducer = (state = COLLECTION_INITIAL_STATE, action = {} as CollectionActions) => {
    switch (action.type) {
       case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_START:
       case COLLECTION_ACTION_TYPES.DELETE_COLLECTION_START:
@@ -75,6 +72,11 @@ const collectionReducer = (
          return {
             ...state,
             collectionsWihoutItems: action.payload,
+         };
+      case COLLECTION_ACTION_TYPES.CREATE_COLLECTION_WITH_ITEMS_SUCCESS:
+         return {
+            ...state,
+            collectionFetch: false,
          };
       case COLLECTION_ACTION_TYPES.DELETE_COLLECTION_SUCCESS:
          return {

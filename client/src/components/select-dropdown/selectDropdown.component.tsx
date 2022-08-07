@@ -1,20 +1,19 @@
 import React, { useState, Fragment, useEffect, Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 
-import { Topics } from "../../pages/create-collection/MOCKUP_DATA";
+import { Topics, Topic, topics } from "../create-item/item-types/itemTypes";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { ICollectionTopics } from "../../pages/create-collection/MOCKUP_DATA";
+
 import { selectTopicDropdown } from "../../store/local/local.selector";
 
 interface ISelectDropDown {
-   data: typeof Topics;
-   setTopic: Dispatch<SetStateAction<keyof ICollectionTopics | undefined>>;
+   setTopic: Dispatch<SetStateAction<Topic | undefined>>;
 }
-type SelectedTopic = typeof Topics[number];
-const SelectDropdown = ({ data, setTopic }: ISelectDropDown) => {
-   const [selected, setSelected] = useState<SelectedTopic | "Choose Topic">(() => {
-      const topic = sessionStorage.getItem("topic") as SelectedTopic | undefined;
+
+const SelectDropdown = ({ setTopic }: ISelectDropDown) => {
+   const [selected, setSelected] = useState<Topic | "Choose Topic">(() => {
+      const topic = sessionStorage.getItem("topic") as Topic | undefined;
       if (!topic) return "Choose Topic";
       return topic;
    });
@@ -41,14 +40,12 @@ const SelectDropdown = ({ data, setTopic }: ISelectDropDown) => {
                leaveTo="opacity-0"
             >
                <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                  {data.map((topic, topicIdx) => (
+                  {topics.map((topic, topicIdx) => (
                      <Listbox.Option
                         key={topicIdx}
                         className={({ active }) =>
                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                              active
-                                 ? "bg-light-blue-100 text-light-blue-900"
-                                 : "text-gray-900"
+                              active ? "bg-light-blue-100 text-light-blue-900" : "text-gray-900"
                            }`
                         }
                         value={topic}

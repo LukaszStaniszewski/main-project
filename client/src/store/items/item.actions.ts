@@ -23,7 +23,7 @@ export const setItems = (items: IItem[]): get.SetItems => ({
    payload: items,
 });
 
-export const deleteItemsStart = (itemsId: IItem["_id"][]): get.DelteItemsStart => ({
+export const deleteItemsStart = (itemsId: { _id: string }[]): get.DelteItemsStart => ({
    type: ITEM_TYPES.DELETE_ITEMS_START,
    payload: itemsId,
 });
@@ -57,9 +57,7 @@ export const getLatestItemsStart = (amount: number): get.GetLatestItemsStart => 
    payload: amount,
 });
 
-export const getLatestItemsSuccess = (
-   items: ILatestItem[]
-): get.GetLatestItemsSuccess => ({
+export const getLatestItemsSuccess = (items: ILatestItem[]): get.GetLatestItemsSuccess => ({
    type: ITEM_TYPES.GET_LATEST_ITEMS_SUCCESS,
    payload: items,
 });

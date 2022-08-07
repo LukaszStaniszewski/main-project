@@ -9,12 +9,9 @@ import {
    findCollection,
    findLargestCollections,
 } from "../services/collection.service";
-import {
-   ErrorMessage,
-   SuccessMessage,
-   collectionTopics,
-} from "../config/constants.config";
+import { ErrorMessage, SuccessMessage, collectionTopics } from "../config/constants.config";
 import { uploadImage } from "../utils/imageKit.utils";
+import { authorize } from "../services/user.service";
 
 export const createCollectionHandler = async (
    req: Request<{}, {}, ICreateItemCollection>,
@@ -28,7 +25,7 @@ export const createCollectionHandler = async (
       const colletion = await createCollection(req.body);
       return res.json({ colletion });
    } catch (error) {
-      res.sendStatus(400);
+      res.sendStatus(400).send(error);
    }
 };
 
@@ -94,10 +91,8 @@ export const getLargestCollections = async (req: Request, res: Response) => {
 export const deleteCollectionHandler = async (req: Request, res: Response) => {
    const params = req.params.id;
    const user = res.locals.user;
-   const { owner } = await findCollection(params);
-   if (owner.name !== user.name || user.role !== "admin")
-      return res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });
    try {
+      await authorize(params, user);
       const respsonse = await deleteCollection(params);
       res.send({ message: SuccessMessage.COLLECTION_DELETED });
    } catch (error) {

@@ -1,8 +1,5 @@
 import { AxiosError } from "axios";
-import {
-   CollectionTopic,
-   ICreateItem,
-} from "../../components/create-item/item-types/itemTypes";
+import { ICreateItem } from "../../components/create-item/item-types/itemTypes";
 import { Action, ActionWithPayload } from "../../utils/store.utils";
 import { ICollection } from "../collections/collection.types";
 
@@ -54,28 +51,13 @@ export type ItemActionTypes =
    | GetLatestItemsSuccess
    | GetLatestItemsFailure;
 
-export type CreateItemsStart = ActionWithPayload<
-   ITEM_TYPES.CREATE_ITEMS_START,
-   ICreateItem[]
->;
-export type CreateItemsSuccess = ActionWithPayload<
-   ITEM_TYPES.CREATE_ITEMS_SUCCESS,
-   IItem[]
->;
-export type CreateItemsFailure = ActionWithPayload<
-   ITEM_TYPES.CREATE_ITEMS_FAILURE,
-   AxiosError
->;
+export type CreateItemsStart = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_START, ICreateItem[]>;
+export type CreateItemsSuccess = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_SUCCESS, IItem[]>;
+export type CreateItemsFailure = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_FAILURE, AxiosError>;
 
-export type DelteItemsStart = ActionWithPayload<
-   ITEM_TYPES.DELETE_ITEMS_START,
-   IItem["_id"][]
->;
+export type DelteItemsStart = ActionWithPayload<ITEM_TYPES.DELETE_ITEMS_START, { _id: string }[]>;
 export type DelteItemsSuccess = Action<ITEM_TYPES.DELETE_ITEMS_SUCCESS>;
-export type DelteItemsFailure = ActionWithPayload<
-   ITEM_TYPES.DELETE_ITEMS_FAILURE,
-   AxiosError
->;
+export type DelteItemsFailure = ActionWithPayload<ITEM_TYPES.DELETE_ITEMS_FAILURE, AxiosError>;
 
 export type SetItems = ActionWithPayload<ITEM_TYPES.SET_ITEMS, IItem[]>;
 
@@ -83,10 +65,7 @@ export type GetItemStart = ActionWithPayload<ITEM_TYPES.GET_ITEM_START, IItem["_
 export type GetItemSuccess = ActionWithPayload<ITEM_TYPES.GET_ITEM_SUCCESS, IItem>;
 export type GetItemFailure = ActionWithPayload<ITEM_TYPES.GET_ITEM_FAILURE, AxiosError>;
 
-export type GetLatestItemsStart = ActionWithPayload<
-   ITEM_TYPES.GET_LATEST_ITEMS_START,
-   number
->;
+export type GetLatestItemsStart = ActionWithPayload<ITEM_TYPES.GET_LATEST_ITEMS_START, number>;
 export type GetLatestItemsSuccess = ActionWithPayload<
    ITEM_TYPES.GET_LATEST_ITEMS_SUCCESS,
    ILatestItem[]
