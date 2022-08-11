@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { API_URL } from "../../src/api/axios-instance.api";
+import { API_URL } from "../../client/src/api/axios-instance.api";
 
 Cypress.Commands.add("getBySelector", (selector, ...args) => {
    return cy.get(`[data-test=${selector}]`, ...args);

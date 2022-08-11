@@ -1,4 +1,4 @@
-import { API_URL } from "../../src/api/axios-instance.api";
+import { API_URL } from "../../client/src/api/axios-instance.api";
 
 describe("user page owned by logged in user", () => {
    it("correctly shows user page, of a user that has collections", () => {

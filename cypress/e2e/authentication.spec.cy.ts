@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { API_URL } from "../../src/api/axios-instance.api";
+import { API_URL } from "../../client/src/api/axios-instance.api";
 
 describe("sign-in", () => {
    beforeEach(() => {
@@ -23,9 +23,10 @@ describe("sign-in", () => {
    });
 
    it("user stays sign in when page is refreshed", () => {
-      cy.intercept("GET", `${API_URL.GET_COLLECTIONS_BY_USER}/${Cypress.env("username")}`).as(
-         "getCollections"
-      );
+      cy.intercept(
+         "GET",
+         `${API_URL.GET_COLLECTIONS_BY_USER}/${Cypress.env("username")}`
+      ).as("getCollections");
 
       cy.login("success", Cypress.env("email"), Cypress.env("password"));
 
@@ -44,7 +45,10 @@ describe("sign-in", () => {
 
       cy.location("pathname").should("eq", "/signin");
 
-      cy.getBySelector("toast").should("have.text", "Info: Sign in failed: Invalid credentials");
+      cy.getBySelector("toast").should(
+         "have.text",
+         "Info: Sign in failed: Invalid credentials"
+      );
    });
 
    it("throws an error when **blocked user** signs in and shows toast with messag: 'your account has been blocked'", () => {
