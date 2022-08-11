@@ -95,6 +95,7 @@ const SignIn = () => {
                <div>
                   <form onSubmit={handleSubmit}>
                      <FormInput
+                        data-test="signin-email"
                         label="Email"
                         type="email"
                         name="email"
@@ -105,6 +106,7 @@ const SignIn = () => {
                      />
 
                      <FormInput
+                        data-test="signin-password"
                         label="Password"
                         type="password"
                         name="password"
@@ -113,7 +115,10 @@ const SignIn = () => {
                         componentName="authentication"
                         required
                      />
-                     <button className="btn btn-block bg-color-secondary hover:bg-color-primary">
+                     <button
+                        data-test="signin-submit"
+                        className="btn btn-block bg-color-secondary hover:bg-color-primary"
+                     >
                         <FormattedMessage
                            id="authentication.button.signIn"
                            defaultMessage="SIGN IN"
@@ -134,9 +139,7 @@ const SignIn = () => {
                </div>
             </section>
             <div
-               className={`${
-                  !alert.toggle && "opacity-0"
-               } absolute bottom-5 z-50 left-1/3`}
+               className={`${!alert.toggle && "opacity-0"} absolute bottom-5 z-50 left-1/3`}
                onClick={closeToastHandler}
             >
                <Alert message={alert.message} type={alert.type} />

@@ -85,9 +85,9 @@ function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectio
 }
 
 function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWithoutItemsStart) {
+      const toast = yield* select(selectToast)
    try {
       const repsonse = yield* call(getRequest<ICollectionWithoutItems>, `${API_URL.GET_COLLECTIONS_BY_USER}/${userName}`)
-      const toast = yield* select(selectToast)
       if(toast?.type !== "success") {
          yield* put(closeToast())
       }
@@ -100,6 +100,8 @@ function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWit
       //@ts-ignore
       if(error.message?.match(/409/g)) {
          yield* put(show404Page(true))
+      } else if(toast) {
+         put(show404Page(false))
       } else {
          yield* all([ 
             put(show404Page(false)),

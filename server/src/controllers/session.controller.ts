@@ -38,8 +38,8 @@ export const getUserSessions = async (req: Request, res: Response<ISessionDocume
 export const deleteSessions = async (req: Request, res: Response) => {
    const sessionId = res.locals?.user?.sessionId;
    try {
-      await updateSession({ _id: sessionId }, { valid: false });
-      return res.send({
+      const sesstion = await updateSession({ _id: sessionId }, { valid: false });
+      return res.status(200).send({
          accessToken: null,
          refreshToken: null,
       });

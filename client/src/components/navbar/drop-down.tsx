@@ -33,6 +33,7 @@ export const DropDownWrapper = ({
       <div className="relative z-30 whitespace-nowrap">
          {currentUser ? (
             <div
+               data-test="navbar-dropdown"
                className="text-primary text-3xl cursor-pointer"
                onClick={userMenuToggleHandler}
             >
@@ -40,6 +41,7 @@ export const DropDownWrapper = ({
             </div>
          ) : (
             <button
+               data-test="navbar-sign-in"
                className="btn bg-color-primary border-none hover:bg-color-primary hover:opacity-80"
                onClick={redirectToSignIn}
             >
@@ -78,10 +80,10 @@ export const Options = ({ url, text, defaultText }: IOptions) => {
    );
 };
 
-export const Button = ({ handler }: { handler: () => void }) => {
+export const Button = ({ handler, ...props }: { handler: () => void }) => {
    return (
       <li>
-         <button onClick={handler}>
+         <button {...props} onClick={handler}>
             <FormattedMessage id="navigation.user-menu.logout" defaultMessage="Logout" />
          </button>
       </li>

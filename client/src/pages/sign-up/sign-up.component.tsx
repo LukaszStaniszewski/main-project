@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import FormInput from "../../components/form-input/form-input.componentx";
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component";
-import { signUpStart, closeToast } from "../../store/user/user.action";
+import { signUpStart, closeToast, showToast } from "../../store/user/user.action";
 import { selectCurrentUser, selectToast } from "../../store/user/user.selector";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Alert from "../../components/alert/alert.component";
@@ -17,8 +17,10 @@ const defaultFormFields = {
 };
 
 const SignUp = () => {
+   const [toggle, setToggle] = useState(true);
    const [userCredentials, setUserCredentials] = useState(defaultFormFields);
    const { email, name, password, confirmPassword } = userCredentials;
+   const toast = useSelector(selectToast);
    const navigate = useNavigate();
 
    const dispatch = useDispatch();
@@ -26,7 +28,10 @@ const SignUp = () => {
 
    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (password !== confirmPassword) return alert("passwords don't match");
+      if (password !== confirmPassword) {
+         dispatch(showToast({ type: "warning", message: "Passwords are not the same" }));
+         return;
+      }
       dispatch(signUpStart({ email, name, password }));
    };
 
@@ -35,6 +40,11 @@ const SignUp = () => {
          navigate(`/user/${currentUser.name}`);
       }
    }, [currentUser]);
+
+   const closeToastHandler = () => {
+      setToggle(!toggle);
+      dispatch(closeToast());
+   };
 
    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
@@ -87,6 +97,7 @@ const SignUp = () => {
                         value={email}
                         onChange={handleChange}
                         componentName="authentication"
+                        data-test="signup-email"
                         required
                      />
 
@@ -97,6 +108,7 @@ const SignUp = () => {
                         value={name}
                         onChange={handleChange}
                         componentName="authentication"
+                        data-test="signup-username"
                         required
                      />
 
@@ -107,6 +119,7 @@ const SignUp = () => {
                         value={password}
                         onChange={handleChange}
                         componentName="authentication"
+                        data-test="signup-password"
                         required
                      />
 
@@ -117,9 +130,13 @@ const SignUp = () => {
                         value={confirmPassword}
                         onChange={handleChange}
                         componentName="authentication"
+                        data-test="signup-confirm-password"
                         required
                      />
-                     <button className="btn btn-block bg-color-secondary hover:bg-color-primary">
+                     <button
+                        data-test="signup-submit"
+                        className="btn btn-block bg-color-secondary hover:bg-color-primary"
+                     >
                         <FormattedMessage
                            id="authentication.button.register"
                            defaultMessage="REGISTER"
@@ -139,6 +156,13 @@ const SignUp = () => {
                   </div>
                </div>
             </section>
+            <div
+               className={`${!toggle && "opacity-0"} absolute bottom-5 z-50 left-1/3`}
+               onClick={closeToastHandler}
+               data-test="user-page-toast"
+            >
+               <Alert message={toast?.message} type={toast?.type} />
+            </div>
          </main>
       </section>
    );
