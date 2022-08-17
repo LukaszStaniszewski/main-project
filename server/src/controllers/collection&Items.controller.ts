@@ -18,8 +18,8 @@ export const createCollectionWithItemsHandler = async (
    res: Response
 ) => {
    try {
-      await createCollectionWithItems(req.body);
-      res.send(200);
+      const collectionId = await createCollectionWithItems(req.body);
+      res.send({ collectionId: collectionId });
    } catch (error) {
       logger.error(getErrorMessage(error));
       res.status(409).send({ error: ErrorMessage.COLLECTION_NOT_CREATED });

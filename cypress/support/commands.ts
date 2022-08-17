@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { API_URL } from "../../client/src/api/axios-instance.api";
+import "cypress-file-upload";
 
 Cypress.Commands.add("getBySelector", (selector, ...args) => {
    return cy.get(`[data-test=${selector}]`, ...args);
@@ -131,7 +132,7 @@ Cypress.Commands.add("dispatchAction", (type, payload) => {
    });
 });
 
-Cypress.Commands.add("loginByReduxState", (email, password, url = "/") => {
+Cypress.Commands.add("loginByReduxState", (email, password, url = "/signin") => {
    const log = Cypress.log({
       name: "loginbyreduxstate",
       displayName: "LOGIN BY REDUX_STATE",
@@ -156,6 +157,22 @@ Cypress.Commands.add("loginByReduxState", (email, password, url = "/") => {
 
    log.snapshot("after");
    log.end();
+});
+
+Cypress.Commands.add("deleteCollectionByRedux", (collectionId) => {
+   cy.intercept("DELETE", `${API_URL.DELETE_COLLECTION}/${collectionId}`).as(
+      "deleteCollection"
+   );
+
+   cy.dispatchAction("DELETE_COLLECTION_START", collectionId);
+
+   cy.wait("@deleteCollection").then((res) => {
+      expect(res.response.statusCode).to.equal(200);
+   });
+});
+
+Cypress.Commands.add("urlShouldEq", (url) => {
+   cy.location("pathname").should("eq", url);
 });
 
 export {};

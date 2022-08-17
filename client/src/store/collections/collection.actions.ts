@@ -1,10 +1,10 @@
 import { AxiosError } from "axios";
 
-import { ICreateCollection } from "../../pages/create-collection/create-collection";
 import {
    ICollection,
    COLLECTION_ACTION_TYPES,
    ILargestCollection,
+   ICreateCollection,
 } from "./collection.types";
 import { IError } from "../user/user.reducer";
 import * as give from "./collection.types";

@@ -85,7 +85,7 @@ describe("user page owned by another user", () => {
 
       cy.getBySelector("404-page-back-button").click();
 
-      cy.location("pathname").should("eq", `/user/${Cypress.env("username")}`);
+      cy.urlShouldEq(`/user/${Cypress.env("username")}`);
 
       cy.getBySelector("404-page").should("not.exist");
    });
@@ -105,7 +105,7 @@ describe("user page routes", () => {
    it("correctly redirects to create collection page, when user clicks new collection button", () => {
       cy.getBySelector("user-page-new-collection-button").click();
 
-      cy.location("pathname").should("eq", "/new/collection");
+      cy.urlShouldEq("/new/collection");
    });
 
    it("correctly redirects to collection page, when user clicks on collection", () => {
@@ -120,7 +120,7 @@ describe("user page routes", () => {
          reducerValue: "collectionsWihoutItems",
       }).then((collection) => {
          //@ts-ignore
-         cy.location("pathname").should("eq", `/collection/${collection[0]._id}`);
+         cy.urlShouldEq(`/collection/${collection[0]._id}`);
       });
    });
 });

@@ -25,7 +25,12 @@ const SelectDropdown = ({ setTopic }: ISelectDropDown) => {
       sessionStorage.setItem("topic", selected);
    }, [selected]);
    return (
-      <Listbox value={selected} onChange={setSelected} disabled={topicDropdownState}>
+      <Listbox
+         data-test="select-dropdown"
+         value={selected}
+         onChange={setSelected}
+         disabled={topicDropdownState}
+      >
          <div className="relative z-10">
             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left  border-b-2 border-color-border-main  focus:outline-none focus-visible:border-main-hover focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                <span className="block truncate">{selected}</span>
@@ -45,7 +50,9 @@ const SelectDropdown = ({ setTopic }: ISelectDropDown) => {
                         key={topicIdx}
                         className={({ active }) =>
                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                              active ? "bg-light-blue-100 text-light-blue-900" : "text-gray-900"
+                              active
+                                 ? "bg-light-blue-100 text-light-blue-900"
+                                 : "text-gray-900"
                            }`
                         }
                         value={topic}

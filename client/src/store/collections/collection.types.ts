@@ -1,10 +1,11 @@
 import { AxiosError } from "axios";
 
 import { Action, ActionWithPayload } from "../../utils/store.utils";
-import { ICreateCollection } from "../../pages/create-collection/create-collection";
+import { ICollectionFields } from "../../pages/create-collection/create-collection";
 import { IError } from "../user/user.reducer";
 import { IItem } from "../items/item.types";
 import { ICurrentUser } from "../user/user.types";
+import { ICreateItem, Topic } from "../../components/create-item/item-types/itemTypes";
 export enum COLLECTION_ACTION_TYPES {
    CREATE_COLLECTION_START = "CREATE_COLLECTION_START",
    CREATE_COLLECTION_SUCCESS = "CREATE_COLLECTION_SUCCESS",
@@ -46,6 +47,19 @@ export interface ICollection extends Omit<ICreateCollection, "image" | "items"> 
       imageId: string;
    };
    items?: IItem[];
+}
+
+export interface ICreateCollection extends Omit<ICollectionFields, "topic"> {
+   topic: Topic;
+   owner: {
+      _id: string;
+      name: string;
+   };
+   image?: {
+      url: string;
+      imageId: string;
+   };
+   items?: ICreateItem[];
 }
 
 export interface ICollectionWithoutItems extends Omit<ICollection, "items"> {}

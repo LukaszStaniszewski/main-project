@@ -1,8 +1,15 @@
-import { Fragment, useState, useEffect, Dispatch, SetStateAction, ChangeEvent } from "react";
+import {
+   Fragment,
+   useState,
+   useEffect,
+   Dispatch,
+   SetStateAction,
+   ChangeEvent,
+} from "react";
 import { useDispatch } from "react-redux";
 
 import FormInput from "../form-input/form-input.componentx";
-import ChosenItemField from "./item-field/chosenItemField.component";
+import ChosenOptionalField from "./item-field/chosenItemField.component";
 import OptionalField from "./item-field/optionalField.component";
 import {
    Topic,
@@ -32,9 +39,9 @@ const CreateItem = ({
    setItemData,
    buttonText = "Add item",
 }: ICreateItemComponent) => {
-   const [optionalFields, setOptionalFields] = useState<IOptionalField<typeof collectionTopic>[]>(
-      []
-   );
+   const [optionalFields, setOptionalFields] = useState<
+      IOptionalField<typeof collectionTopic>[]
+   >([]);
    const [chosenOptionalFields, setChosenOptionalFields] = useState<
       IOptionalField<typeof collectionTopic>[]
    >([]);
@@ -84,7 +91,9 @@ const CreateItem = ({
 
    const moveFieldsToRight = () => {
       setOptionalFields(() => getBaseFields());
-      setChosenOptionalFields(() => chosenOptionalFields.filter((value) => value === null));
+      setChosenOptionalFields(() =>
+         chosenOptionalFields.filter((value) => value === null)
+      );
       setUserInputData(defaultUserInputData);
    };
 
@@ -132,9 +141,9 @@ const CreateItem = ({
 
    const removeFalsyValues = () => {
       if (!userInputData.optionalFields) return;
-      const keyes = Object.keys(userInputData.optionalFields) as OptionalFieldsKeysByTopic<
-         typeof collectionTopic
-      >;
+      const keyes = Object.keys(
+         userInputData.optionalFields
+      ) as OptionalFieldsKeysByTopic<typeof collectionTopic>;
 
       keyes.forEach((key) => {
          if (userInputData.optionalFields && !userInputData.optionalFields[key]) {
@@ -162,6 +171,7 @@ const CreateItem = ({
             </div>
             <div className="col-start-1 col-end-2 flex items-center gap-10 with-33vw max-w-33vw">
                <FormInput
+                  data-test="create-item-name"
                   label="item name"
                   componentName="createCollection"
                   onChange={handleChange}
@@ -171,6 +181,7 @@ const CreateItem = ({
                />
 
                <FormInput
+                  data-test="creatre-item-id"
                   label="id"
                   componentName="createCollection"
                   onChange={handleChange}
@@ -197,16 +208,20 @@ const CreateItem = ({
             <div className="col-start-3 col-end-4 flex items-center justify-end gap-10 w-29vw">
                <button className="btn btn-sm">ADD TAGS</button>
 
-               <button className="btn btn-sm bg-green-600" onClick={saveItemHandler}>
+               <button
+                  className="btn btn-sm bg-green-600"
+                  data-test="create-item-submit"
+                  onClick={saveItemHandler}
+               >
                   {buttonText}
                </button>
             </div>
          </div>
 
-         <div className="grid grid-cols-2  gap-x-10  overflow-y-auto ">
+         <div className="grid grid-cols-2  gap-x-10">
             <div className="col-start-1 col-end-2">
                {chosenOptionalFields.map((baseField, index) => (
-                  <ChosenItemField
+                  <ChosenOptionalField
                      key={index}
                      addedField={baseField}
                      setChosenOptionalFields={setChosenOptionalFields}
@@ -217,7 +232,7 @@ const CreateItem = ({
                ))}
             </div>
 
-            <div className="col-start-2 col-end-3 ">
+            <div className="col-start-2 col-end-3">
                {optionalFields.map((baseField, index) => (
                   <OptionalField
                      key={index}

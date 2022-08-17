@@ -15,6 +15,7 @@ const OptionalField = <T extends Topic>({
    baseField,
    setChosenOptionalFields,
    setOptionalFields,
+   ...otherProps
 }: IOptionalFieldComponent<T>) => {
    const { fieldName, isAdded } = baseField;
    const isPresent = useIsPresent();
@@ -23,8 +24,13 @@ const OptionalField = <T extends Topic>({
    const moveFieldHandler = async () => {
       await startAnimation();
 
-      setChosenOptionalFields((prevValue) => [...prevValue, { ...baseField, isAdded: true }]);
-      setOptionalFields((prevValue) => prevValue.filter((field) => field.fieldName !== fieldName));
+      setChosenOptionalFields((prevValue) => [
+         ...prevValue,
+         { ...baseField, isAdded: true },
+      ]);
+      setOptionalFields((prevValue) =>
+         prevValue.filter((field) => field.fieldName !== fieldName)
+      );
    };
 
    const startAnimation = async () => {
@@ -43,7 +49,10 @@ const OptionalField = <T extends Topic>({
                <div className="mt-4 flex border border-gray-300 whitespace-nowrap rounded h-10 relative">
                   <div onClick={moveFieldHandler} className="px-4  flex items-center">
                      {!isAdded && (
-                        <div className="w-5  text-green-600 ">
+                        <div
+                           data-test={`optional-field-${fieldName.toString()}`}
+                           className="w-5  text-green-600 "
+                        >
                            <PlusIcon />
                         </div>
                      )}

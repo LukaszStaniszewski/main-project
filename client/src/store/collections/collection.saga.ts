@@ -1,10 +1,10 @@
 import {takeLatest, put, all, call, throttle, select} from "typed-redux-saga/macro"
-import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ILargestCollection} from "./collection.types"
+import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ICreateCollection, ILargestCollection} from "./collection.types"
 import { createCollectionSuccess, createCollectionFailure, deleteCollectionSuccess, deleteColletionFailure, createCollectionWithItemsSuccess, createCollectionWithItemsFailure, getCollectionWithItemsSuccess, getCollectionWithItemsFailure, getCollectionsWihoutItemsSuccess, getCollectionsWihoutItemsFailure, getLargestCollectionsSuccess, getLargestCollectionsFailure, autocompleteSuccess, autocompeleteFailure, setCollection } from "./collection.actions"
 import * as type from "./collection.types"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
 import { AxiosError } from "axios"
-import { ICreateCollection } from "../../pages/create-collection/create-collection"
+
 import { setItems } from "../items/item.actions"
 import { show404Page } from "../local/local.action"
 import { selectToast } from "../user/user.selector"
@@ -32,8 +32,9 @@ export function* createCollectionWithItems({payload: {collectionWithItems, image
    try {
       let payload = collectionWithItems;
       if(image) {
-         const {data} = yield* call(uploadImage, image)
-         payload = appendImage(data, payload)
+         const response = yield* call(uploadImage, image)
+         // if(!response?.data) throw new Error()
+         payload = appendImage(response.data, payload)
       }
       const response = yield* call(postRequest<ICollection>, API_URL.CREATE_COLLECTION_WITH_ITEMS, payload)
       yield* all([
@@ -49,7 +50,9 @@ export function* createCollectionWithItems({payload: {collectionWithItems, image
 }
 
 export function* uploadImage(image: File) {
-   return yield* call(uploadFile<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
+ 
+      return yield* call(uploadFile<ImageResponse>, API_URL.UPLOAD_IMAGE, {image: image}, optionsUploadImage)
+ 
 }
 
 export function appendImage (data: ImageResponse, itemsCollection: ICreateCollection) {

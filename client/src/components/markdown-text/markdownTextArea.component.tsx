@@ -71,6 +71,7 @@ const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) 
 
          <Textarea
             className="flex w-full text-lg items-end gap-4 focus:ring-0 focus:border-color-border-main focus:text-secondary"
+            data-test="markdown-text-area"
             autoFocus
             value={input}
             name="description"
@@ -81,6 +82,7 @@ const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) 
          <ReactMarkdown className="bg-white mt-2" children={input} />
          <div className="flex justify-between whitespace-normal break-words">
             <button
+               data-test="text-area-button"
                type="button"
                onClick={handleSubmit}
                className="btn bg-cyan-600 hover:bg-cyan-800"
