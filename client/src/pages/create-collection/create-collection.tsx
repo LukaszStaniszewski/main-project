@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PhotographIcon } from "@heroicons/react/outline";
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import FormInput from "../../components/form-input/form-input.componentx";
@@ -12,13 +13,11 @@ import { ICreateItem, Topic } from "../../components/create-item/item-types/item
 import { selectCurrentUser, selectToast } from "../../store/user/user.selector";
 import { createCollectionWithItemsStart } from "../../store/collections/collection.actions";
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
-import {
-   selectCollectionErrorMessage,
-   selectCollectionLoadingState,
-} from "../../store/collections/collection.selector";
+import { selectCollectionLoadingState } from "../../store/collections/collection.selector";
 import Alert, { IAlert } from "../../components/alert/alert.component";
 import { disableTopicDropdown } from "../../store/local/local.action";
 import { closeToast } from "../../store/user/user.action";
+import { ICreateCollection } from "../../store/collections/collection.types";
 
 const requiredCollectionFields = {
    name: "",
@@ -31,6 +30,12 @@ const alertSettings: IAlert = {
    toggle: true,
    type: "info",
 };
+
+enum AlertMessages {
+   signIn = "You must be sign in to create collection",
+   requiredFields = "You missed required fields!",
+   wrongFileType = "File must be of type png, jpg or jpeg",
+}
 
 export const defaultItemData = {
    id: "",
@@ -45,31 +50,20 @@ export interface ICollectionFields {
    topic?: Topic;
 }
 
-export interface ICreateCollection extends Omit<ICollectionFields, "topic"> {
-   topic: Topic;
-   owner: {
-      _id: string;
-      name: string;
-   };
-   image?: {
-      url: string;
-      imageId: string;
-   };
-   items?: ICreateItem[];
-}
-
 const imageMimeType = /image\/(png|jpg|jpeg)/i;
 
 const CreateCollection = () => {
    const [collectionTopic, setCollectionTopic] = useState<Topic | undefined>();
-   const [collectionFields, setCollectionFields] =
-      useState<ICollectionFields>(requiredCollectionFields);
+   const [collectionFields, setCollectionFields] = useState<ICollectionFields>(
+      requiredCollectionFields
+   );
    const [itemData, setItemData] = useState<ICreateItem<Topic>>(defaultItemData);
    const [header, setHeader] = useState(false);
    const [fileDataURL, setFileDataURL] = useState(null);
    const [alert, setAlert] = useState(alertSettings);
    const [image, setImage] = useState<File>();
    const dispatch = useDispatch();
+   const navigate = useNavigate();
    const currentUser = useSelector(selectCurrentUser);
    const collectionFetch = useSelector(selectCollectionLoadingState);
    const toast = useSelector(selectToast);
@@ -78,10 +72,15 @@ const CreateCollection = () => {
 
    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      if (!currentUser)
+         return setAlert({ message: AlertMessages.signIn, type: "info", toggle: true });
       const collectionWithItems = appendItemsToCollection();
       if (!collectionWithItems) return;
       dispatch(
-         createCollectionWithItemsStart({ collectionWithItems: collectionWithItems, image: image })
+         createCollectionWithItemsStart({
+            collectionWithItems: collectionWithItems,
+            image: image,
+         })
       );
       dispatch(disableTopicDropdown(false));
       clearSession();
@@ -92,7 +91,7 @@ const CreateCollection = () => {
          setAlert((prevState) => ({
             ...prevState,
             toggle: true,
-            message: `You missed required fields!`,
+            message: AlertMessages.requiredFields,
             type: "error",
          }));
          return false;
@@ -119,7 +118,11 @@ const CreateCollection = () => {
       if (!event.target.files) return;
       const file = event.target.files[0];
       if (!file.type.match(imageMimeType)) {
-         setAlert((prevState) => ({ toggle: true, message: "Saving...", type: "error" }));
+         setAlert((prevState) => ({
+            toggle: true,
+            message: AlertMessages.wrongFileType,
+            type: "error",
+         }));
          return;
       }
 
@@ -164,14 +167,22 @@ const CreateCollection = () => {
       });
    }, [toast]);
 
+   useEffect(() => {
+      setAlert(alertSettings);
+   }, []);
+
    return (
       <section className="relative z-0 pb-4">
          <HeaderExtension />
-         <Tabs value="createCollection" className="w-90vw m-auto bg-secondary p-3 screen-height ">
+         <Tabs
+            value="createCollection"
+            className="w-90vw m-auto bg-secondary p-3 screen-height "
+         >
             <div className="flex justify-between items-center">
                <div />
                <TabsHeader>
                   <Tab
+                     data-test="create-collection-tab"
                      value="createCollection"
                      className="text-2xl w-50vw pb-1 cursor-pointer"
                      onClick={setCardHandler}
@@ -179,11 +190,12 @@ const CreateCollection = () => {
                      Create Collection
                   </Tab>
                   <Tab
+                     data-test="add-items-tab"
                      value="addItems"
                      className="text-2xl  pb-1 cursor-pointer"
                      onClick={setCardHandler}
                   >
-                     Add items
+                     Add Items
                   </Tab>
                </TabsHeader>
 
@@ -191,6 +203,7 @@ const CreateCollection = () => {
                   className={`btn ${collectionFetch && "loading"}`}
                   form="create-collection"
                   type="submit"
+                  data-test="create-collection-submit"
                >
                   DONE!
                </button>
@@ -205,6 +218,7 @@ const CreateCollection = () => {
                      <form onSubmit={handleSubmit} id="create-collection">
                         <div className="w-full">
                            <FormInput
+                              data-test="create-collection-name"
                               label="collection name"
                               componentName="createCollection"
                               value={collectionFields.name}
@@ -215,7 +229,7 @@ const CreateCollection = () => {
                         <MarkdownTextArea
                            setText={setCollectionFields}
                            elementsText={{
-                              label: "Enter your description",
+                              label: "Enter description",
                               button: "Save description",
                               submited: "Edit description",
                            }}
@@ -227,8 +241,15 @@ const CreateCollection = () => {
                      <div className="w-full mb-5">
                         <SelectElement setTopic={setCollectionTopic} />
                      </div>
-                     <div className={`${!alert.toggle && "opacity-0"}`} onClick={alertHandler}>
-                        <Alert type={alert.type} message={alert.message} className="text-sm" />
+                     <div
+                        className={`${!alert.toggle && "opacity-0"}`}
+                        onClick={alertHandler}
+                     >
+                        <Alert
+                           type={alert.type}
+                           message={alert.message}
+                           className="text-sm"
+                        />
                      </div>
                      <div>
                         {fileDataURL ? <img src={fileDataURL} alt="preview" /> : null}
@@ -240,6 +261,7 @@ const CreateCollection = () => {
                                  <span className="text-blue-600 underline"> browse</span>
                               </span>
                               <input
+                                 data-test="collection-image-input"
                                  type="file"
                                  name="image"
                                  className="hidden"
@@ -251,10 +273,13 @@ const CreateCollection = () => {
                      </div>
                   </div>
                </TabPanel>
-               <TabPanel className="col-start-1 col-end-3 h-70vh" value="addItems">
+               <TabPanel className="col-start-1 col-end-3 min-h-70vh" value="addItems">
                   {collectionTopic ? (
-                     <div className="col-start-1 col-end-3 h-70vh">
-                        <CreateItem collectionTopic={collectionTopic} setItemData={setItemData} />
+                     <div className="col-start-1 col-end-3">
+                        <CreateItem
+                           collectionTopic={collectionTopic}
+                           setItemData={setItemData}
+                        />
                      </div>
                   ) : (
                      <div className="h-30vh text-center col-start-1 col-end-3 text-xl mt-20">

@@ -110,11 +110,7 @@ const Navbar = () => {
                <SearchBar />
                <div className="flex items-center pb-4">
                   <label className="swap swap-rotate w-6">
-                     <input
-                        type="checkbox"
-                        className="hidden"
-                        onChange={themeSwitchHandler}
-                     />
+                     <input type="checkbox" className="hidden" onChange={themeSwitchHandler} />
                      <SunIcon />
                      <MoonIcon />
                   </label>
@@ -165,7 +161,7 @@ const Navbar = () => {
                         text="navigation.user-menu.admin"
                         defaultText="Admin Page"
                      />
-                     <Button handler={logoutHandler} />
+                     <Button data-test="logout-button" handler={logoutHandler} />
                   </DropDownWrapper>
                </div>
             </section>

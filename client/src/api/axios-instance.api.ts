@@ -47,22 +47,15 @@ export enum API_URL {
    AUTOCOMPLETE = "api/collection/autocomplete",
 }
 
-export const postRequest = <returnType>(
-   url: string,
-   payload: any
-): AxiosPromise<returnType> => api.post(url, payload, optionsDefault);
-export const uploadFile = <returnType>(
-   url: string,
-   payload: any
-): AxiosPromise<returnType> => api.post(url, payload, optionsUploadImage);
-export const patchRequest = <returnType>(
-   url: string,
-   payload: any
-): AxiosPromise<returnType> => api.patch(url, payload, optionsDefault);
+export const postRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> =>
+   api.post(url, payload, optionsDefault);
+export const uploadFile = <returnType>(url: string, payload: any): AxiosPromise<returnType> =>
+   api.post(url, payload, optionsUploadImage);
+export const patchRequest = <returnType>(url: string, payload: any): AxiosPromise<returnType> =>
+   api.patch(url, payload, optionsDefault);
 export const getRequest = <returnType>(url: string): AxiosPromise<returnType> =>
    api.get(url, optionsDefault);
-export const deleteRequest = (url: string): AxiosPromise =>
-   api.delete(url, optionsDefault);
+export const deleteRequest = (url: string): AxiosPromise => api.delete(url, optionsDefault);
 
 const optionsDefault = {
    withCredentials: false,

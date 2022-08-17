@@ -9,6 +9,7 @@ const CustomTable = <T extends RequiredProps>({
    checkboxesAvaible = false,
    setSelectedItems,
    url,
+   ...otherProps
 }: ICustomTable<T>) => {
    let columns: Columns<T>;
    if (customizedColumns) {
@@ -44,7 +45,7 @@ const CustomTable = <T extends RequiredProps>({
    };
 
    return (
-      <div>
+      <div {...otherProps}>
          <table className="table bg-secondary table-normal w-full">
             <thead>
                <tr>

@@ -13,20 +13,20 @@ import {
    Topic,
 } from "../item-types/itemTypes";
 
-interface IChosenItemField<T extends Topic> extends Omit<IOptionalFieldComponent<T>, "baseField"> {
+interface IChosenOptionalField<T extends Topic>
+   extends Omit<IOptionalFieldComponent<T>, "baseField"> {
    setUserInputData: Dispatch<SetStateAction<ICreateItem<T>>>;
    collectionTopic: Topic;
    addedField: IOptionalField<T>;
 }
 
-const ChosenItemField = <T extends Topic>({
+const ChosenOptionalField = <T extends Topic>({
    addedField,
    setChosenOptionalFields,
    setUserInputData,
    setOptionalFields,
-
    collectionTopic,
-}: IChosenItemField<T>) => {
+}: IChosenOptionalField<T>) => {
    const { fieldName, isAdded, valueType } = addedField;
    const [startDate, setStartDate] = useState<Date>();
    const [fieldValue, setFieldValues] = useState<OptionalFieldsByTopic<T>>(
@@ -34,8 +34,6 @@ const ChosenItemField = <T extends Topic>({
    );
    const isPresent = useIsPresent();
    const controls = useAnimation();
-
-   console.log("fieldNAme", fieldName);
 
    const stringifyName = useCallback(() => fieldName.toString(), [fieldName]);
    const stringifiedName = stringifyName();
@@ -71,7 +69,8 @@ const ChosenItemField = <T extends Topic>({
       setOptionalFields((prevValue) => [{ ...addedField, isAdded: false }, ...prevValue]);
 
       setUserInputData((prevState) =>
-         prevState.optionalFields && prevState.optionalFields[fieldName] === fieldValue[fieldName]
+         prevState.optionalFields &&
+         prevState.optionalFields[fieldName] === fieldValue[fieldName]
             ? // prevState.optionalFields && prevState.optionalFields.hasOwnProperty(fieldName)
               {
                  ...prevState,
@@ -101,10 +100,16 @@ const ChosenItemField = <T extends Topic>({
       <AnimatePresence>
          {isPresent && (
             <motion.div animate={controls} key={stringifyName()}>
-               <div className="mt-4 flex border whitespace-nowrap rounded h-10 relative border-green-300">
+               <div
+                  className="mt-4 flex border whitespace-nowrap rounded h-10 relative border-green-300"
+                  data-test={`chosen-field-${fieldName.toString()}`}
+               >
                   <div onClick={moveFieldHandler} className="px-4  flex items-center">
                      {isAdded && (
-                        <div className="w-5  text-red-600 ">
+                        <div
+                           data-test={`chosen-field-remove-${fieldName.toString()}`}
+                           className="w-5  text-red-600 "
+                        >
                            <MinusIcon />
                         </div>
                      )}
@@ -137,7 +142,7 @@ const ChosenItemField = <T extends Topic>({
                         onChange={handleChange}
                      />
                   )}
-                  {isAdded && valueType === "function" && (
+                  {isAdded && valueType === "object" && (
                      <div>
                         <DatePicker
                            placeholderText="&#128467;"
@@ -157,4 +162,4 @@ const ChosenItemField = <T extends Topic>({
    );
 };
 
-export default ChosenItemField;
+export default ChosenOptionalField;

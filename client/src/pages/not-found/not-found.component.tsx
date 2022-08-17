@@ -10,13 +10,13 @@ const NotFound = () => {
 
    const redirectToPreviousUrl = () => {
       dispatch(show404Page(false));
-      navigate("/");
+      navigate(-1);
    };
 
    const reloadPage = () => window.location.reload();
 
    return (
-      <div className="relative z-0 pb-4">
+      <div data-test="404-page" className="relative z-0 pb-4">
          <HeaderExtension />
          <div className="bg-secondary w-90vw m-auto max-w-90vw relative screen-height p-4 flex justify-center items-center">
             <div className="flex flex-col items-center">
@@ -121,6 +121,7 @@ const NotFound = () => {
 
                <div className="flex gap-x-10">
                   <button
+                     data-test="404-page-back-button"
                      className="mt-6 text-gray-500 font-mono text-xl bg-gray-200 p-3 rounded-md hover:shadow-md"
                      onClick={redirectToPreviousUrl}
                   >

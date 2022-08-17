@@ -9,7 +9,11 @@ import {
    findCollection,
    findLargestCollections,
 } from "../services/collection.service";
-import { ErrorMessage, SuccessMessage, collectionTopics } from "../config/constants.config";
+import {
+   ErrorMessage,
+   SuccessMessage,
+   collectionTopics,
+} from "../config/constants.config";
 import { uploadImage } from "../utils/imageKit.utils";
 import { authorize } from "../services/user.service";
 

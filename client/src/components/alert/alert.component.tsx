@@ -25,20 +25,14 @@ const Alert = ({ type, message, className }: IAlert) => {
          className={`
       ${type === "info" && "bg-blue-50 border border-blue-400 text-blue-800"} 
       ${type === "error" && "bg-red-50 border border-red-400 rounded text-red-800"}
-      ${
-         type === "success" &&
-         "bg-green-50 border border-green-400 rounded text-green-800"
-      }
-      ${
-         type === "warning" &&
-         "bg-yellow-50 border border-yellow-400 rounded text-yellow-800"
-      }
+      ${type === "success" && "bg-green-50 border border-green-400 rounded text-green-800"}
+      ${type === "warning" && "bg-yellow-50 border border-yellow-400 rounded text-yellow-800"}
       rounded  text-sm"  p-4 flex justify-between  ${className}`}
       >
-         <div className="flex items-center">
+         <div className="flex items-center" data-test="toast">
             <InformationCircleIcon className="h-4 w-4 mr-2" />
             <p>
-               <span className="font-bold pr-2">Info:</span>
+               <span className="font-bold">Info: </span>
                {message}
             </p>
          </div>

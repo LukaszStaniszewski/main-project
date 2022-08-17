@@ -10,7 +10,10 @@ import {
    selectCollection,
    selectCollectionsWithoutItems,
 } from "../../store/collections/collection.selector";
-import { ICollection, ICollectionWithoutItems } from "../../store/collections/collection.types";
+import {
+   ICollection,
+   ICollectionWithoutItems,
+} from "../../store/collections/collection.types";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
 import CustomTable from "../../components/custom-table/custom-table.component";
@@ -62,11 +65,13 @@ const CollectionPage = () => {
    useEffect(() => {
       if (!collection) return;
       authorization();
-   }, [collection]);
+   }, [collection, []]);
 
    const authorization = () => {
-      console.log("currentUser", currentUser);
-      if (currentUser?.name == collection?.owner.name || currentUser?.status === "admin") {
+      if (
+         currentUser?.name == collection?.owner.name ||
+         currentUser?.status === "admin"
+      ) {
          setWriteMode(true);
       } else {
          setWriteMode(false);
@@ -130,17 +135,20 @@ const CollectionPage = () => {
                <div className="text-lg w-max font-semibold">
                   <span>{owner.name}</span> / {topic}
                </div>
-               <div className="text-xl font-bold">
+               <div data-test="collection-page-title" className="text-xl font-bold">
                   {name.charAt(0).toUpperCase() + name.slice(1)}
                </div>
                {writeMode ? (
                   <Menu offset={{ crossAxis: -30, mainAxis: 5 }}>
                      <MenuHandler className="w-8 mr-10 ">
-                        <CogIcon />
+                        <CogIcon data-test="collection-page-menu" />
                      </MenuHandler>
                      <MenuList>
                         <MenuItem className="text-black">Update Collection</MenuItem>
-                        <MenuItem onClick={deleteCurrentCollection} className="text-black">
+                        <MenuItem
+                           onClick={deleteCurrentCollection}
+                           className="text-black"
+                        >
                            Delete Collection
                         </MenuItem>
                      </MenuList>
@@ -162,11 +170,19 @@ const CollectionPage = () => {
             <div className="flex  my-5 gap-20">
                {writeMode && (
                   <Fragment>
-                     <Button onClick={toCreateItemPage} variant="outlined">
+                     <Button
+                        data-test="collection-page-newItem-button"
+                        onClick={toCreateItemPage}
+                        variant="outlined"
+                     >
                         new item
                      </Button>
                      {items && items.length > 0 && (
-                        <Button onClick={deleteSelectedItems} variant="outlined">
+                        <Button
+                           data-test="collection-page-updateItem-button"
+                           onClick={deleteSelectedItems}
+                           variant="outlined"
+                        >
                            delete item
                         </Button>
                      )}
@@ -176,6 +192,7 @@ const CollectionPage = () => {
             <div>
                {items?.length && (
                   <CustomTable
+                     data-test="collection-page-table"
                      rows={items}
                      customizedColumns={columns}
                      checkboxesAvaible={writeMode}

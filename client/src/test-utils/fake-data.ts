@@ -1,5 +1,6 @@
 import { ICreateItem } from "../components/create-item/item-types/itemTypes";
-import { ICreateCollection } from "../pages/create-collection/create-collection";
+import { ICreateCollection } from "../store/collections/collection.types";
+
 import { IItem } from "../store/items/item.types";
 import { ICurrentUser } from "../store/user/user.types";
 
