@@ -9,21 +9,28 @@ import * as key from "../config/keyes";
 import { createSession } from "../services/session.service";
 import { Values_TO_Omit, ErrorMessage } from "../config/constants.config";
 
-export const registerAndSignIn = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+export const registerAndSignIn = async (
+   req: Request<{}, {}, IUserCredentials>,
+   res: Response
+) => {
    try {
       const user = await createUser(req.body);
       const session = await createSession(user._id);
 
-      const accessToken = signJwt({ ...user, sessionId: session._id }, key.privateAccessKey, "60s");
+      const accessToken = signJwt(
+         { ...user, sessionId: session._id },
+         key.privateAccessKey,
+         "60s"
+      );
       const refreshToken = signJwt(
          { ...user, sessionId: session._id },
          key.privateRefreshKey,
          "30d"
       );
-      if (accessToken && refreshToken) return res.json({ accessToken, refreshToken });
+      if (accessToken && refreshToken) return res.send({ accessToken, refreshToken });
    } catch (error) {
       logger.error(getErrorMessage(error));
-      res.status(409).send({ error: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN });
+      res.status(409).send({ message: ErrorMessage.EMAIL_OR_PASSWORD_TAKEN });
    }
 };
 
@@ -31,8 +38,8 @@ export const deleteUserOrUsers = async (
    req: Request<{}, {}, Array<IUserDocument>>,
    res: Response
 ) => {
-   // if (res.locals.user.role !== "admin")
-   //    return res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });
+   if (res.locals.user.role !== "admin")
+      return res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });
    try {
       await deleteUsers(req.body);
 
@@ -72,7 +79,7 @@ export const sendUsers = async (req: Request, res: Response<Array<IUserDocument>
 
 export const sendUser = async (req: Request, res: Response) => {
    try {
-      const user = await User.findOne(req.params).select(Values_TO_Omit.SEND_USERS_REQUEST);
+      const user = await findUser(req.params, Values_TO_Omit.SEND_USERS_REQUEST);
       if (!user) throw new Error("user wasn't found");
       res.json(user);
    } catch (error) {

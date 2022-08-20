@@ -13,9 +13,12 @@ export enum ErrorMessage {
    NOT_AUTHORIZED = "You are not authorized to do this action",
    USER_DELETION_FAILURE = "User/s weren't deleted",
    USER_UPDATE_FAILURE = "User/s weren't updated",
+   USER_NOT_FOUND = "User not found",
+   USER_HAS_NO_COLLECTIONS = "Given user has no collections",
    COLLECTION_TOPIC_ERROR = "Collection topic is invalid",
    ITEM_DELITION_FAILURE = "Item/s weren't deleted",
    COLLECTION_NOT_CREATED = "Collection was not created",
+   ITEM_NOT_CREATED = "Item was not created",
    GET_ITEM_FAILURE = "Item was not found",
    COMMENT_NOT_CREATED = "Comment hasn't been created",
 }

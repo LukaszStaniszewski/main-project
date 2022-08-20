@@ -3,10 +3,8 @@ import { Request, Response } from "express";
 import { ICreateItemCollection } from "../models/collection.model";
 import {
    findCollectionsByUser,
-   findAllCollections,
    createCollection,
    deleteCollection,
-   findCollection,
    findLargestCollections,
 } from "../services/collection.service";
 import {
@@ -16,6 +14,7 @@ import {
 } from "../config/constants.config";
 import { uploadImage } from "../utils/imageKit.utils";
 import { authorize } from "../services/user.service";
+import getErrorMessage from "../utils/getErrorMessage";
 
 export const createCollectionHandler = async (
    req: Request<{}, {}, ICreateItemCollection>,
@@ -51,26 +50,17 @@ export const getCollectionsPinnedToUser = async (req: Request, res: Response) =>
       const collections = await findCollectionsByUser(params);
       res.json(collections);
    } catch (error) {
-      //@ts-ignore
-      if (error.message === "User not found") {
-         res.sendStatus(409);
+      if (getErrorMessage(error) === ErrorMessage.USER_NOT_FOUND) {
+         res.status(409).send({ message: ErrorMessage.USER_NOT_FOUND });
+      } else if (getErrorMessage(error) === ErrorMessage.USER_HAS_NO_COLLECTIONS) {
+         res.status(403).send({ message: ErrorMessage.USER_HAS_NO_COLLECTIONS });
       } else {
-         res.sendStatus(403);
+         res.sendStatus(400);
       }
    }
 };
 
-export const getAllCollections = async (req: Request, res: Response) => {
-   try {
-      const collections = await findAllCollections();
-      res.json({ collections });
-   } catch (error) {
-      res.sendStatus(405);
-   }
-};
-
 export const getLargestCollections = async (req: Request, res: Response) => {
-   console.log("hit");
    const amount = req.params.number;
    try {
       const collections = await findLargestCollections(Number(amount));
@@ -80,24 +70,12 @@ export const getLargestCollections = async (req: Request, res: Response) => {
    }
 };
 
-// export const deleteCollectionsHandler = async (req:Request, res:Response) => {
-//    const param = req.params._id
-//    const user = res.locals.user
-//    if(param !== user.userId || user.role !== "admin") return res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
-//    try {
-//       const collection = deleteCollections({_id: param})
-//       res.send({message: SuccessMessage.COLLECTION_DELETED})
-//    } catch (error) {
-//       res.status(401).send({message: ErrorMessage.NOT_AUTHORIZED})
-//    }
-// }
-
 export const deleteCollectionHandler = async (req: Request, res: Response) => {
    const params = req.params.id;
    const user = res.locals.user;
    try {
       await authorize(params, user);
-      const respsonse = await deleteCollection(params);
+      await deleteCollection(params);
       res.send({ message: SuccessMessage.COLLECTION_DELETED });
    } catch (error) {
       res.status(401).send({ message: ErrorMessage.NOT_AUTHORIZED });

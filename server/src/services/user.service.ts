@@ -19,7 +19,6 @@ export const createUser = async (input: IUserCredentials) => {
 export const authorize = async (query: string, user: IUserDocument) => {
    try {
       const { owner } = await findCollection(query);
-      console.log("owner", owner);
       if (owner?.name === user?.name || user?.role === "admin") {
          return true;
       } else {
