@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import * as CommentService from "../services/comment.service";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import createExpressServer from "../utils/server";
 import {
    commentResponse,
@@ -19,15 +19,27 @@ const app = createExpressServer();
 
 describe("comments", () => {
    describe("create comment", () => {
+      describe("request is send when user is not logged in", () => {
+         it("should return message and status 403", async () => {
+            const { statusCode, body } = await supertest(app)
+               .post("/api/comment/new")
+               .send(commentInput);
+
+            expect(body).toEqual({ message: ErrorMessage.SESSION_EXPIRED });
+            expect(statusCode).toBe(403);
+         });
+      });
       describe("given payload is valid", () => {
          it("should return comment and status 200", async () => {
+            const jwt = signJwt(user, key.privateAccessKey, "60s");
             const createCommentMock = jest
                .spyOn(CommentService, "createComment")
                .mockResolvedValue(commentPayload);
 
             const { statusCode, body } = await supertest(app)
                .post("/api/comment/new")
-               .send(commentInput);
+               .send(commentInput)
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(200);
             expect(body).toEqual(commentResponse);
@@ -35,11 +47,13 @@ describe("comments", () => {
          });
          describe("given payload is not valid", () => {
             it("should return message and status 409", async () => {
+               const jwt = signJwt(user, key.privateAccessKey, "60s");
                jest.spyOn(CommentService, "createComment").mockRejectedValue("error");
 
                const { statusCode, body } = await supertest(app)
                   .post("/api/comment/new")
-                  .send({ name: "faulty payload" });
+                  .send({ name: "faulty payload" })
+                  .set("Cookie", `accessToken=${jwt}`);
 
                expect(statusCode).toBe(409);
                expect(body).toEqual({ message: ErrorMessage.COMMENT_NOT_CREATED });

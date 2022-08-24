@@ -1,6 +1,5 @@
 import { takeLatest, put, all, call } from "typed-redux-saga/macro";
 
-import { decode as decodeToken } from "../../utils/userToken.utils";
 import {
    API_URL,
    postRequest,
@@ -17,22 +16,17 @@ import {
    SignUpStart,
    UpdateUsersStart,
    DeleteUsersStart,
-   GetUserByCredentialsStart,
 } from "./user.types";
-import { show404Page } from "../local/local.action";
 import * as action from "./user.action";
 
 export function* Authenticate(credentials: IUserFormValues, url: string) {
    try {
       localStorage.removeItem("token");
-      const { data } = yield* call(postRequest<ITokens>, url, credentials);
-      localStorage.setItem("token", JSON.stringify(data));
-      const userData = yield* call(decodeToken, data.accessToken);
+      yield* call(postRequest<ITokens>, url, credentials);
+      const { data } = yield* call(getRequest<ICurrentUser>, "/api/user/current");
       yield* all([
-         put(action.authenticationSuccess(userData)),
-         put(
-            action.showToast({ message: `Sign up as ${userData.name}`, type: "success" })
-         ),
+         put(action.authenticationSuccess(data)),
+         put(action.showToast({ message: `Sign up as ${data.name}`, type: "success" })),
       ]);
    } catch (error) {
       const act = credentials.name ? "up" : "in";
@@ -52,6 +46,24 @@ export function* signInWithEmail({ payload: credentials }: SignInStart) {
 
 export function* signUpWithEmail({ payload: credentials }: SignUpStart) {
    yield* call(Authenticate, credentials, API_URL.SIGN_UP);
+}
+
+export function* getCurrentUser() {
+   try {
+      const { data } = yield* call(getRequest<ICurrentUser>, API_URL.GET_CURRENT_USER);
+      yield* put(action.setCurrentUser(data));
+   } catch (error) {
+      yield* all([
+         put(
+            action.showToast({
+               //@ts-ignore
+               message: `${error.response.data.message}`,
+               type: "warning",
+            })
+         ),
+         put(action.setCurrentUser(null)),
+      ]);
+   }
 }
 
 export function* updateOrDeleteUsers(
@@ -77,13 +89,10 @@ export function* deleteUsers({ payload: users }: DeleteUsersStart) {
 
 export function* logOut() {
    try {
-      const { status } = yield* call(deleteRequest, API_URL.LOG_OUT);
-      if (status === 200) {
-         localStorage.removeItem("token");
-         yield* put(action.logOutSuccess());
-      }
+      yield* call(deleteRequest, API_URL.LOG_OUT);
+
+      yield* put(action.logOutSuccess());
    } catch (error) {
-      localStorage.removeItem("token");
       // yield* put(action.logOutFailure(error as AxiosError))
    }
 }
@@ -97,26 +106,8 @@ export function* getUsers() {
    }
 }
 
-export function* getUserByCredentials({ payload: userName }: GetUserByCredentialsStart) {
-   try {
-      const { data } = yield* call(
-         getRequest<ICurrentUser>,
-         `${API_URL.GET_USER_SEND_URL}/${userName}`
-      );
-      yield* all([
-         put(action.getUserByCredentialsSuccess(data)),
-         put(show404Page(false)),
-      ]);
-   } catch (error) {
-      yield* put(show404Page(true));
-   }
-}
-
-function* onGetUserByCredentials() {
-   yield* takeLatest(
-      USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
-      getUserByCredentials
-   );
+function* onGetCurrentUser() {
+   yield* takeLatest(USER_ACTION_TYPES.GET_CURRENT_USER_START, getCurrentUser);
 }
 
 function* onUpdateUsers() {
@@ -151,6 +142,6 @@ export default function* userSagas() {
       call(onGetUsers),
       call(onDeleteUsers),
       call(onUpdateUsers),
-      call(onGetUserByCredentials),
+      call(onGetCurrentUser),
    ]);
 }

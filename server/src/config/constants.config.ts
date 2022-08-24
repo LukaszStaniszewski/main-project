@@ -21,6 +21,7 @@ export enum ErrorMessage {
    ITEM_NOT_CREATED = "Item was not created",
    GET_ITEM_FAILURE = "Item was not found",
    COMMENT_NOT_CREATED = "Comment hasn't been created",
+   SESSION_EXPIRED = "Your session has expired, please sign in",
 }
 
 export enum SuccessMessage {

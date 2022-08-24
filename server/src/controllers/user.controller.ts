@@ -3,17 +3,17 @@ import { Request, Response } from "express";
 import {
    createUser,
    deleteUsers,
-   findUser,
    updateUsers,
    updateUsersSession,
    createSession,
+   findUsers,
 } from "../services";
-import User, { IUserCredentials, IUserDocument } from "../models/user.model";
+import { IUserCredentials, IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import logger from "../utils/logger";
 import { signJwt } from "../utils/jtw.utils";
-import * as key from "../config/keyes";
-import { Values_TO_Omit, ErrorMessage } from "../config/constants.config";
+import * as key from "../config/keys";
+import { ErrorMessage } from "../config/constants.config";
 
 export const registerAndSignIn = async (
    req: Request<{}, {}, IUserCredentials>,
@@ -33,6 +33,24 @@ export const registerAndSignIn = async (
          key.privateRefreshKey,
          "30d"
       );
+
+      res.cookie("accessToken", accessToken, {
+         maxAge: 900000, // 15min
+         httpOnly: true,
+         domain: "localhost",
+         path: "/",
+         sameSite: "strict",
+         secure: false,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+         maxAge: 3.154e10, // 1year
+         httpOnly: true,
+         domain: "localhost",
+         path: "/",
+         sameSite: "strict",
+         secure: false,
+      });
       if (accessToken && refreshToken) return res.send({ accessToken, refreshToken });
    } catch (error) {
       logger.error(getErrorMessage(error));
@@ -75,21 +93,14 @@ export const updateUserOrUsers = async (
 
 export const sendUsers = async (req: Request, res: Response<Array<IUserDocument>>) => {
    try {
-      const data = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST);
-      res.json(data);
+      const users = await findUsers();
+      res.send(users);
    } catch (error) {
       logger.error(getErrorMessage(error));
       res.sendStatus(400);
    }
 };
 
-export const sendUser = async (req: Request, res: Response) => {
-   try {
-      const user = await findUser(req.params, Values_TO_Omit.SEND_USERS_REQUEST);
-      if (!user) throw new Error("user wasn't found");
-      res.json(user);
-   } catch (error) {
-      logger.error(getErrorMessage(error));
-      res.sendStatus(400);
-   }
+export const getCurrentUser = async (req: Request, res: Response) => {
+   return res.send(res.locals.user);
 };

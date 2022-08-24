@@ -62,6 +62,15 @@ export const findUser = async (
    }
 };
 
+export const findUsers = async () => {
+   try {
+      const users = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST).lean();
+      return users;
+   } catch (error) {
+      throw new Error(getErrorMessage(error));
+   }
+};
+
 export const autoCompleteUser = async (query: string) => {
    try {
       const result = await User.aggregate([

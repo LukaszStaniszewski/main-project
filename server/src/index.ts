@@ -7,7 +7,6 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 
 import logger from "./utils/logger";
-
 import socket from "./utils/socket.utils";
 import createExpressServer from "./utils/server";
 
@@ -46,5 +45,4 @@ const PORT = process.env.PORT || 8000;
 httpServer.listen(PORT, async () => {
    logger.info(`🚀 Server is running at http://localhost:${PORT} 🚀 `);
    socket({ io });
-   // await connect();
 });

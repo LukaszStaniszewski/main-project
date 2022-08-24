@@ -11,13 +11,27 @@ import {
    collectionResponse,
    itemResponse,
 } from "./data/collections&Items";
+import { signJwt } from "../utils/jtw.utils";
+import { userWithAminStatus } from "./data/user";
+import * as key from "../config/keys";
 
 const app = createExpressServer();
 
 describe("collections&items", () => {
    describe("create collection with items", () => {
+      describe("request is send, when user is not logged in", () => {
+         it("should return message and status 403", async () => {
+            const { statusCode, body } = await supertest(app)
+               .post("/api/collection")
+               .send(createCollectionWithItemsInput);
+
+            expect(body).toEqual({ message: ErrorMessage.SESSION_EXPIRED });
+            expect(statusCode).toBe(403);
+         });
+      });
       describe("given payload is valid", () => {
          it("should return collection id and status 200", async () => {
+            const jwt = signJwt(userWithAminStatus, key.privateAccessKey, "60s");
             const { items, ...collection } = createCollectionWithItemsInput;
 
             const createCollectionMock = jest
@@ -29,7 +43,8 @@ describe("collections&items", () => {
 
             const { body, statusCode } = await supertest(app)
                .post("/api/collection")
-               .send(createCollectionWithItemsInput);
+               .send(createCollectionWithItemsInput)
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(200);
             expect(body).toEqual({ collectionId: collectionResponse._id });
@@ -39,6 +54,7 @@ describe("collections&items", () => {
       });
       describe("given payload contains not valid collection", () => {
          it("should return 'Collection not created' message and status 409", async () => {
+            const jwt = signJwt(userWithAminStatus, key.privateAccessKey, "60s");
             const { items, ...collection } = createCollectionWithItemsInput;
 
             const createCollectionMock = jest
@@ -47,7 +63,8 @@ describe("collections&items", () => {
 
             const { body, statusCode } = await supertest(app)
                .post("/api/collection")
-               .send(createCollectionWithItemsInput);
+               .send(createCollectionWithItemsInput)
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(409);
             expect(body).toEqual({ message: ErrorMessage.COLLECTION_NOT_CREATED });
@@ -56,6 +73,7 @@ describe("collections&items", () => {
       });
       describe("given payload contains not valid item/s", () => {
          it("should return 'Item not created' message and status 409", async () => {
+            const jwt = signJwt(userWithAminStatus, key.privateAccessKey, "60s");
             const { items, ...collection } = createCollectionWithItemsInput;
 
             const createCollectionMock = jest
@@ -67,7 +85,8 @@ describe("collections&items", () => {
 
             const { body, statusCode } = await supertest(app)
                .post("/api/collection")
-               .send(createCollectionWithItemsInput);
+               .send(createCollectionWithItemsInput)
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(409);
             expect(body).toEqual({ message: ErrorMessage.ITEM_NOT_CREATED });

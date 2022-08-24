@@ -5,7 +5,7 @@ dotenv.config();
 import * as UserService from "../services/user.service";
 import * as CollectionService from "../services/collection.service";
 import * as ItemService from "../services/item.service";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import createExpressServer from "../utils/server";
 import { ErrorMessage, SuccessMessage } from "../config/constants.config";
 import { signJwt } from "../utils/jtw.utils";
@@ -23,15 +23,28 @@ const app = createExpressServer();
 
 describe("item", () => {
    describe("create item/s", () => {
+      describe("request is send when user is not logged in", () => {
+         it("should return message and status 403", async () => {
+            const { statusCode, body } = await supertest(app)
+               .post("/api/item/new")
+               .send(itemInput);
+
+            expect(body).toEqual({ message: ErrorMessage.SESSION_EXPIRED });
+            expect(statusCode).toBe(403);
+         });
+      });
       describe("given payload is valid", () => {
          it("should return item array and stauts 200", async () => {
+            const jwt = signJwt(user, key.privateAccessKey, "60s");
+
             const createItemMock = jest
                .spyOn(ItemService, "createItem")
                .mockResolvedValue([itemPayload]);
 
             const { body, statusCode } = await supertest(app)
                .post("/api/item/new")
-               .send(itemInput);
+               .send(itemInput)
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(200);
             expect(body).toEqual([itemResponse]);
@@ -40,9 +53,12 @@ describe("item", () => {
       });
       describe("given payload is not valid", () => {
          it("should return 404", async () => {
+            const jwt = signJwt(user, key.privateAccessKey, "60s");
             jest.spyOn(ItemService, "createItem").mockRejectedValue("not found");
 
-            const { statusCode } = await supertest(app).post("/api/item/new");
+            const { statusCode } = await supertest(app)
+               .post("/api/item/new")
+               .set("Cookie", `accessToken=${jwt}`);
 
             expect(statusCode).toBe(404);
          });
@@ -162,6 +178,8 @@ describe("item", () => {
       });
       describe("given collections doesn't exist / payload is not valid", () => {
          it("should return message and 404 status", async () => {
+            const jwt = signJwt(user, key.privateAccessKey, "10m");
+
             jest.spyOn(UserService, "authorize").mockResolvedValueOnce(true);
             const deleteItemsMock = jest
                .spyOn(ItemService, "deleteItems")
@@ -169,7 +187,8 @@ describe("item", () => {
 
             const { body, statusCode } = await supertest(app)
                .post("/api/item/delete")
-               .send(["not", "valid", "input"]);
+               .send(["not", "valid", "input"])
+               .set("Authorization", `Bearer ${jwt}`);
 
             expect(statusCode).toBe(404);
             expect(body).toEqual({ message: ErrorMessage.USER_DELETION_FAILURE });

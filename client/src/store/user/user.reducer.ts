@@ -34,7 +34,7 @@ const userReducer = (
       case USER_ACTION_TYPES.SIGN_UP_START:
       case USER_ACTION_TYPES.GET_USERS_START:
       case USER_ACTION_TYPES.LOG_OUT_START:
-      case USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START:
+      case USER_ACTION_TYPES.GET_CURRENT_USER_START:
          return {
             ...state,
             isLoading: true,
@@ -46,7 +46,7 @@ const userReducer = (
             currentUser: action.payload,
             isLoading: false,
          };
-      case USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS:
+      case USER_ACTION_TYPES.GET_CURRENT_USER_SUCCESS:
          return {
             ...state,
             user: action.payload,
@@ -80,6 +80,7 @@ const userReducer = (
       case USER_ACTION_TYPES.START_TOAST:
       case USER_ACTION_TYPES.GET_USERS_FAILURE:
       case USER_ACTION_TYPES.UPDATE_USERS_FAILURE:
+      case USER_ACTION_TYPES.GET_CURRENT_USER_FAILURE:
          return {
             ...state,
             toast: action.payload,

@@ -5,7 +5,7 @@ dotenv.config();
 
 import * as UserService from "../services/user.service";
 import * as SessionService from "../services/session.service";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import createExpressServer from "../utils/server";
 import { authenticate } from "../controllers/session.controller";
 import { registerAndSignIn } from "../controllers/user.controller";
@@ -50,8 +50,10 @@ describe("user", () => {
             };
 
             const send = jest.fn();
+            const cookie = jest.fn();
             const res = {
                send,
+               cookie,
             };
             //@ts-ignore
             await registerAndSignIn(req, res);
@@ -62,6 +64,15 @@ describe("user", () => {
             });
             expect(createUserMock).toHaveBeenCalledWith(userInput);
             expect(createSessionMock).toHaveBeenCalledWith(userPayload._id);
+
+            expect(cookie).toHaveBeenCalledWith("accessToken", expect.any(String), {
+               maxAge: 900000,
+               httpOnly: true,
+               domain: "localhost",
+               path: "/",
+               sameSite: "strict",
+               secure: false,
+            });
          });
       });
 
@@ -82,39 +93,32 @@ describe("user", () => {
          });
       });
    });
-   describe("get user", () => {
-      describe("given user exist", () => {
-         it("should return the user and 200 status", async () => {
-            //@ts-ignore
-            const getUserMock = jest.spyOn(UserService, "findUser").mockReturnValue(user);
+   describe("get users", () => {
+      describe("given users exist", () => {
+         it("should return users and 200 status", async () => {
+            const getUsersMock = jest
+               .spyOn(UserService, "findUsers")
+               //@ts-ignore
+               .mockReturnValue([user]);
 
-            const { body, statusCode } = await supertest(app).get(
-               `/api/user/${user.name}`
-            );
+            const { body, statusCode } = await supertest(app).get("/api/user");
 
-            expect(body).toEqual(user);
+            expect(body).toEqual([user]);
             expect(statusCode).toBe(200);
-
-            expect(getUserMock).toBeCalledWith(
-               { name: user.name },
-               Values_TO_Omit.SEND_USERS_REQUEST
-            );
+            expect(getUsersMock).toBeCalledTimes(1);
          });
       });
-      describe("given user doesn't exist", () => {
+      describe("given users doesn't exist", () => {
          it("should return 400 status", async () => {
             //@ts-ignore
-            const getUserMock = jest
-               .spyOn(UserService, "findUser")
+            const getUsersMock = jest
+               .spyOn(UserService, "findUsers")
                .mockRejectedValue("user wasn't found");
 
-            const { statusCode } = await supertest(app).get(`/api/user/notExisting5224`);
+            const { statusCode } = await supertest(app).get("/api/user");
 
             expect(statusCode).toBe(400);
-            expect(getUserMock).toBeCalledWith(
-               { name: "notExisting5224" },
-               Values_TO_Omit.SEND_USERS_REQUEST
-            );
+            expect(getUsersMock).toBeCalledTimes(1);
          });
       });
    });
@@ -187,9 +191,11 @@ describe("user", () => {
             };
 
             const send = jest.fn();
+            const cookie = jest.fn();
 
             const res = {
                send,
+               cookie,
             };
             //@ts-ignore
             await authenticate(req, res);
@@ -197,6 +203,15 @@ describe("user", () => {
             expect(send).toHaveBeenCalledWith({
                accessToken: expect.any(String),
                refreshToken: expect.any(String),
+            });
+
+            expect(cookie).toHaveBeenCalledWith("accessToken", expect.any(String), {
+               maxAge: 900000,
+               httpOnly: true,
+               domain: "localhost",
+               path: "/",
+               sameSite: "strict",
+               secure: false,
             });
          });
       });

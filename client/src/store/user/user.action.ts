@@ -1,24 +1,19 @@
 import { ICurrentUser, USER_ACTION_TYPES, IUserFormValues, IToast } from "./user.types";
 import * as type from "./user.types";
 
-export const getUserByCredentialsStart = (
-   userName: ICurrentUser["name"]
-): type.GetUserByCredentialsStart => ({
-   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
-   payload: userName,
+export const getCurrentUserStart = (): type.GetCurrentUserStart => ({
+   type: USER_ACTION_TYPES.GET_CURRENT_USER_START,
 });
 
-export const getUserByCredentialsSuccess = (
+export const getCurrentUserSuccess = (
    user: ICurrentUser
-): type.GetUserByCredentialsSuccess => ({
-   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS,
+): type.GetCurrentUserSuccess => ({
+   type: USER_ACTION_TYPES.GET_CURRENT_USER_SUCCESS,
    payload: user,
 });
 
-export const getUserByCredentialsFailure = (
-   toast: IToast
-): type.GetUserByCredentialsFailure => ({
-   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_FAILURE,
+export const getCurrentUserFailure = (toast: IToast): type.GetCurrentUserFailure => ({
+   type: USER_ACTION_TYPES.GET_CURRENT_USER_FAILURE,
    payload: toast,
 });
 

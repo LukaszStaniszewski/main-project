@@ -3,7 +3,7 @@ import supertest from "supertest";
 import createExpressServer from "../utils/server";
 import * as CollectionService from "../services/collection.service";
 import { signJwt } from "../utils/jtw.utils";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import { ErrorMessage, SuccessMessage } from "../config/constants.config";
 import { user, userWithAminStatus } from "./data/user";
 import { largestCollections, collectionsByUser } from "./data/collections&Items";

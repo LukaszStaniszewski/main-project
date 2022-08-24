@@ -4,7 +4,7 @@ import { IUserCredentials } from "../models/user.model";
 import { ISessionDocument } from "../models/session.model";
 import { authentication, createSession, findSession, updateSession } from "../services";
 import { signJwt } from "../utils/jtw.utils";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import { ErrorMessage } from "../config/constants.config";
 
 export const authenticate = async (
@@ -27,6 +27,23 @@ export const authenticate = async (
       key.privateRefreshKey,
       "30d"
    );
+   res.cookie("accessToken", accessToken, {
+      maxAge: 900000, // 15min
+      httpOnly: true,
+      domain: "localhost",
+      path: "/",
+      sameSite: "strict",
+      secure: false,
+   });
+
+   res.cookie("refreshToken", refreshToken, {
+      maxAge: 3.154e10, // 1year
+      httpOnly: true,
+      domain: "localhost",
+      path: "/",
+      sameSite: "strict",
+      secure: false,
+   });
 
    res.send({ accessToken, refreshToken });
 };

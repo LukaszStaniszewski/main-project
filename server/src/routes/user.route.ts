@@ -5,15 +5,17 @@ import {
    updateUserOrUsers,
    sendUsers,
    registerAndSignIn,
-   sendUser,
+   // sendUser,
+   getCurrentUser,
 } from "../controllers/user.controller";
+import requireUser from "../middleware/requireUser";
 
 const userRouter = Router();
 
 userRouter.post("/register", registerAndSignIn);
-userRouter.post("/delete", deleteUserOrUsers);
-userRouter.get("/:name", sendUser);
-userRouter.patch("/", updateUserOrUsers);
+userRouter.post("/delete", requireUser, deleteUserOrUsers);
+userRouter.patch("/", requireUser, updateUserOrUsers);
 userRouter.get("/", sendUsers);
+userRouter.get("/current", requireUser, getCurrentUser);
 
 export default userRouter;
