@@ -37,7 +37,7 @@ export const registerAndSignIn = async (
       res.cookie("accessToken", accessToken, {
          maxAge: 900000, // 15min
          httpOnly: true,
-         domain: "localhost",
+         domain: "main-app-collections.herokuapp.com",
          path: "/",
          sameSite: "strict",
          secure: true,
@@ -46,7 +46,7 @@ export const registerAndSignIn = async (
       res.cookie("refreshToken", refreshToken, {
          maxAge: 3.154e10, // 1year
          httpOnly: true,
-         domain: "localhost",
+         domain: "main-app-collections.herokuapp.com",
          path: "/",
          sameSite: "strict",
          secure: true,
