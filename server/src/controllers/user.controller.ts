@@ -40,7 +40,7 @@ export const registerAndSignIn = async (
          domain: "localhost",
          path: "/",
          sameSite: "strict",
-         secure: false,
+         secure: true,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -49,7 +49,7 @@ export const registerAndSignIn = async (
          domain: "localhost",
          path: "/",
          sameSite: "strict",
-         secure: false,
+         secure: true,
       });
       if (accessToken && refreshToken) return res.send({ accessToken, refreshToken });
    } catch (error) {
