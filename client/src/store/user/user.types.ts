@@ -24,9 +24,9 @@ export enum USER_ACTION_TYPES {
 
    DELETE_USERS_START = "DELETE_USERS_START",
 
-   GET_USER_BY_CREDENTIALS_START = "GET_USER_BY_CREDENTIALS_START",
-   GET_USER_BY_CREDENTIALS_SUCCESS = "GET_USER_BY_CREDENTIALS_SUCCESS",
-   GET_USER_BY_CREDENTIALS_FAILURE = "GET_USER_BY_CREDENTIALS_FAILURE",
+   GET_CURRENT_USER_START = "GET_CURRENT_USER_START",
+   GET_CURRENT_USER_SUCCESS = "GET_CURRENT_USER_SUCCESS",
+   GET_CURRENT_USER_FAILURE = "GET_CURRENT_USER_FAILURE",
 }
 
 export type SignInStart = ActionWithPayload<
@@ -80,16 +80,13 @@ export type DeleteUsersStart = ActionWithPayload<
    ICurrentUser[]
 >;
 
-export type GetUserByCredentialsStart = ActionWithPayload<
-   USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
-   ICurrentUser["name"]
->;
-export type GetUserByCredentialsSuccess = ActionWithPayload<
-   USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS,
+export type GetCurrentUserStart = Action<USER_ACTION_TYPES.GET_CURRENT_USER_START>;
+export type GetCurrentUserSuccess = ActionWithPayload<
+   USER_ACTION_TYPES.GET_CURRENT_USER_SUCCESS,
    ICurrentUser
 >;
-export type GetUserByCredentialsFailure = ActionWithPayload<
-   USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_FAILURE,
+export type GetCurrentUserFailure = ActionWithPayload<
+   USER_ACTION_TYPES.GET_CURRENT_USER_FAILURE,
    IToast
 >;
 
@@ -110,9 +107,9 @@ export type UserAction =
    | DeleteUsersStart
    | UpdateUsersSuccess
    | UpdateUsersFailure
-   | GetUserByCredentialsStart
-   | GetUserByCredentialsSuccess
-   | GetUserByCredentialsFailure;
+   | GetCurrentUserStart
+   | GetCurrentUserSuccess
+   | GetCurrentUserFailure;
 
 export interface ICurrentUser {
    _id: string;

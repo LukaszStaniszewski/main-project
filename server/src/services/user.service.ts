@@ -19,7 +19,6 @@ export const createUser = async (input: IUserCredentials) => {
 export const authorize = async (query: string, user: IUserDocument) => {
    try {
       const { owner } = await findCollection(query);
-      console.log("owner", owner);
       if (owner?.name === user?.name || user?.role === "admin") {
          return true;
       } else {
@@ -58,6 +57,15 @@ export const findUser = async (
 ) => {
    try {
       return await User.findOne(query).select(exclude);
+   } catch (error) {
+      throw new Error(getErrorMessage(error));
+   }
+};
+
+export const findUsers = async () => {
+   try {
+      const users = await User.find().select(Values_TO_Omit.SEND_USERS_REQUEST).lean();
+      return users;
    } catch (error) {
       throw new Error(getErrorMessage(error));
    }

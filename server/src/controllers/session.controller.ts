@@ -2,27 +2,50 @@ import { Request, Response } from "express";
 
 import { IUserCredentials } from "../models/user.model";
 import { ISessionDocument } from "../models/session.model";
-import {
-   authentication,
-   createSession,
-   findSession,
-   updateSession,
-} from "../services/session.service";
+import { authentication, createSession, findSession, updateSession } from "../services";
 import { signJwt } from "../utils/jtw.utils";
-import * as key from "../config/keyes";
+import * as key from "../config/keys";
 import { ErrorMessage } from "../config/constants.config";
 
-export const authenticate = async (req: Request<{}, {}, IUserCredentials>, res: Response) => {
+export const authenticate = async (
+   req: Request<{}, {}, IUserCredentials>,
+   res: Response
+) => {
    const user = await authentication(req.body);
    if (!user) return res.status(401).send({ message: ErrorMessage.NOT_AUTHENTICATED });
    if (user.status === "blocked")
       return res.status(403).send({ message: ErrorMessage.ACCOUNT_HAS_BLOCKED_STATUS });
    const session = await createSession(user._id);
 
-   const accessToken = signJwt({ ...user, sessionId: session._id }, key.privateAccessKey, "60s"); // 60s
-   const refreshToken = signJwt({ ...user, sessionId: session._id }, key.privateRefreshKey, "30d");
+   const accessToken = signJwt(
+      { ...user, sessionId: session._id },
+      key.privateAccessKey,
+      "60s"
+   ); // 60s
+   const refreshToken = signJwt(
+      { ...user, sessionId: session._id },
+      key.privateRefreshKey,
+      "30d"
+   );
+   res.cookie("accessToken", accessToken, {
+      maxAge: 900000, // 15min
+      httpOnly: true,
+      domain: "localhost",
+      path: "/",
+      sameSite: "strict",
+      secure: false,
+   });
 
-   res.json({ accessToken, refreshToken });
+   res.cookie("refreshToken", refreshToken, {
+      maxAge: 3.154e10, // 1year
+      httpOnly: true,
+      domain: "localhost",
+      path: "/",
+      sameSite: "strict",
+      secure: false,
+   });
+
+   res.send({ accessToken, refreshToken });
 };
 
 export const getUserSessions = async (req: Request, res: Response<ISessionDocument>) => {

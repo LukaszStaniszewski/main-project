@@ -2,7 +2,6 @@ import * as matchers from "redux-saga-test-plan/matchers";
 import { throwError } from "redux-saga-test-plan/providers";
 import { expectSaga } from "redux-saga-test-plan";
 
-import { decode as decodeToken } from "../../utils/userToken.utils";
 import {
    API_URL,
    deleteRequest,
@@ -12,7 +11,6 @@ import {
 } from "../../api/axios-instance.api";
 import {
    DeleteUsersStart,
-   GetUserByCredentialsStart,
    SignInStart,
    SignUpStart,
    USER_ACTION_TYPES,
@@ -27,11 +25,9 @@ import {
    deleteUsers,
    updateOrDeleteUsers,
    getUsers,
-   getUserByCredentials,
    logOut,
 } from "./user.saga";
 import { currentUser, successMessage } from "../../test-utils/fake-data";
-import { AxiosError } from "axios";
 
 const response = { data: { accessToken: "secredcode4324" } };
 
@@ -69,10 +65,10 @@ const deleteUsersAction: DeleteUsersStart = {
    payload: [currentUser],
 };
 
-const getUserByNameAction: GetUserByCredentialsStart = {
-   type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
-   payload: "admin",
-};
+// const getUserByNameAction: GetUserByCredentialsStart = {
+//    type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_START,
+//    payload: "admin",
+// };
 
 const error = {
    response: {
@@ -86,7 +82,6 @@ describe("sign in flow", () => {
       return expectSaga(signInWithEmail, signInStart)
          .provide([
             [matchers.call(postRequest, API_URL.SIGN_IN, signInCredentials), response],
-            [matchers.call(decodeToken, response.data.accessToken), currentUser],
          ])
          .call(Authenticate, signInStart.payload, API_URL.SIGN_IN)
          .put(action.authenticationSuccess(currentUser))
@@ -124,7 +119,6 @@ describe("sign up flow", () => {
       return expectSaga(signUpWithEmail, signUpStart)
          .provide([
             [matchers.call(postRequest, API_URL.SIGN_UP, signUpCredentials), response],
-            [matchers.call(decodeToken, response.data.accessToken), currentUser],
          ])
          .call(Authenticate, signUpStart.payload, API_URL.SIGN_UP)
          .put(action.authenticationSuccess(currentUser))
@@ -172,17 +166,17 @@ describe("get users from DB", () => {
          .run();
    });
 
-   test("successfuly get user by url params", () => {
-      return expectSaga(getUserByCredentials, getUserByNameAction)
-         .provide([
-            [
-               matchers.call(getRequest, API_URL.GET_USER_SEND_URL, {
-                  name: "admin",
-               }),
-               user,
-            ],
-         ])
-         .put(action.GetUserByCredentialsSuccess(currentUser))
-         .run();
-   });
+   // test("successfuly get user by url params", () => {
+   //    return expectSaga(getUserByCredentials, getUserByNameAction)
+   //       .provide([
+   //          [
+   //             matchers.call(getRequest, API_URL.GET_USER_SEND_URL, {
+   //                name: "admin",
+   //             }),
+   //             user,
+   //          ],
+   //       ])
+   //       .put(action.getUserByCredentialsSuccess(currentUser))
+   //       .run();
+   // });
 });

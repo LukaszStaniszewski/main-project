@@ -1,22 +1,21 @@
-import { useState, useEffect, Fragment, MouseEvent } from "react";
+import { useState, useEffect, MouseEvent } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { PhotographIcon } from "@heroicons/react/outline";
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
-
-import { getItemStart } from "../../store/items/item.actions";
-import { selectItem } from "../../store/items/item.selector";
-import { selectComments } from "../../store/comments/comment.selector";
+import { selectItem, getItemStart } from "../../store/items";
+import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
+import { selectCurrentUser } from "../../store/user";
 import {
    createCommentStart,
-   getCommentsStart,
    getCommentStart,
-} from "../../store/comments/comment.action";
-import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
-import { selectCurrentUser } from "../../store/user/user.selector";
-import { IComment, ICreateComment } from "../../store/comments/comment.types";
+   getCommentsStart,
+   IComment,
+   ICreateComment,
+   selectComments,
+} from "../../store/comments";
 import useDeleteComment from "../../hooks/comments/delete-comment";
 import socket from "../../api/socket";
 import Comment from "../../components/comment/commet.component";

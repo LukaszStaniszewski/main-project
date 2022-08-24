@@ -1,6 +1,6 @@
 import ImageKit from "imagekit";
 
-import { imageKitPublicKey, imageKitPrivateKey, imageKitUrl } from "../config/keyes";
+import { imageKitPublicKey, imageKitPrivateKey, imageKitUrl } from "../config/keys";
 import getErrorMessage from "./getErrorMessage";
 import { ICreateItemCollection } from "../models/collection.model";
 

@@ -5,13 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { ReactComponent as MoonIcon } from "../../assets/moon-icon.svg";
 import { ReactComponent as SunIcon } from "../../assets/sun-icon.svg";
-import { decode as decodeToken } from "../../utils/userToken.utils";
-import { setCurrentUser, logOutStart } from "../../store/user/user.action";
-import { selectCurrentUser } from "../../store/user/user.selector";
-import { setLanguage } from "../../store/local/local.action";
-import { selectCurrentLanguage } from "../../store/local/local.selector";
+import { setLanguage, selectCurrentLanguage } from "../../store/local";
 import SearchBar from "../search-bar/searchBar.component";
 import { DropDownWrapper, Options, Button, Restricted } from "./drop-down";
+import { getCurrentUserStart, logOutStart, selectCurrentUser } from "../../store/user";
 
 const languageList = {
    Polski: "pl",
@@ -28,15 +25,9 @@ const Navbar = () => {
    const navigate = useNavigate();
 
    useEffect(() => {
-      const token = JSON.parse(localStorage.getItem("token") as string);
-      if (!token) {
-         setCurrentUser(null);
-         return;
-      }
-      const user = decodeToken(token.accessToken);
-      if (user) {
-         dispatch(setCurrentUser(user));
-      }
+      const controller = new AbortController();
+      if (currentUser) return;
+      dispatch(getCurrentUserStart());
    }, []);
 
    useEffect(() => {
@@ -110,7 +101,11 @@ const Navbar = () => {
                <SearchBar />
                <div className="flex items-center pb-4">
                   <label className="swap swap-rotate w-6">
-                     <input type="checkbox" className="hidden" onChange={themeSwitchHandler} />
+                     <input
+                        type="checkbox"
+                        className="hidden"
+                        onChange={themeSwitchHandler}
+                     />
                      <SunIcon />
                      <MoonIcon />
                   </label>

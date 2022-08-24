@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 
-import { Spinner, SpinningDots } from "../spinner/export-helper";
+import { Spinner, SpinningDots } from "../spinner";
 import {
    selectLargestCollections,
    selectCollectionLoadingState,

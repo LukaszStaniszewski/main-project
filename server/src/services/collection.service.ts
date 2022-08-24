@@ -6,7 +6,7 @@ import CollectionModel, {
 import { IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import { deleteItemsByCollection } from "./item.service";
-import { Values_TO_Omit } from "../config/constants.config";
+import { ErrorMessage, Values_TO_Omit } from "../config/constants.config";
 import { findUser } from "./user.service";
 import ItemModel from "../models/item.model";
 import logger from "../utils/logger";
@@ -28,11 +28,11 @@ export const findCollectionsByUser = async (
 ): Promise<IItemCollectionDocument[]> => {
    try {
       const user = await findUser({ name: name });
-      if (!user) throw new Error("User not found");
+      if (!user) throw new Error(ErrorMessage.USER_NOT_FOUND);
       const collections = await CollectionModel.find({ "owner.name": name })
          .select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
          .lean();
-      if (!collections.length) throw new Error("Given user has no collections");
+      if (!collections.length) throw new Error(ErrorMessage.USER_HAS_NO_COLLECTIONS);
       return collections;
    } catch (error) {
       logger.error(error);
@@ -69,9 +69,9 @@ export const findCollection = async (
    collectionId: string
 ): Promise<IItemCollectionDocument> => {
    try {
-      const collection = await CollectionModel.findOne({ _id: collectionId }).select(
-         Values_TO_Omit.SEND_COLLECTION_REQUEST
-      );
+      const collection = await CollectionModel.findOne({ _id: collectionId })
+         .select(Values_TO_Omit.SEND_COLLECTION_REQUEST)
+         .lean();
       if (!collection) throw new Error("Collection not found");
       return collection;
    } catch (error) {

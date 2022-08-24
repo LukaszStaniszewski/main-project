@@ -4,7 +4,7 @@ import { selectItemLoading, selectLatestItems } from "../../store/items/item.sel
 import { getLatestItemsStart } from "../../store/items/item.actions";
 import LatestItem from "./latest-item.component";
 import useLazyLoad from "../../hooks/useLazyLoad";
-import { Spinner, SpinningDots } from "../spinner/export-helper";
+import { Spinner, SpinningDots } from "../spinner";
 
 const initialAmount = window.screen.height > 1000 ? 12 : 8;
 const itemsOnScroll = window.screen.height > 1000 ? 6 : 4;

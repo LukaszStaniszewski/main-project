@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import CreateItem from "../../components/create-item/createItem.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
-import { selectCollection } from "../../store/collections/collection.selector";
+import { selectCollection, ICollection } from "../../store/collections";
 import { ICreateItem, Topic } from "../../components/create-item/item-types/itemTypes";
-import { ICollection } from "../../store/collections/collection.types";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { createItemsStart } from "../../store/items/item.actions";
 import Spinner from "../../components/spinner/spinner.component";

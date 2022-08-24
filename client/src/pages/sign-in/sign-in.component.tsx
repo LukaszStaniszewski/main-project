@@ -5,9 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import FormInput from "../../components/form-input/form-input.componentx";
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component";
-import { signInStart, closeToast } from "../../store/user/user.action";
-import { selectToast } from "../../store/user/user.selector";
-import { selectUserReducer } from "../../store/user/user.selector";
+import {
+   selectUserReducer,
+   selectToast,
+   signInStart,
+   closeToast,
+} from "../../store/user";
 import Alert, { IAlert } from "../../components/alert/alert.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 
@@ -139,7 +142,9 @@ const SignIn = () => {
                </div>
             </section>
             <div
-               className={`${!alert.toggle && "opacity-0"} absolute bottom-5 z-50 left-1/3`}
+               className={`${
+                  !alert.toggle && "opacity-0"
+               } absolute bottom-5 z-50 left-1/3`}
                onClick={closeToastHandler}
             >
                <Alert message={alert.message} type={alert.type} />
