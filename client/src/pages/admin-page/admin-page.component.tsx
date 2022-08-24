@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 
 import CustomTable from "../../components/custom-table/custom-table.component";
-import { getUsersStart, logOutStart } from "../../store/user/user.action";
-import { selectUserReducer } from "../../store/user/user.selector";
-import { ICurrentUser } from "../../store/user/user.types";
+import {
+   ICurrentUser,
+   selectUserReducer,
+   getUsersStart,
+   logOutStart,
+} from "../../store/user";
 import useUpdateUsers from "../../hooks/user-session/update-users.hook";
 import useDeleteUsers from "../../hooks/user-session/delete-users.hook";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
@@ -73,7 +76,12 @@ const AdminPage = () => {
                >
                   unblock user
                </Button>
-               <Button size="sm" variant="outlined" value="role_user" onClick={updateSelectedUsers}>
+               <Button
+                  size="sm"
+                  variant="outlined"
+                  value="role_user"
+                  onClick={updateSelectedUsers}
+               >
                   set role to user
                </Button>
                <Button
@@ -84,7 +92,12 @@ const AdminPage = () => {
                >
                   set role to admin
                </Button>
-               <Button size="sm" variant="outlined" color="red" onClick={deleteSelectedUsers}>
+               <Button
+                  size="sm"
+                  variant="outlined"
+                  color="red"
+                  onClick={deleteSelectedUsers}
+               >
                   delete user
                </Button>
             </div>

@@ -6,14 +6,14 @@ import {
    createCollection,
    deleteCollection,
    findLargestCollections,
-} from "../services/collection.service";
+   authorize,
+} from "../services";
 import {
    ErrorMessage,
    SuccessMessage,
    collectionTopics,
 } from "../config/constants.config";
 import { uploadImage } from "../utils/imageKit.utils";
-import { authorize } from "../services/user.service";
 import getErrorMessage from "../utils/getErrorMessage";
 
 export const createCollectionHandler = async (

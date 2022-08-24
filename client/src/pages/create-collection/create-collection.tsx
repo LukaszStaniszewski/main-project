@@ -6,18 +6,18 @@ import { useNavigate } from "react-router-dom";
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import FormInput from "../../components/form-input/form-input.componentx";
-import SelectElement from "../../components/select-dropdown/selectDropdown.component";
+import SelectDropwdown from "../../components/select-dropdown/selectDropdown.component";
 import CreateItem from "../../components/create-item/createItem.component";
-
 import { ICreateItem, Topic } from "../../components/create-item/item-types/itemTypes";
-import { selectCurrentUser, selectToast } from "../../store/user/user.selector";
-import { createCollectionWithItemsStart } from "../../store/collections/collection.actions";
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
-import { selectCollectionLoadingState } from "../../store/collections/collection.selector";
 import Alert, { IAlert } from "../../components/alert/alert.component";
 import { disableTopicDropdown } from "../../store/local/local.action";
-import { closeToast } from "../../store/user/user.action";
-import { ICreateCollection } from "../../store/collections/collection.types";
+import { closeToast, selectCurrentUser, selectToast } from "../../store/user";
+import {
+   createCollectionWithItemsStart,
+   selectCollectionLoadingState,
+   ICreateCollection,
+} from "../../store/collections";
 
 const requiredCollectionFields = {
    name: "",
@@ -239,7 +239,7 @@ const CreateCollection = () => {
 
                   <div className="col-start-2 col-end-3">
                      <div className="w-full mb-5">
-                        <SelectElement setTopic={setCollectionTopic} />
+                        <SelectDropwdown setTopic={setCollectionTopic} />
                      </div>
                      <div
                         className={`${!alert.toggle && "opacity-0"}`}

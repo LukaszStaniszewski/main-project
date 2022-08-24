@@ -15,7 +15,7 @@ const createExpressServer = () => {
    app.use(express.urlencoded({ extended: false }));
    app.use(
       cors({
-         origin: ["http://localhost:3000"],
+         origin: process.env.ORIGIN,
          methods: ["GET", "POST", "PATCH", "DELETE"],
          credentials: false,
          allowedHeaders: ["Content-type", "Authorization", "x-refresh"],

@@ -5,21 +5,18 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import { CogIcon } from "@heroicons/react/outline";
 import { Menu, MenuHandler, MenuList, MenuItem, Button } from "@material-tailwind/react";
 
-import { getCollectionWithItemsStart } from "../../store/collections/collection.actions";
 import {
+   getCollectionWithItemsStart,
    selectCollection,
    selectCollectionsWithoutItems,
-} from "../../store/collections/collection.selector";
-import {
    ICollection,
    ICollectionWithoutItems,
-} from "../../store/collections/collection.types";
+} from "../../store/collections";
+import { AdjustedItems, selectAdjustedItems, IItem } from "../../store/items";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
 import CustomTable from "../../components/custom-table/custom-table.component";
-import { AdjustedItems, selectAdjustedItems } from "../../store/items/item.selector";
 import useDeleteItems from "../../hooks/items/delete-items.hook";
-import { IItem } from "../../store/items/item.types";
 import useDeleteCollection from "../../hooks/collection/delete-collections.hook";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { selectIs404PageActive } from "../../store/local/local.selector";

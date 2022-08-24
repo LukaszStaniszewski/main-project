@@ -7,9 +7,9 @@ import {
    findItem,
    findLatestItems,
    assignCollectionNameToItem,
-} from "../services/item.service";
+   authorize,
+} from "../services";
 import { SuccessMessage, ErrorMessage } from "../config/constants.config";
-import { authorize } from "../services/user.service";
 import getErrorMessage from "../utils/getErrorMessage";
 
 interface ItemInput extends Omit<IItemDocument, "_id" | "collectionId"> {

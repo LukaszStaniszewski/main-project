@@ -37,7 +37,7 @@ export const findComments = async (itemId: FilterQuery<ICommentDocument>) => {
    }
 };
 
-export const authorize = async (
+export const authorizeCommentOwner = async (
    user: IUserDocument,
    params: FilterQuery<ICommentDocument>
 ) => {

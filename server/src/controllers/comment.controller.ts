@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
 import { ICreateComment } from "../models/comment.model";
 import {
-   authorize,
+   authorizeCommentOwner,
    createComment,
    deleteComment,
    findComments,
-} from "../services/comment.service";
+} from "../services";
 import { ErrorMessage } from "../config/constants.config";
 import getErrorMessage from "../utils/getErrorMessage";
 
@@ -28,7 +28,7 @@ export const deleteCommentHandler = async (
 ) => {
    const user = res.locals.user;
    try {
-      await authorize(user, req.params);
+      await authorizeCommentOwner(user, req.params);
       await deleteComment(req.params.id);
       res.sendStatus(200);
    } catch (error) {

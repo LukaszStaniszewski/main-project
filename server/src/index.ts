@@ -24,7 +24,7 @@ const app = createExpressServer();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
    cors: {
-      origin: ["http://localhost:3000"],
+      origin: process.env.ORIGIN,
       methods: ["GET", "POST", "PATCH", "DELETE"],
       allowedHeaders: ["Content-type", "Authorization", "x-refresh"],
       credentials: true,

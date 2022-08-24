@@ -5,8 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import FormInput from "../../components/form-input/form-input.componentx";
 import SocialMediaAuthentication from "../../components/social-media-auth/socialMediaAuth.component";
-import { signUpStart, closeToast, showToast } from "../../store/user/user.action";
-import { selectCurrentUser, selectToast } from "../../store/user/user.selector";
+import {
+   selectCurrentUser,
+   selectToast,
+   signUpStart,
+   closeToast,
+   showToast,
+} from "../../store/user";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Alert from "../../components/alert/alert.component";
 const defaultFormFields = {

@@ -4,14 +4,15 @@ import { useParams, Link } from "react-router-dom";
 import { FolderAddIcon } from "@heroicons/react/outline";
 
 import { useSelector } from "react-redux";
-import { selectToast, selectUserReducer } from "../../store/user/user.selector";
-import { selectIs404PageActive } from "../../store/local/local.selector";
-import { closeToast } from "../../store/user/user.action";
-import { getCollectionsWithoutItemsStart } from "../../store/collections/collection.actions";
-import { selectCollectionsWithoutItems } from "../../store/collections/collection.selector";
+import { selectIs404PageActive } from "../../store/local";
+import { selectToast, selectUserReducer, closeToast } from "../../store/user";
 import CustomTable from "../../components/custom-table/custom-table.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
-import { ICollectionWithoutItems } from "../../store/collections/collection.types";
+import {
+   getCollectionsWithoutItemsStart,
+   selectCollectionsWithoutItems,
+   ICollectionWithoutItems,
+} from "../../store/collections";
 import Alert from "../../components/alert/alert.component";
 import NotFound from "../not-found/not-found.component";
 

@@ -31,7 +31,6 @@ import {
    logOut,
 } from "./user.saga";
 import { currentUser, successMessage } from "../../test-utils/fake-data";
-import { AxiosError } from "axios";
 
 const response = { data: { accessToken: "secredcode4324" } };
 
@@ -182,7 +181,7 @@ describe("get users from DB", () => {
                user,
             ],
          ])
-         .put(action.GetUserByCredentialsSuccess(currentUser))
+         .put(action.getUserByCredentialsSuccess(currentUser))
          .run();
    });
 });

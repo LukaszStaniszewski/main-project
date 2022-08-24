@@ -1,12 +1,18 @@
 import { Request, Response } from "express";
-import { createUser, deleteUsers, findUser, updateUsers } from "../services/user.service";
-import { updateUsersSession } from "../services/session.service";
+
+import {
+   createUser,
+   deleteUsers,
+   findUser,
+   updateUsers,
+   updateUsersSession,
+   createSession,
+} from "../services";
 import User, { IUserCredentials, IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
 import logger from "../utils/logger";
 import { signJwt } from "../utils/jtw.utils";
 import * as key from "../config/keyes";
-import { createSession } from "../services/session.service";
 import { Values_TO_Omit, ErrorMessage } from "../config/constants.config";
 
 export const registerAndSignIn = async (

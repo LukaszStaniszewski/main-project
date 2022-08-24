@@ -4,10 +4,12 @@ import logger from "../utils/logger";
 import {
    createCollectionWithItems,
    ICollectionWithItems,
-} from "../services/collection&Items.service";
-import { findItems, autoCompleteItem } from "../services/item.service";
-import { autoCompleteCollection, findCollection } from "../services/collection.service";
-import { autoCompleteUser } from "../services/user.service";
+   findItems,
+   autoCompleteItem,
+   autoCompleteCollection,
+   findCollection,
+   autoCompleteUser,
+} from "../services";
 import getErrorMessage from "../utils/getErrorMessage";
 import { ErrorMessage } from "../config/constants.config";
 

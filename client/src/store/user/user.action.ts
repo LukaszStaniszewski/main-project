@@ -8,14 +8,14 @@ export const getUserByCredentialsStart = (
    payload: userName,
 });
 
-export const GetUserByCredentialsSuccess = (
+export const getUserByCredentialsSuccess = (
    user: ICurrentUser
 ): type.GetUserByCredentialsSuccess => ({
    type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_SUCCESS,
    payload: user,
 });
 
-export const GetUserByCredentialsFailure = (
+export const getUserByCredentialsFailure = (
    toast: IToast
 ): type.GetUserByCredentialsFailure => ({
    type: USER_ACTION_TYPES.GET_USER_BY_CREDENTIALS_FAILURE,

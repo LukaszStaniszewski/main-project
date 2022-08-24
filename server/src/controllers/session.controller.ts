@@ -2,12 +2,7 @@ import { Request, Response } from "express";
 
 import { IUserCredentials } from "../models/user.model";
 import { ISessionDocument } from "../models/session.model";
-import {
-   authentication,
-   createSession,
-   findSession,
-   updateSession,
-} from "../services/session.service";
+import { authentication, createSession, findSession, updateSession } from "../services";
 import { signJwt } from "../utils/jtw.utils";
 import * as key from "../config/keyes";
 import { ErrorMessage } from "../config/constants.config";
