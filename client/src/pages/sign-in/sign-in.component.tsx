@@ -30,7 +30,7 @@ const SignIn = () => {
    const [alert, setAlert] = useState(alertSettings);
    const { email, password } = formFields;
    const dispatch = useDispatch();
-   const { currentUser, isLoading } = useSelector(selectUserReducer);
+   const { currentUser } = useSelector(selectUserReducer);
    const navigate = useNavigate();
    const toast = useSelector(selectToast);
 

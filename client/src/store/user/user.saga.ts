@@ -21,7 +21,6 @@ import * as action from "./user.action";
 
 export function* Authenticate(credentials: IUserFormValues, url: string) {
    try {
-      localStorage.removeItem("token");
       yield* call(postRequest<ITokens>, url, credentials);
       const { data } = yield* call(getRequest<ICurrentUser>, "/api/user/current");
       yield* all([
@@ -47,6 +46,10 @@ export function* signInWithEmail({ payload: credentials }: SignInStart) {
 export function* signUpWithEmail({ payload: credentials }: SignUpStart) {
    yield* call(Authenticate, credentials, API_URL.SIGN_UP);
 }
+
+// export function* signInWithGoogle() {
+//    const { data } = yield* call(getRequest<ICurrentUser>, getGoogleOAuthUrl());
+// }
 
 export function* getCurrentUser() {
    try {

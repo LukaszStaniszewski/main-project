@@ -7,7 +7,7 @@ import HeaderExtension from "../../components/headerExtension/headerExtension.co
 import Spinner from "../../components/spinner/spinner.component";
 import { selectItem, getItemStart } from "../../store/items";
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
-import { selectCurrentUser } from "../../store/user";
+import { ICurrentUser, selectCurrentUser } from "../../store/user";
 import {
    createCommentStart,
    getCommentStart,
@@ -23,8 +23,10 @@ import OptionalItemFields from "../../components/optional-item-fields/optional-i
 import { selectIs404PageActive } from "../../store/local/local.selector";
 import NotFound from "../not-found/not-found.component";
 
+type CommentBody = { description: string };
+
 const ItemPage = () => {
-   const [commentText, setCommentText] = useState<{ description: string }>();
+   const [commentBody, setCommentBody] = useState<CommentBody>();
    const [deleteComment] = useDeleteComment();
    const dispatch = useDispatch();
    const item = useSelector(selectItem);
@@ -50,18 +52,22 @@ const ItemPage = () => {
    }, [socket]);
 
    useEffect(() => {
-      postCommentHandler();
-   }, [commentText]);
+      if (isCommentInputValid()) {
+         const comment = adjustCommentData(commentBody!, id!, currentUser!);
+         dispatch(createCommentStart(comment));
+      }
+   }, [commentBody]);
 
-   const postCommentHandler = () => {
-      const comment = adjustCommentData();
-      if (!comment) return;
-      dispatch(createCommentStart(comment));
+   const isCommentInputValid = (): boolean => {
+      return id && commentBody && currentUser ? true : false;
    };
 
-   const adjustCommentData = (): ICreateComment | null => {
-      if (!id || !commentText || !currentUser) return null;
-      return { body: commentText.description, itemId: id, postedBy: currentUser?.name };
+   const adjustCommentData = (
+      commentBody: CommentBody,
+      id: string,
+      currentUser: ICurrentUser
+   ): ICreateComment => {
+      return { body: commentBody.description, itemId: id, postedBy: currentUser?.name };
    };
 
    const deleteCommentHandler = (event: MouseEvent<HTMLButtonElement>) => {
@@ -124,7 +130,7 @@ const ItemPage = () => {
                   </div>
                ))}
                <MarkdownTextArea
-                  setText={setCommentText}
+                  setText={setCommentBody}
                   elementsText={{
                      label: "Enter your comment",
                      button: "Post comment",
