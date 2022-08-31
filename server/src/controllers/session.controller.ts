@@ -72,8 +72,8 @@ export const deleteSessions = async (req: Request, res: Response) => {
    const sessionId = res.locals?.user?.sessionId;
    try {
       const session = await updateSession({ _id: sessionId }, { valid: false });
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken", { domain: process.env.ORIGIN, path: "/" });
+      res.clearCookie("refreshToken", { domain: process.env.ORIGIN, path: "/" });
       return res.status(200).send({
          accessToken: null,
          refreshToken: null,
