@@ -18,9 +18,9 @@ import { ErrorMessage } from "../config/constants.config";
 import logger from "../utils/logger";
 
 const accessTokenCookieOptions: CookieOptions = {
-   maxAge: 900000, // 15mins
+   maxAge: 900000, // 15min
    httpOnly: true,
-   domain: "localhost",
+   domain: "main-app-collections.herokuapp.com",
    path: "/",
    sameSite: "strict",
    secure: false,
