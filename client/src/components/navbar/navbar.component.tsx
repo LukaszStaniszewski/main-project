@@ -3,8 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ReactComponent as MoonIcon } from "../../assets/moon-icon.svg";
-import { ReactComponent as SunIcon } from "../../assets/sun-icon.svg";
+import { MoonIcon, SunIcon } from "../../assets";
 import { setLanguage, selectCurrentLanguage } from "../../store/local";
 import SearchBar from "../search-bar/searchBar.component";
 import { DropDownWrapper, Options, Button, Restricted } from "./drop-down";

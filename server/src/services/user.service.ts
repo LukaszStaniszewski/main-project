@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, UpdateQuery, QueryOptions } from "mongoose";
 
 import User, { IUserCredentials, IUserDocument } from "../models/user.model";
 import getErrorMessage from "../utils/getErrorMessage";
@@ -94,6 +94,19 @@ export const autoCompleteUser = async (query: string) => {
          },
       ]);
       return result.map((user) => ({ ...user, label: user.label + " - User" }));
+   } catch (error) {
+      logger.error(error);
+      throw new Error(getErrorMessage(error));
+   }
+};
+
+export const findAndUpdateUser = async (
+   query: FilterQuery<IUserDocument>,
+   update: UpdateQuery<IUserDocument>,
+   options?: QueryOptions
+) => {
+   try {
+      return await User.findOneAndUpdate(query, update, options).lean();
    } catch (error) {
       logger.error(error);
       throw new Error(getErrorMessage(error));

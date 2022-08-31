@@ -10,6 +10,6 @@ const commentRouter = Router();
 
 commentRouter.post("/new", requireUser, createCommentHandler);
 commentRouter.delete("/delete/:id", requireUser, deleteCommentHandler);
-commentRouter.get("/:id", sendCommentsHandler);
+commentRouter.get("/:itemId", sendCommentsHandler);
 
 export default commentRouter;

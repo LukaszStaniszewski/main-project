@@ -3,6 +3,7 @@ import { useRef } from "react";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import LatestItemsOverview from "../../components/latest-items/latest-items-overview.component";
 import LargestCollectionsOverview from "../../components/largest-collections/largest-collections-overview.component";
+
 const HomePage = () => {
    const ref = useRef<HTMLHeadingElement>(null);
 

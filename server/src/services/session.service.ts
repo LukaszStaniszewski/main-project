@@ -1,5 +1,7 @@
 import { omit } from "lodash";
 import { Types, FilterQuery, UpdateQuery } from "mongoose";
+import qs from "qs";
+import axios from "axios";
 
 import { IUserDocument } from "../models/user.model";
 import SessionModel, { ISessionDocument } from "../models/session.model";
@@ -8,6 +10,7 @@ import { verifyToken, signJwt } from "../utils/jtw.utils";
 import getErrorMessage from "../utils/getErrorMessage";
 import { Values_TO_Omit } from "../config/constants.config";
 import * as key from "../config/keys";
+import logger from "../utils/logger";
 
 export const authentication = async ({
    email,
@@ -78,4 +81,40 @@ export const reIssueAccessToken = async (refreshToken: string) => {
       "60s"
    );
    return accessToken;
+};
+
+interface GoogleTokensResult {
+   access_token: string;
+   expires_in: Number;
+   refresh_token: string;
+   scope: string;
+   id_token: string;
+}
+
+export const getGoogleOAuthTokens = async ({
+   code,
+}: {
+   code: string;
+}): Promise<GoogleTokensResult> => {
+   const url = "https://oauth2.googleapis.com/token";
+
+   const values = {
+      code,
+      client_id: key.googleClientId,
+      client_secret: key.googleClientSecret,
+      redirect_uri: key.googleOauthRedirectUrl,
+      grant_type: "authorization_code",
+   };
+
+   try {
+      const res = await axios.post<GoogleTokensResult>(url, qs.stringify(values), {
+         headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+         },
+      });
+      return res.data;
+   } catch (error) {
+      logger.error(error, "failed to fetch Google Oauth Tokens");
+      throw new Error(getErrorMessage(error));
+   }
 };

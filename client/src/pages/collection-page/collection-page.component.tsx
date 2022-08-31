@@ -21,6 +21,7 @@ import useDeleteCollection from "../../hooks/collection/delete-collections.hook"
 import { selectCurrentUser } from "../../store/user/user.selector";
 import { selectIs404PageActive } from "../../store/local/local.selector";
 import NotFound from "../not-found/not-found.component";
+import { ICurrentUser } from "../../store/user";
 
 const defaultCollectionValues: ICollection = {
    _id: "",
@@ -60,19 +61,16 @@ const CollectionPage = () => {
    }, [params]);
 
    useEffect(() => {
-      if (!collection) return;
-      authorization();
-   }, [collection, []]);
-
-   const authorization = () => {
-      if (
-         currentUser?.name == collection?.owner.name ||
-         currentUser?.status === "admin"
-      ) {
+      if (isAuthorized(currentUser)) {
          setWriteMode(true);
       } else {
          setWriteMode(false);
       }
+   }, [collection, []]);
+
+   const isAuthorized = (user: ICurrentUser | null): boolean => {
+      if (user?.name == collection?.owner.name || user?.status === "admin") return true;
+      return false;
    };
 
    useEffect(() => {

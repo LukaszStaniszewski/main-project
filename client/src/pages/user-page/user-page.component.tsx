@@ -5,7 +5,12 @@ import { FolderAddIcon } from "@heroicons/react/outline";
 
 import { useSelector } from "react-redux";
 import { selectIs404PageActive } from "../../store/local";
-import { selectToast, selectUserReducer, closeToast } from "../../store/user";
+import {
+   selectToast,
+   selectUserReducer,
+   closeToast,
+   ICurrentUser,
+} from "../../store/user";
 import CustomTable from "../../components/custom-table/custom-table.component";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import {
@@ -49,10 +54,6 @@ const UserPage = () => {
       setColumns(columns);
    }, [collectionsWihoutItems]);
 
-   useEffect(() => {
-      authorization();
-   }, [name, []]);
-
    const customizeColumns = () => {
       return [
          ...Object.keys(collectionsWihoutItems[0]).filter(
@@ -61,12 +62,18 @@ const UserPage = () => {
          "createdAt",
       ];
    };
-   const authorization = () => {
-      if (currentUser?.name == name || currentUser?.status === "admin") {
+
+   useEffect(() => {
+      if (isAuthorized(currentUser)) {
          setWriteMode(true);
       } else {
          setWriteMode(false);
       }
+   }, [name, []]);
+
+   const isAuthorized = (user: ICurrentUser | null): boolean => {
+      if (user?.name == name || user?.status === "admin") return true;
+      return false;
    };
 
    useEffect(() => {

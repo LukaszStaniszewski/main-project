@@ -1,7 +1,13 @@
 import { useState } from "react";
 
 import TableRows from "./table-rows/table-rows.component";
-import { ICustomTable, Columns, Rows, RequiredProps, SortedBy } from "./table-types/table-types";
+import {
+   ICustomTable,
+   Columns,
+   Rows,
+   RequiredProps,
+   SortedBy,
+} from "./table-types/table-types";
 
 const CustomTable = <T extends RequiredProps>({
    rows = [],

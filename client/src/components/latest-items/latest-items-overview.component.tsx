@@ -1,7 +1,10 @@
 import { useRef, Fragment } from "react";
 
-import { selectItemLoading, selectLatestItems } from "../../store/items/item.selector";
-import { getLatestItemsStart } from "../../store/items/item.actions";
+import {
+   selectItemLoading,
+   selectLatestItems,
+   getLatestItemsStart,
+} from "../../store/items";
 import LatestItem from "./latest-item.component";
 import useLazyLoad from "../../hooks/useLazyLoad";
 import { Spinner, SpinningDots } from "../spinner";
