@@ -11,7 +11,7 @@ import CreateItem from "../../components/create-item/createItem.component";
 import { ICreateItem, Topic } from "../../components/create-item/item-types/itemTypes";
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
 import Alert, { IAlert } from "../../components/alert/alert.component";
-import { disableTopicDropdown } from "../../store/local/local.action";
+import { disableTopicDropdown } from "../../store/local/local.slice";
 import { closeToast, selectCurrentUser, selectToast } from "../../store/user";
 import {
    createCollectionWithItemsStart,

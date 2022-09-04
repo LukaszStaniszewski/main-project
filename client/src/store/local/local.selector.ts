@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { ILocalState } from "./local.reducer";
+import { ILocalState } from "./local.slice";
 import { AppState } from "../root-reducer";
 
 export const selectLocalReducer = (state: AppState): ILocalState => state.localData;

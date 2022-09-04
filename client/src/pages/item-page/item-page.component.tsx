@@ -7,7 +7,7 @@ import HeaderExtension from "../../components/headerExtension/headerExtension.co
 import Spinner from "../../components/spinner/spinner.component";
 import { selectItem, getItemStart } from "../../store/items";
 import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
-import { ICurrentUser, selectCurrentUser } from "../../store/user";
+import { ICurrentUser, selectCurrentUser, closeToast } from "../../store/user";
 import {
    createCommentStart,
    getCommentStart,
@@ -22,12 +22,14 @@ import Comment from "../../components/comment/commet.component";
 import OptionalItemFields from "../../components/optional-item-fields/optional-item-fields.component";
 import { selectIs404PageActive } from "../../store/local/local.selector";
 import NotFound from "../not-found/not-found.component";
+import Alert, { IAlert } from "../../components/alert/alert.component";
 
 type CommentBody = { description: string };
 
 const ItemPage = () => {
    const [commentBody, setCommentBody] = useState<CommentBody>();
    const [deleteComment] = useDeleteComment();
+   const [alert, setAlert] = useState<IAlert>();
    const dispatch = useDispatch();
    const item = useSelector(selectItem);
    const comments = useSelector(selectComments);
@@ -52,14 +54,19 @@ const ItemPage = () => {
    }, [socket]);
 
    useEffect(() => {
+      if(!commentBody) return
       if (isCommentInputValid()) {
-         const comment = adjustCommentData(commentBody!, id!, currentUser!);
+         const comment = adjustCommentData(commentBody, id!, currentUser!);
          dispatch(createCommentStart(comment));
       }
    }, [commentBody]);
 
    const isCommentInputValid = (): boolean => {
-      return id && commentBody && currentUser ? true : false;
+      if(!currentUser) {
+         setAlert({message: "You must be logged in to post a commnet", type:"warning",toggle:true})
+         return false
+      }
+      return id && currentUser ? true : false;
    };
 
    const adjustCommentData = (
@@ -79,6 +86,11 @@ const ItemPage = () => {
 
    const findCommentToDelete = (itemId: string): IComment | undefined => {
       return comments?.find((comment) => comment._id === itemId);
+   };
+
+   const closeToastHandler = () => {
+      setAlert((prevState) => ({ ...prevState, toggle: false }));
+      dispatch(closeToast());
    };
 
    if (!item && !Is404PageActive) {
@@ -119,7 +131,7 @@ const ItemPage = () => {
                )}
             </div>
             <div className="col-start-1 col-end-6">
-               {comments?.map((comment) => (
+               {comments?.length > 0 && comments.map((comment) => (
                   <div key={comment._id} className="border p-2 m-2">
                      <Comment
                         comment={comment}
@@ -137,6 +149,14 @@ const ItemPage = () => {
                      submited: "Your post has been created",
                   }}
                />
+            </div>
+            <div
+               className={`${
+                  !alert?.toggle && "opacity-0"
+               } absolute bottom-5 z-50 left-1/3`}
+               onClick={closeToastHandler}
+            >
+               <Alert message={alert?.message} type={alert?.type} />
             </div>
          </main>
       </section>

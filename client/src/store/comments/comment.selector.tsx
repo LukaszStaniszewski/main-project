@@ -1,6 +1,6 @@
 import { createSelector } from "reselect";
 import { AppState } from "../root-reducer";
-import { ICommentState } from "./comment.reducer";
+import { ICommentState } from "./comment.slice";
 
 export const selectCommentReducer = (state: AppState): ICommentState => state.comments
 

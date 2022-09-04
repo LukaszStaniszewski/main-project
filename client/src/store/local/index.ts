@@ -1,3 +1,3 @@
-export * from "./local.action";
+export * from "./local.slice";
 export * from "./local.selector";
-export * from "./local.types";
+

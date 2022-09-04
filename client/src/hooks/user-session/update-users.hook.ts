@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 
-import {ICurrentUser} from "../../store/user/user.types"
-import { updateUsersStart, setUsers} from "../../store/user/user.action";
+import { ICurrentUser,  updateUsersStart, setUsers} from "../../store/user";
 import { changeItemsValue } from "../../utils/hooks.utils";
 
 const useUpdateUsers = () => {

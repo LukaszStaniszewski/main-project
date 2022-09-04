@@ -1,8 +1,7 @@
 import { useDispatch } from "react-redux";
 
-import { deleteUsersStart, setUsers } from "../../store/user/user.action";
 import { deleteItems } from "../../utils/hooks.utils";
-import { ICurrentUser } from "../../store/user/user.types";
+import { ICurrentUser, setUsers, deleteUsersStart } from "../../store/user";
 
 const useDeleteUsers = () => {
 const dispatch = useDispatch()

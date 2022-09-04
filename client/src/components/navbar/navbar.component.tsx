@@ -9,9 +9,9 @@ import SearchBar from "../search-bar/searchBar.component";
 import { DropDownWrapper, Options, Button, Restricted } from "./drop-down";
 import { getCurrentUserStart, logOutStart, selectCurrentUser } from "../../store/user";
 
-const languageList = {
-   Polski: "pl",
-   English: "en",
+enum languageList {
+   Polski = "pl",
+   English = "en",
 };
 
 const Navbar = () => {

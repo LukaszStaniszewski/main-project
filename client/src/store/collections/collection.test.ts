@@ -1,8 +1,8 @@
 import { COLLECTION_ACTION_TYPES } from "./collection.types";
 import {
    deleteCollectionSuccess,
-   createCollectionWithItemsSuccess,
-} from "./collection.actions";
+
+} from "./collection.slice";
 import * as type from "./collection.types";
 import * as matchers from "redux-saga-test-plan/matchers";
 import { expectSaga } from "redux-saga-test-plan";
@@ -62,7 +62,6 @@ describe("create collection", () => {
                null,
             ],
          ])
-         .put(createCollectionWithItemsSuccess())
          .run();
    });
    test("successful creation of collection with items, when collection has image", () => {

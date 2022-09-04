@@ -1,5 +1,5 @@
 import {createSelector} from "reselect"
-import { ICollectionState } from "./collection.reducer"
+import { ICollectionState } from "./collection.slice"
 import { AppState } from "../root-reducer"
 
 export const selectCollectionReducer = (state: AppState) : ICollectionState => state.collection
@@ -19,11 +19,6 @@ export const selectCollectionsWithoutItems = createSelector(
   (state) => state.collectionsWihoutItems.map(collection => {
           return {...collection, owner: collection.owner.name, image: collection.image?.url}
        })
-)
-
-export const selectCollectionErrorMessage = createSelector(
-   selectCollectionReducer,
-   (state) => state.error?.response.data
 )
 
 export const selectCollectionLoadingState = createSelector(

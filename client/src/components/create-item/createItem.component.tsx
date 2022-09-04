@@ -18,7 +18,7 @@ import {
    COLLECTIONS_MOCKUP,
    OptionalFieldsKeysByTopic,
 } from "./item-types/itemTypes";
-import { disableTopicDropdown } from "../../store/local/local.action";
+import { disableTopicDropdown } from "../../store/local/local.slice";
 import Alert, { IAlert } from "../alert/alert.component";
 
 interface ICreateItemComponent {

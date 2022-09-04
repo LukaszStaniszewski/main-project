@@ -1,51 +1,54 @@
-import { AxiosError } from "axios"
 import {takeLatest, put, all, call,} from "typed-redux-saga/macro"
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
-import { show404Page } from "../local/local.action"
-import { createItemsFailure, createItemsSuccess, deleteItemsFailure, deleteItemsSuccess, getItemFailure, getItemSuccess, getLatestItemsFailure, getLatestItemsSuccess } from "./item.actions"
+import { show404Page } from "../local/local.slice"
+import { showToast } from "../user"
+import * as action from "./item.slice"
 import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem, GetLatestItemsStart} from "./item.types"
 
 export function* createItems({payload: item}:CreateItemsStart) {
    try {
+      yield* put(action.startLoading())
       const response = yield* call(postRequest<IItem[]>, API_URL.CREATE_ITEM, item)
-      yield* put(createItemsSuccess(response.data))
+      yield* put(action.setItems(response.data))
    } catch (error) {
-      yield* put(createItemsFailure(error as AxiosError))
+      // yield* put(createItemsFailure(error as AxiosError))
    }
 }
 
 export function* deleteItems({payload: itemsId}:DelteItemsStart) {
    try {
+      yield* put(action.startLoading())
       yield* call(postRequest, API_URL.DELETE_ITEM, itemsId)
-      yield* put(deleteItemsSuccess())
+      yield* put(showToast({type: "success", message: "Items has been deleted"}))
    } catch (error) {
-      yield* put(deleteItemsFailure(error as AxiosError))
+      // yield* put(deleteItemsFailure(error as AxiosError))
    }
 }
 
 function* getItem({payload: itemId}: GetItemStart) {
    try {
+      yield* put(action.startLoading())
       const response = yield* call(getRequest<IItem>, `${API_URL.GET_ITEM}/${itemId}`)
       yield* all([
          put(show404Page(false)),
-         put(getItemSuccess(response.data))
+         put(action.setItem(response.data))
       ]) 
    } catch (error) {
       
       yield* all([
          put(show404Page(true)),
-         put(getItemFailure(error as AxiosError)),
+         // put(getItemFailure(error as AxiosError)),
       ]) 
    }  
 }
 
 export function* getLatestItems({payload: amount}: GetLatestItemsStart) {
- 
    try {
+      yield* put(action.startLoading())
       const response = yield* call(getRequest<ILatestItem[]>, `${API_URL.GET_LATEST_ITEMS}/${amount}`)
-      yield* put(getLatestItemsSuccess(response.data))
+      yield* put(action.setLatestItems(response.data))
    } catch (error) {
-      yield* put(getLatestItemsFailure(error as AxiosError))
+      // yield* put(getLatestItemsFailure(error as AxiosError))
    }
 }
 
