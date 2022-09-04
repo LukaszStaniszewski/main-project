@@ -3,8 +3,8 @@ import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ICreateCo
 
 import * as action from "./collection.slice"
 import * as type from "./collection.types"
+import { setItems } from "../items"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
-import { setItems } from "../items/item.actions"
 import { show404Page } from "../local/local.action"
 import { showToast, selectToast, closeToast} from "../user"
 

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { IItemState } from "./item.reducer";
+import { IItemState } from "./item.slice";
 import { AppState } from "../root-reducer";
 
 export type AdjustedItems = {

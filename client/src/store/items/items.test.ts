@@ -3,10 +3,11 @@ import * as matchers from "redux-saga-test-plan/matchers";
 import { throwError } from "redux-saga-test-plan/providers";
 
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api";
-import { createItemsSuccess, deleteItemsSuccess, getLatestItemsSuccess } from "./item.actions";
+import { setItems, setLatestItems } from "./item.slice";
 import { CreateItemsStart, ITEM_TYPES, DelteItemsStart, GetLatestItemsStart } from "./item.types";
 import { createItems, deleteItems, getLatestItems } from "./item.saga";
 import { dataToCreateItem, itemCreated, latestItems } from "../../test-utils/fake-data";
+import { showToast } from "../user";
 
 const createItemsStart: CreateItemsStart = {
    type: ITEM_TYPES.CREATE_ITEMS_START,
@@ -32,7 +33,7 @@ describe("create item", () => {
                itemCreated,
             ],
          ])
-         .put(createItemsSuccess(itemCreated.data))
+         .put(setItems(itemCreated.data))
          .run();
    });
 
@@ -54,7 +55,7 @@ describe("update items", () => {
          .provide([
             [matchers.call(postRequest, API_URL.DELETE_ITEM, deleteItemsStart.payload), null],
          ])
-         .put(deleteItemsSuccess())
+         .put(showToast({type: "success", message: "Items has been deleted"}))
          .run();
    });
 
@@ -74,7 +75,7 @@ describe("get items from server", () => {
                latestItems,
             ],
          ])
-         .put(getLatestItemsSuccess(latestItems.data))
+         .put(setLatestItems(latestItems.data))
          .run();
    });
 });

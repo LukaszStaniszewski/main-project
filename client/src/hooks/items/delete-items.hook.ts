@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
-import { deleteItemsStart, setItems } from "../../store/items/item.actions";
-import { IItem } from "../../store/items/item.types";
+
+import { setItems, IItem, deleteItemsStart } from "../../store/items";
 import { deleteItems } from "../../utils/hooks.utils";
 
 const useDeleteItems = () => {
