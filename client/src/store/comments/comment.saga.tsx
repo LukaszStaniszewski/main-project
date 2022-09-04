@@ -53,6 +53,7 @@ function* createCommentSocket ({payload: comment}: CreateCommentStart) {
    while (true) {
       try {
         const value = yield* take(data);
+        console.log("value", value)
         yield* put(action.setComment(value));
       } catch (error) {
         console.error('socket error:', error)
