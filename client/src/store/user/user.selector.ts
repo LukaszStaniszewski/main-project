@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { IUserState } from "./user.reducer";
+import { IUserState } from "./user.slice";
 import { AppState } from "../root-reducer";
 
 export const selectUserReducer = (state: AppState): IUserState => state.user;

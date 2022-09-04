@@ -1,10 +1,11 @@
-import { combineReducers} from "redux";
+import { combineReducers } from "redux";
 
 import localReducer from "./local/local.reducer";
-import userReducer from "./user/user.reducer";
+// import userReducer from "./user/user.reducer";
 import collectionReducer from "./collections/collection.reducer";
 import itemReducer from "./items/item.reducer";
 import commentReducer from "./comments/comment.reducer";
+import userReducer from "./user/user.slice";
 
 const rootReducer = combineReducers({
    user: userReducer,
@@ -14,6 +15,6 @@ const rootReducer = combineReducers({
    comments: commentReducer,
 });
 
-export type AppState = ReturnType<typeof rootReducer>
+export type AppState = ReturnType<typeof rootReducer>;
 
-export default rootReducer
+export default rootReducer;

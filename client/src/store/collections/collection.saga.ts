@@ -7,9 +7,7 @@ import { AxiosError } from "axios"
 
 import { setItems } from "../items/item.actions"
 import { show404Page } from "../local/local.action"
-import { selectToast } from "../user/user.selector"
-import { showToast, closeToast } from "../user/user.action"
-
+import { showToast, selectToast, closeToast} from "../user"
 
 export type ImageResponse = {
    image: {

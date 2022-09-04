@@ -17,14 +17,16 @@ import {
    UpdateUsersStart,
    DeleteUsersStart,
 } from "./user.types";
-import * as action from "./user.action";
+import { updateUsersSuccess } from "./user.action";
+import * as action from "./user.slice";
 
 export function* Authenticate(credentials: IUserFormValues, url: string) {
    try {
+      yield* put(action.startLoading())
       yield* call(postRequest<ITokens>, url, credentials);
       const { data } = yield* call(getRequest<ICurrentUser>, "/api/user/current");
       yield* all([
-         put(action.authenticationSuccess(data)),
+         put(action.setCurrentUser(data)),
          put(action.showToast({ message: `Sign up as ${data.name}`, type: "success" })),
       ]);
    } catch (error) {
@@ -47,12 +49,9 @@ export function* signUpWithEmail({ payload: credentials }: SignUpStart) {
    yield* call(Authenticate, credentials, API_URL.SIGN_UP);
 }
 
-// export function* signInWithGoogle() {
-//    const { data } = yield* call(getRequest<ICurrentUser>, getGoogleOAuthUrl());
-// }
-
 export function* getCurrentUser() {
    try {
+      yield* put(action.startLoading())
       const { data } = yield* call(getRequest<ICurrentUser>, API_URL.GET_CURRENT_USER);
       yield* put(action.setCurrentUser(data));
    } catch (error) {
@@ -75,8 +74,9 @@ export function* updateOrDeleteUsers(
    url: string
 ) {
    try {
+      yield* put(action.startLoading())
       yield* call(requestType, url, usersToUpdate);
-      yield* put(action.updateUsersSuccess());
+      yield* put(updateUsersSuccess());
    } catch (error) {
       // yield* put(action.updateUsersFailure(error as AxiosError))
    }
@@ -94,7 +94,7 @@ export function* logOut() {
    try {
       yield* call(deleteRequest, API_URL.LOG_OUT);
 
-      yield* put(action.logOutSuccess());
+      yield* put(action.setCurrentUser(null));
    } catch (error) {
       // yield* put(action.logOutFailure(error as AxiosError))
    }
@@ -102,8 +102,9 @@ export function* logOut() {
 
 export function* getUsers() {
    try {
+      yield* put(action.startLoading())
       const response = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS);
-      yield* put(action.getUsersSuccess(response.data));
+      yield* put(action.setUsers(response.data));
    } catch (error) {
       // yield* put(action.getUsersFailure(error as AxiosError))
    }
