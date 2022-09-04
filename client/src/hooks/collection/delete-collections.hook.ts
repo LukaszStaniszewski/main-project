@@ -1,8 +1,6 @@
 import { useDispatch } from "react-redux";
-import {
-   setCollection,
-   deleteCollectionStart,
-} from "../../store/collections/collection.actions";
+
+import { setCollection, deleteCollectionStart, setCollectionsWihoutItems } from "../../store/collections";
 import {
    ICollection,
    ICollectionWithoutItems,
@@ -26,7 +24,8 @@ const useDeleteCollection = () => {
          collections,
          collectionToDelete
       );
-      dispatch(setCollection(wihoutUnwontedCollections));
+      //@ts-ignore
+      dispatch(setCollectionsWihoutItems(wihoutUnwontedCollections));
       dispatch(deleteCollectionStart(collectionToDelete._id));
    };
    return [deleteCollection];

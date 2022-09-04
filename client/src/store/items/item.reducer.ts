@@ -1,9 +1,8 @@
-import { IError } from "../user/user.reducer";
 import { ITEM_TYPES, ItemActionTypes, IItem, ILatestItem } from "./item.types";
 
 export interface IItemState {
    isLoading: boolean;
-   error: IError | null;
+   error: string | null;
    items: IItem[] | null;
    item: IItem | null;
    latestItems: ILatestItem[] | null;

@@ -1,10 +1,9 @@
 import { COMMENTS_ACTION_TYPES, IComment, CommentActions } from "./comment.types";
-import { IError } from "../user/user.reducer";
 
 export interface ICommentState{
    isCommentFetching: boolean,
    comments: IComment[] | null,
-   error: IError | null;
+   error: string | null;
    
 }
 

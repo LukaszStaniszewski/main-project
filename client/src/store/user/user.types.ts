@@ -35,11 +35,7 @@ export type StartToast = ActionWithPayload<USER_ACTION_TYPES.CLOSE_TOAST, IToast
 
 export type LogOutStart = Action<USER_ACTION_TYPES.LOG_OUT_START>;
 
-
-
-
 export type GetUsersStart = Action<USER_ACTION_TYPES.GET_USERS_START>;
-
 
 export type UpdateUsersStart = ActionWithPayload<
    USER_ACTION_TYPES.UPDATE_USERS_START,
@@ -52,8 +48,6 @@ export type DeleteUsersStart = ActionWithPayload<
 >;
 
 export type GetCurrentUserStart = Action<USER_ACTION_TYPES.GET_CURRENT_USER_START>;
-
-
 
 
 export interface ICurrentUser {
