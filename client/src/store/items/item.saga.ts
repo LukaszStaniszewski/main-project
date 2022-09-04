@@ -1,7 +1,6 @@
-import { AxiosError } from "axios"
 import {takeLatest, put, all, call,} from "typed-redux-saga/macro"
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
-import { show404Page } from "../local/local.action"
+import { show404Page } from "../local/local.slice"
 import { showToast } from "../user"
 import * as action from "./item.slice"
 import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem, GetLatestItemsStart} from "./item.types"

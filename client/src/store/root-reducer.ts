@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-import localReducer from "./local/local.reducer";
+import localReducer from "./local/local.slice";
 import collectionReducer from "./collections/collection.slice";
 import itemReducer from "./items/item.slice";
 import commentReducer from "./comments/comment.slice";

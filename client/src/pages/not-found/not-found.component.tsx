@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
-import { show404Page } from "../../store/local/local.action";
+import { show404Page } from "../../store/local/local.slice";
 
 const NotFound = () => {
    const navigate = useNavigate();

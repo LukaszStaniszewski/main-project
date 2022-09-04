@@ -5,7 +5,7 @@ import * as action from "./collection.slice"
 import * as type from "./collection.types"
 import { setItems } from "../items"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
-import { show404Page } from "../local/local.action"
+import { show404Page } from "../local/local.slice"
 import { showToast, selectToast, closeToast} from "../user"
 
 export type ImageResponse = {
