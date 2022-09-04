@@ -6,7 +6,9 @@ import { PhotographIcon } from "@heroicons/react/outline";
 import HeaderExtension from "../../components/headerExtension/headerExtension.component";
 import Spinner from "../../components/spinner/spinner.component";
 import { selectItem, getItemStart } from "../../store/items";
-import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
+import MarkdownTextArea, {
+   TextAreaUI,
+} from "../../components/markdown-text/markdownTextArea.component";
 import { ICurrentUser, selectCurrentUser, closeToast } from "../../store/user";
 import {
    createCommentStart,
@@ -26,10 +28,22 @@ import Alert, { IAlert } from "../../components/alert/alert.component";
 
 type CommentBody = { description: string };
 
+enum MessagesToUser {
+   defaultButtonText = "Post comment",
+   defaultLabel = "Enter your comment",
+   postCreated = "Your post has been created",
+   noCurrentUser = "You must be logged in to post a commnet",
+}
+
 const ItemPage = () => {
    const [commentBody, setCommentBody] = useState<CommentBody>();
    const [deleteComment] = useDeleteComment();
    const [alert, setAlert] = useState<IAlert>();
+   const [textAreaUI, setTextAreaUI] = useState<TextAreaUI>({
+      label: MessagesToUser.defaultButtonText,
+      button: MessagesToUser.defaultButtonText,
+      toggleUI: false,
+   });
    const dispatch = useDispatch();
    const item = useSelector(selectItem);
    const comments = useSelector(selectComments);
@@ -54,18 +68,25 @@ const ItemPage = () => {
    }, [socket]);
 
    useEffect(() => {
-      if(!commentBody) return
+      if (!commentBody) return;
       if (isCommentInputValid()) {
          const comment = adjustCommentData(commentBody, id!, currentUser!);
          dispatch(createCommentStart(comment));
+         setTextAreaUI((prevState) => ({
+            ...prevState,
+            submited: MessagesToUser.postCreated,
+            toggleUI: true,
+         }));
+      } else {
+         setAlert({
+            message: MessagesToUser.noCurrentUser,
+            type: "warning",
+            toggle: true,
+         });
       }
    }, [commentBody]);
 
    const isCommentInputValid = (): boolean => {
-      if(!currentUser) {
-         setAlert({message: "You must be logged in to post a commnet", type:"warning",toggle:true})
-         return false
-      }
       return id && currentUser ? true : false;
    };
 
@@ -74,7 +95,7 @@ const ItemPage = () => {
       id: string,
       currentUser: ICurrentUser
    ): ICreateComment => {
-      return { body: commentBody.description, itemId: id, postedBy: currentUser?.name };
+      return { body: commentBody.description, itemId: id, postedBy: currentUser.name };
    };
 
    const deleteCommentHandler = (event: MouseEvent<HTMLButtonElement>) => {
@@ -131,24 +152,18 @@ const ItemPage = () => {
                )}
             </div>
             <div className="col-start-1 col-end-6">
-               {comments?.length > 0 && comments.map((comment) => (
-                  <div key={comment._id} className="border p-2 m-2">
-                     <Comment
-                        comment={comment}
-                        currentUser={currentUser}
-                        //@ts-ignore
-                        deleteCommentHandler={deleteCommentHandler}
-                     />
-                  </div>
-               ))}
-               <MarkdownTextArea
-                  setText={setCommentBody}
-                  elementsText={{
-                     label: "Enter your comment",
-                     button: "Post comment",
-                     submited: "Your post has been created",
-                  }}
-               />
+               {comments?.length > 0 &&
+                  comments.map((comment) => (
+                     <div key={comment._id} className="border p-2 m-2">
+                        <Comment
+                           comment={comment}
+                           currentUser={currentUser}
+                           //@ts-ignore
+                           deleteCommentHandler={deleteCommentHandler}
+                        />
+                     </div>
+                  ))}
+               <MarkdownTextArea setText={setCommentBody} userInterface={textAreaUI} />
             </div>
             <div
                className={`${

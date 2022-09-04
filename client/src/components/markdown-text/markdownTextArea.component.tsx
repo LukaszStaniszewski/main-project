@@ -2,25 +2,26 @@ import React, { ChangeEvent, useState, Dispatch } from "react";
 import ReactMarkdown from "react-markdown";
 import { Textarea } from "@material-tailwind/react";
 
+export type TextAreaUI = {
+   button: string;
+   label: string;
+   submited?: string;
+   toggleUI: boolean;
+};
+
 interface ITextArea<T> {
    setText: Dispatch<React.SetStateAction<T>>;
    label?: string;
-   elementsText: {
-      button: string;
-      label: string;
-      submited: string;
-   };
+   userInterface: TextAreaUI;
 }
 
-const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) => {
+const MarkdownTextArea = <T extends ITextArea<T>>({ setText, userInterface }: T) => {
    const [input, setInput] = useState<string>("");
    // const [input, setInput] = useState<string>(() => {
    //    const userText = sessionStorage.getItem("description")
    //    if(!userText) return ""
    //    return userText
-   // })
-
-   const [toggle, setToggle] = useState(false);
+   // });
    const [message, setMessage] = useState<null | string>(null);
 
    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -32,7 +33,6 @@ const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) 
    const handleSubmit = () => {
       if (!input) return setMessage("Description must be minimum 10 characters long");
       setText((prevValue) => ({ ...prevValue, description: input }));
-      setToggle(!toggle);
    };
 
    return (
@@ -76,8 +76,8 @@ const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) 
             value={input}
             name="description"
             onChange={handleChange}
-            label={`${toggle ? "Success" : elementsText.label}`}
-            success={toggle && true}
+            label={`${userInterface.toggleUI ? "Success" : userInterface.label}`}
+            success={userInterface.toggleUI && true}
          />
          <ReactMarkdown className="bg-white mt-2" children={input} />
          <div className="flex justify-between whitespace-normal break-words">
@@ -86,7 +86,9 @@ const MarkdownTextArea = <T extends ITextArea<T>>({ setText, elementsText }: T) 
                type="button"
                onClick={handleSubmit}
                className="btn bg-cyan-600 hover:bg-cyan-800"
-            >{`${toggle ? elementsText.submited : elementsText.button}`}</button>
+            >{`${
+               userInterface.toggleUI ? userInterface.submited : userInterface.button
+            }`}</button>
             <div className="text-red-600">{message}</div>
          </div>
       </div>

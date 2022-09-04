@@ -9,7 +9,9 @@ import FormInput from "../../components/form-input/form-input.componentx";
 import SelectDropwdown from "../../components/select-dropdown/selectDropdown.component";
 import CreateItem from "../../components/create-item/createItem.component";
 import { ICreateItem, Topic } from "../../components/create-item/item-types/itemTypes";
-import MarkdownTextArea from "../../components/markdown-text/markdownTextArea.component";
+import MarkdownTextArea, {
+   TextAreaUI,
+} from "../../components/markdown-text/markdownTextArea.component";
 import Alert, { IAlert } from "../../components/alert/alert.component";
 import { disableTopicDropdown } from "../../store/local/local.slice";
 import { closeToast, selectCurrentUser, selectToast } from "../../store/user";
@@ -59,11 +61,16 @@ const CreateCollection = () => {
    );
    const [itemData, setItemData] = useState<ICreateItem<Topic>>(defaultItemData);
    const [header, setHeader] = useState(false);
+   const [textAreaUI, setTextAreaUI] = useState<TextAreaUI>({
+      label: "Enter description",
+      button: "Save description",
+      submited: "Edit description",
+      toggleUI: false,
+   });
    const [fileDataURL, setFileDataURL] = useState(null);
    const [alert, setAlert] = useState(alertSettings);
    const [image, setImage] = useState<File>();
    const dispatch = useDispatch();
-   const navigate = useNavigate();
    const currentUser = useSelector(selectCurrentUser);
    const collectionFetch = useSelector(selectCollectionLoadingState);
    const toast = useSelector(selectToast);
@@ -82,6 +89,7 @@ const CreateCollection = () => {
             image: image,
          })
       );
+      setTextAreaUI((prevState) => ({ ...prevState, toggleUI: true }));
       dispatch(disableTopicDropdown(false));
       clearSession();
    };
@@ -228,11 +236,7 @@ const CreateCollection = () => {
                         </div>
                         <MarkdownTextArea
                            setText={setCollectionFields}
-                           elementsText={{
-                              label: "Enter description",
-                              button: "Save description",
-                              submited: "Edit description",
-                           }}
+                           userInterface={textAreaUI}
                         />
                      </form>
                   </div>
