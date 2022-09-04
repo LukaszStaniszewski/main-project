@@ -8,3 +8,8 @@ export const selectComments = createSelector(
    selectCommentReducer,
    (state) => state.comments
 )
+
+export const isCommentFetching = createSelector(
+   selectCommentReducer,
+   (state) => state.isCommentFetching
+)

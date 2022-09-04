@@ -49,11 +49,11 @@ const createComment =  (comment : ICreateComment) :EventChannel<IComment> => {
  };
 
 function* createCommentSocket ({payload: comment}: CreateCommentStart) {
+   yield* put(action.startLoading())
    const data =yield* call(createComment, comment)
    while (true) {
       try {
         const value = yield* take(data);
-        console.log("value", value)
         yield* put(action.setComment(value));
       } catch (error) {
         console.error('socket error:', error)
