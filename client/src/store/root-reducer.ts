@@ -1,10 +1,9 @@
 import { combineReducers } from "redux";
 
 import localReducer from "./local/local.reducer";
-// import userReducer from "./user/user.reducer";
 import collectionReducer from "./collections/collection.slice";
 import itemReducer from "./items/item.slice";
-import commentReducer from "./comments/comment.reducer";
+import commentReducer from "./comments/comment.slice";
 import userReducer from "./user/user.slice";
 
 const rootReducer = combineReducers({

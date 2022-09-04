@@ -119,7 +119,7 @@ const ItemPage = () => {
                )}
             </div>
             <div className="col-start-1 col-end-6">
-               {comments?.map((comment) => (
+               {comments?.length > 0 && comments.map((comment) => (
                   <div key={comment._id} className="border p-2 m-2">
                      <Comment
                         comment={comment}

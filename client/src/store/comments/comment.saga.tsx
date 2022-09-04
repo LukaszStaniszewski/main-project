@@ -3,8 +3,7 @@ import { eventChannel, END, EventChannel } from "redux-saga";
 import { API_URL,  deleteRequest, getRequest,} from "../../api/axios-instance.api";
 
 import { COMMENTS_ACTION_TYPES, CreateCommentStart, DeleteCommentStart, GetCommentsStart, GetCommentStart, IComment, ICreateComment } from "./comment.types";
-import { createCommentFailure, createCommentSuccess, deleteCommentFailure, deleteCommentSuccess, getCommentFailure, getCommentsFailure, getCommentsSuccess, getCommentSuccess } from "./comment.action";
-import { AxiosError } from "axios";
+import * as action from "./comment.slice"
 import socket from "../../api/socket";
 
 const receiveMessage = (itemId: string) :EventChannel<IComment> => {
@@ -27,9 +26,9 @@ const receiveMessage = (itemId: string) :EventChannel<IComment> => {
    while (true) {
      try {
        const value = yield* take(channel);
-       yield* put(getCommentSuccess(value));
+       yield* put(action.setComment(value));
      } catch (error) {
-       yield* put(getCommentFailure(error as Error))
+      //  yield* put(getCommentFailure(error as Error))
      }
    }
  };
@@ -54,31 +53,29 @@ function* createCommentSocket ({payload: comment}: CreateCommentStart) {
    while (true) {
       try {
         const value = yield* take(data);
-        yield* put(createCommentSuccess(value));
+        yield* put(action.setComment(value));
       } catch (error) {
         console.error('socket error:', error)
-        yield* put(createCommentFailure(error as Error))
+      //   yield* put(createCommentFailure(error as Error))÷
       }
     }
 }
  
-
-
 function* deleteComment ({payload: id}: DeleteCommentStart ){
    try {
       yield* call(deleteRequest,`${API_URL.DELETE_COMMENT}/${id}`)
-      yield* put(deleteCommentSuccess())
    } catch (error) {
-      yield* put(deleteCommentFailure(error as AxiosError))
+      // yield* put(deleteCommentFailure(error as AxiosError))
    }
 }
 
 function* getComments ({payload: id}: GetCommentsStart) {
    try {
+      yield* put(action.startLoading())
       const response = yield* call(getRequest<IComment[]>, `${API_URL.GET_COMMENTS}/${id}`)
-      yield* put(getCommentsSuccess(response.data))
+      yield* put(action.setComments(response.data))
    } catch (error) {
-      yield* put(getCommentsFailure(error as AxiosError))
+      // yield* put(getCommentsFailure(error as AxiosError))
    }
 }
 function* onGetCommentFromSocket() {

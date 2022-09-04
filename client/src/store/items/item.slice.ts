@@ -3,7 +3,6 @@ import { IItem, ILatestItem } from "./item.types";
 
 export interface IItemState {
    isLoading: boolean;
-   error: string | null;
    items: IItem[] | null;
    item: IItem | null;
    latestItems: ILatestItem[] | null;
@@ -11,7 +10,6 @@ export interface IItemState {
 
 const initialState: IItemState = {
    isLoading: false,
-   error: null,
    item: null,
    items: null,
    latestItems: [],

@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 
-import { deleteCommentStart, setComments } from "../../store/comments/comment.action";
-import { IComment } from "../../store/comments/comment.types";
+import { IComment,deleteCommentStart,setComments } from "../../store/comments";
 import { deleteItem } from "../../utils/hooks.utils";
 
 const useDeleteComment = () => {

@@ -34,7 +34,7 @@ const LargestCollection = ({ collection }: { collection: ILargestCollection }) =
          </div>
          <div className="col-start-2 col-end-3">
             {collection.image ? (
-               <img loading="lazy" className="object-cover w-full" src={collection.image.url} alt="" />
+               <img className="object-cover w-full" src={collection.image.url} alt="" />
             ) : (
                <PhotographIcon />
             )}
