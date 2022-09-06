@@ -13,7 +13,7 @@ import MarkdownTextArea, {
    TextAreaUI,
 } from "../../components/markdown-text/markdownTextArea.component";
 import Alert, { IAlert } from "../../components/alert/alert.component";
-import { disableTopicDropdown } from "../../store/local/local.slice";
+import { disableTopicDropdown } from "../../store/local/index";
 import { closeToast, selectCurrentUser, selectToast } from "../../store/user";
 import {
    createCollectionWithItemsStart,

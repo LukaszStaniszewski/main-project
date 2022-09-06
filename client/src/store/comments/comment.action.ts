@@ -9,3 +9,6 @@ export const getCommentStart = createAction<string>(COMMENTS_ACTION_TYPES.GET_CO
 export const getCommentsStart = createAction<IItem["_id"]>(COMMENTS_ACTION_TYPES.GET_COMMENTS_START)
 
 export const deleteCommentStart = createAction<IComment["_id"]>(COMMENTS_ACTION_TYPES.DELETE_COMMENT_START)
+
+export const setComments = createAction<IComment[]>(COMMENTS_ACTION_TYPES.SET_COMMENTS)
+export const setComment = createAction<IComment>(COMMENTS_ACTION_TYPES.SET_COMMENT)

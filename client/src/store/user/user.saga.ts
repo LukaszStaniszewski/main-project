@@ -17,12 +17,10 @@ import {
    UpdateUsersStart,
    DeleteUsersStart,
 } from "./user.types";
-import { updateUsersSuccess } from "./user.action";
-import * as action from "./user.slice";
+import * as action from "./user.action";
 
 export function* Authenticate(credentials: IUserFormValues, url: string) {
    try {
-      yield* put(action.startLoading())
       yield* call(postRequest<ITokens>, url, credentials);
       const { data } = yield* call(getRequest<ICurrentUser>, "/api/user/current");
       yield* all([
@@ -51,7 +49,6 @@ export function* signUpWithEmail({ payload: credentials }: SignUpStart) {
 
 export function* getCurrentUser() {
    try {
-      yield* put(action.startLoading())
       const { data } = yield* call(getRequest<ICurrentUser>, API_URL.GET_CURRENT_USER);
       yield* put(action.setCurrentUser(data));
    } catch (error) {
@@ -74,9 +71,9 @@ export function* updateOrDeleteUsers(
    url: string
 ) {
    try {
-      yield* put(action.startLoading())
+
       yield* call(requestType, url, usersToUpdate);
-      yield* put(updateUsersSuccess());
+      yield* put(action.updateUsersSuccess());
    } catch (error) {
       // yield* put(action.updateUsersFailure(error as AxiosError))
    }
@@ -102,7 +99,6 @@ export function* logOut() {
 
 export function* getUsers() {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(getRequest<ICurrentUser[]>, API_URL.GET_USERS);
       yield* put(action.setUsers(response.data));
    } catch (error) {

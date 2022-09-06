@@ -6,3 +6,4 @@ export type ActionWithPayload<T, P> = {
 export type Action<T> = {
    type: T;
 };
+

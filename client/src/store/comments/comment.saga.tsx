@@ -3,7 +3,7 @@ import { eventChannel, END, EventChannel } from "redux-saga";
 import { API_URL,  deleteRequest, getRequest,} from "../../api/axios-instance.api";
 
 import { COMMENTS_ACTION_TYPES, CreateCommentStart, DeleteCommentStart, GetCommentsStart, GetCommentStart, IComment, ICreateComment } from "./comment.types";
-import * as action from "./comment.slice"
+import * as action from "./comment.action"
 import socket from "../../api/socket";
 
 const receiveMessage = (itemId: string) :EventChannel<IComment> => {
@@ -49,7 +49,6 @@ const createComment =  (comment : ICreateComment) :EventChannel<IComment> => {
  };
 
 function* createCommentSocket ({payload: comment}: CreateCommentStart) {
-   yield* put(action.startLoading())
    const data =yield* call(createComment, comment)
    while (true) {
       try {
@@ -72,7 +71,6 @@ function* deleteComment ({payload: id}: DeleteCommentStart ){
 
 function* getComments ({payload: id}: GetCommentsStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(getRequest<IComment[]>, `${API_URL.GET_COMMENTS}/${id}`)
       yield* put(action.setComments(response.data))
    } catch (error) {

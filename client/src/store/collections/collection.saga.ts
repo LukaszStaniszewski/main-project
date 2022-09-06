@@ -1,11 +1,11 @@
 import {takeLatest, put, all, call, throttle, select} from "typed-redux-saga/macro"
 import {COLLECTION_ACTION_TYPES, ICollection, ICollectionWithoutItems, ICreateCollection, ILargestCollection} from "./collection.types"
 
-import * as action from "./collection.slice"
+import * as action from "./collection.actions"
 import * as type from "./collection.types"
 import { setItems } from "../items"
 import { postRequest, API_URL, optionsUploadImage, uploadFile, getRequest, deleteRequest } from "../../api/axios-instance.api"
-import { show404Page } from "../local/local.slice"
+import { show404Page } from "../local/index"
 import { showToast, selectToast, closeToast} from "../user"
 
 export type ImageResponse = {
@@ -17,7 +17,6 @@ export type ImageResponse = {
 
 export function* createCollectionWithItems({payload: {collectionWithItems, image}}: type.CreateCollectionWithItemsStart){
    try {
-      yield* put(action.startLoading())
       let payload = collectionWithItems;
       if(image) {
          const response = yield* call(uploadImage, image)
@@ -50,7 +49,6 @@ export function appendImage (data: ImageResponse, itemsCollection: ICreateCollec
 
 export function* deleteCollection({payload: collectionId}: type.DeleteCollectionStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(deleteRequest,`${API_URL.DELETE_COLLECTION}/${collectionId}`)
       yield* put(action.deleteCollectionSuccess(response.data))
    } catch (error) {
@@ -60,7 +58,6 @@ export function* deleteCollection({payload: collectionId}: type.DeleteCollection
 
 function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectionWithItemsStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(getRequest<ICollection>, `${API_URL.GET_COLLECTION_WITH_ITEMS}/${collectionId}`)
       const collectionWithItems = response.data
       const {items, ...collection} = collectionWithItems
@@ -76,7 +73,6 @@ function* getCollectionWithItemsStart({payload: collectionId}: type.GetCollectio
 }
 
 function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWithoutItemsStart) {
-      yield* put(action.startLoading())
       const toast = yield* select(selectToast)
    try {
       const repsonse = yield* call(getRequest<ICollectionWithoutItems[]>, `${API_URL.GET_COLLECTIONS_BY_USER}/${userName}`)
@@ -105,7 +101,6 @@ function* getCollectionsWithoutItems({payload: userName}: type.GetCollectionsWit
 
 function* getLargestCollections({payload: amount}: type.GetLargestCollectionsStart) {
    try {
-      yield* put(action.startLoading())
       const repsonse = yield* call(getRequest<ILargestCollection[]>, `${API_URL.GET_LARGEST_COLLECTIONS}/${amount}`)
       yield* put(action.setLargestCollections(repsonse.data))
    } catch (error) {
@@ -115,7 +110,6 @@ function* getLargestCollections({payload: amount}: type.GetLargestCollectionsSta
 
 function* autocomplete ({payload: query}: type.AutocompleteStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(postRequest, API_URL.AUTOCOMPLETE, query)
       yield* put(action.autocompleteSuccess(response.data))
    } catch (error) {

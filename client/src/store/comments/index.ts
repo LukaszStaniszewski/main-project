@@ -1,4 +1,4 @@
 export * from "./comment.action";
 export * from "./comment.types";
 export * from "./comment.selector";
-export * from "./comment.slice"
+export * from "./comment.reducer"

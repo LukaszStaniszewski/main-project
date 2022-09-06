@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const supportedLanguages = ["en", "pl"] as const
-type SupportedLanguages = typeof supportedLanguages[number]
+export type SupportedLanguages = typeof supportedLanguages[number]
 
 export interface ILocalState {
    currentLanguage: SupportedLanguages;

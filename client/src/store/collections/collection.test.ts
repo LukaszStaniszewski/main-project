@@ -2,7 +2,7 @@ import { COLLECTION_ACTION_TYPES } from "./collection.types";
 import {
    deleteCollectionSuccess,
 
-} from "./collection.slice";
+} from "./collection.actions";
 import * as type from "./collection.types";
 import * as matchers from "redux-saga-test-plan/matchers";
 import { expectSaga } from "redux-saga-test-plan";

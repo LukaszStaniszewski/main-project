@@ -3,7 +3,7 @@ import * as matchers from "redux-saga-test-plan/matchers";
 import { throwError } from "redux-saga-test-plan/providers";
 
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api";
-import { setItems, setLatestItems } from "./item.slice";
+import { setItems, setLatestItems } from "./index";
 import { CreateItemsStart, ITEM_TYPES, DelteItemsStart, GetLatestItemsStart } from "./item.types";
 import { createItems, deleteItems, getLatestItems } from "./item.saga";
 import { dataToCreateItem, itemCreated, latestItems } from "../../test-utils/fake-data";

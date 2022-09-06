@@ -1,13 +1,12 @@
 import {takeLatest, put, all, call,} from "typed-redux-saga/macro"
 import { API_URL, getRequest, postRequest } from "../../api/axios-instance.api"
-import { show404Page } from "../local/local.slice"
+import { show404Page } from "../local/index"
 import { showToast } from "../user"
-import * as action from "./item.slice"
+import * as action from "./item.actions"
 import { CreateItemsStart, ITEM_TYPES, IItem, DelteItemsStart, GetItemStart, ILatestItem, GetLatestItemsStart} from "./item.types"
 
 export function* createItems({payload: item}:CreateItemsStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(postRequest<IItem[]>, API_URL.CREATE_ITEM, item)
       yield* put(action.setItems(response.data))
    } catch (error) {
@@ -17,7 +16,6 @@ export function* createItems({payload: item}:CreateItemsStart) {
 
 export function* deleteItems({payload: itemsId}:DelteItemsStart) {
    try {
-      yield* put(action.startLoading())
       yield* call(postRequest, API_URL.DELETE_ITEM, itemsId)
       yield* put(showToast({type: "success", message: "Items has been deleted"}))
    } catch (error) {
@@ -27,7 +25,6 @@ export function* deleteItems({payload: itemsId}:DelteItemsStart) {
 
 function* getItem({payload: itemId}: GetItemStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(getRequest<IItem>, `${API_URL.GET_ITEM}/${itemId}`)
       yield* all([
          put(show404Page(false)),
@@ -44,7 +41,6 @@ function* getItem({payload: itemId}: GetItemStart) {
 
 export function* getLatestItems({payload: amount}: GetLatestItemsStart) {
    try {
-      yield* put(action.startLoading())
       const response = yield* call(getRequest<ILatestItem[]>, `${API_URL.GET_LATEST_ITEMS}/${amount}`)
       yield* put(action.setLatestItems(response.data))
    } catch (error) {

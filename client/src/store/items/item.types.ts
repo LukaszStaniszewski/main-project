@@ -7,6 +7,9 @@ export enum ITEM_TYPES {
    DELETE_ITEMS_START = "DELETE_ITEMS_START",
    GET_ITEM_START = "GET_ITEM_START",
    GET_LATEST_ITEMS_START = "GET_LATEST_ITEMS_START",
+   SET_LATEST_ITEMS = "SET_LATEST_ITEMS",
+   SET_ITEMS = "SET_ITEMS",
+   SET_ITEM = "SET_ITEM"
 }
 
 export interface IItem extends ICreateItem {
@@ -30,4 +33,4 @@ export type CreateItemsStart = ActionWithPayload<ITEM_TYPES.CREATE_ITEMS_START, 
 export type DelteItemsStart = ActionWithPayload<ITEM_TYPES.DELETE_ITEMS_START, { _id: string }[]>;
 export type GetItemStart = ActionWithPayload<ITEM_TYPES.GET_ITEM_START, IItem["_id"]>;
 export type GetLatestItemsStart = ActionWithPayload<ITEM_TYPES.GET_LATEST_ITEMS_START, number>;
-;
+
