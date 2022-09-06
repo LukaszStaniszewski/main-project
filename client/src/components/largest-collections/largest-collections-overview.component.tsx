@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 
-import { Spinner, SpinningDots } from "../spinner";
+import { SpinningDots } from "../spinner";
 import {
    selectLargestCollections,
    selectCollectionLoadingState,
@@ -29,17 +29,9 @@ const LargestCollectionsOverview = () => {
       options
    );
 
-   if (!items) {
-      return (
-         <div className="flex justify-center items-center h-full">
-            <Spinner />
-         </div>
-      );
-   }
-
    return (
       <Fragment>
-         {items.map((collection) => (
+         {items?.map((collection) => (
             <LargestCollection key={collection._id} collection={collection} />
          ))}
          <div ref={triggerRef}></div>
