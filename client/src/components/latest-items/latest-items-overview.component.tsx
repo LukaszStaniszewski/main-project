@@ -7,10 +7,11 @@ import {
 } from "../../store/items";
 import LatestItem from "./latest-item.component";
 import useLazyLoad from "../../hooks/useLazyLoad";
-import { Spinner, SpinningDots } from "../spinner";
+import { SpinningDots } from "../spinner";
 
-const initialAmount = window.screen.height > 1000 ? 12 : 8;
-const itemsOnScroll = window.screen.height > 1000 ? 6 : 4;
+const initialAmount = window.screen.availWidth > 1500 ? 11 : 6;
+const itemsOnScroll = window.screen.availWidth > 1500 ? 7 : 6;
+console.log("initialAmount", window.screen.width);
 
 const options = {
    INITIAL_ITEMS_NUMBER: initialAmount,
@@ -31,17 +32,9 @@ const LatestItemsOverview = () => {
       options
    );
 
-   if (!items) {
-      return (
-         <div className="flex justify-center">
-            <Spinner />
-         </div>
-      );
-   }
-
    return (
       <Fragment>
-         {items.map((item) => (
+         {items?.map((item) => (
             <LatestItem key={item._id} item={item} />
          ))}
          <div ref={triggerRef}></div>

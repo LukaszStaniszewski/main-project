@@ -16,7 +16,7 @@ const initialState: ICollectionState = {
    collection: null,
    collections: [],
    collectionsWihoutItems: [],
-   largestCollections: [],
+   largestCollections: null,
    autocomplete: [],
    collectionFetch: false,
    successMessage: null,
