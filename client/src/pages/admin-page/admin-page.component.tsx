@@ -6,9 +6,11 @@ import { Button } from "@material-tailwind/react";
 import CustomTable from "../../components/custom-table/custom-table.component";
 import {
    ICurrentUser,
-   selectUserReducer,
+   selectCurrentUser,
    getUsersStart,
    logOutStart,
+   selectLoadingState,
+   selectUsers,
 } from "../../store/user";
 import useUpdateUsers from "../../hooks/user-session/update-users.hook";
 import useDeleteUsers from "../../hooks/user-session/delete-users.hook";
@@ -16,7 +18,9 @@ import HeaderExtension from "../../components/headerExtension/headerExtension.co
 import SpinningDots from "../../components/spinner/spinning-dots.component";
 
 const AdminPage = () => {
-   const { isLoading, users, currentUser } = useSelector(selectUserReducer);
+   const isLoading = useSelector(selectLoadingState);
+   const users = useSelector(selectUsers);
+   const currentUser = useSelector(selectCurrentUser);
    const [usersToUpdate, setSelectedUsers] = useState<ICurrentUser[]>(users);
    const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -24,7 +28,7 @@ const AdminPage = () => {
    const [deleteUsers] = useDeleteUsers();
 
    useEffect(() => {
-      if (!currentUser || currentUser?.role !== "admin") return navigate("/");
+      if (currentUser?.role !== "admin") return navigate("/");
    }, []);
 
    useEffect(() => {
