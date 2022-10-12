@@ -69,8 +69,8 @@ const ItemPage = () => {
 
    useEffect(() => {
       if (!commentBody) return;
-      if (isCommentInputValid()) {
-         const comment = adjustCommentData(commentBody, id!, currentUser!);
+      if (isCommentInputValid(currentUser, id)) {
+         const comment = adjustCommentData(commentBody, id!, currentUser);
          dispatch(createCommentStart(comment));
          setTextAreaUI((prevState) => ({
             ...prevState,
@@ -86,7 +86,10 @@ const ItemPage = () => {
       }
    }, [commentBody]);
 
-   const isCommentInputValid = (): boolean => {
+   const isCommentInputValid = (
+      currentUser: ICurrentUser | null,
+      id?: string
+   ): currentUser is ICurrentUser => {
       return id && currentUser ? true : false;
    };
 

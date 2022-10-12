@@ -71,7 +71,7 @@ const UserPage = () => {
       }
    }, [name, []]);
 
-   const isAuthorized = (user: ICurrentUser | null): boolean => {
+   const isAuthorized = (user: ICurrentUser | null) => {
       if (user?.name == name || user?.status === "admin") return true;
       return false;
    };
