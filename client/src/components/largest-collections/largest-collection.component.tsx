@@ -11,16 +11,6 @@ const LargestCollection = ({ collection }: { collection: ILargestCollection }) =
     navigate(`/collection/${collection._id}`);
   };
 
-  const handleOnMouseMove = (event: MouseEvent<HTMLDivElement>) => {
-    const { currentTarget: target } = event;
-    const rect = target.getBoundingClientRect();
-    let x = event.clientX - rect.left;
-    let y = event.clientY - rect.top;
-
-    target.style.setProperty("--mouse-x", `${x}px`);
-    target.style.setProperty("--mouse-y", `${y}px`);
-  };
-
   return (
     <div className="custom-card my-2 flex" onClick={toCollectionPageHandler}>
       <div className="custom-card-border"></div>
@@ -28,17 +18,14 @@ const LargestCollection = ({ collection }: { collection: ILargestCollection }) =
         <div className="mr-4">
           <div className="flex flex-col justify-between h-full">
             <div>
-              <div className="flex w-1/2 justify-between whitespace-nowrap">
-                <div>
-                  {collection.owner.name} / {collection.topic}
-                </div>
-                <div className="pl-6">{collection.name}</div>
-              </div>
-              <div>{collection.description}</div>
+              <h3 className="text-center capitalize font-medium">{collection.name}</h3>
+              <div className="text-justify">{collection.description}</div>
             </div>
             <div className="flex justify-between">
               <div>Items in collection: {collection.itemCount}</div>
-              <div>{collection.createdAt}</div>
+              <div className="capitalize">
+                {collection.owner.name} / {collection.topic}
+              </div>
             </div>
           </div>
         </div>

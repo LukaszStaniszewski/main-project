@@ -8,7 +8,6 @@
     --color-secondary: #0891b2;
     --color-background-primary: #fafafa;
     --color-background-secondary: #ffffff;
-    /* --color-background-secondary: rgb(20, 20, 20); */
     --color-border-primary: #94a3b8;
     --color-border-primary-m: #e2e8f0;
     --color-border-secondary: #4338ca;
@@ -16,7 +15,10 @@
     --color-border-main-hover: #0284c7;
     --color-text-primary: #fafafa;
     --color-text-primaryM: #a5adba;
-    --card-color: rgb(23, 23, 23);
+    --card-color: #ffffff;
+    --custom-card: rgba(148, 163, 184, 0.2);
+    --custom-card-hover: rgba(148, 163, 184, 0.12);
+    --custom-card-border-hover: rgba(148, 163, 184, 0.6);
   }
 
   html[data-theme="dark"] {
@@ -24,6 +26,10 @@
     --color-secondary: #0284c7;
     --color-background-primary: #011627;
     --color-background-secondary: #0b294a;
+    --card-color: rgb(23, 23, 23);
+    --custom-card: rgba(255, 255, 255, 0.1);
+    --custom-card-hover: rgba(255, 255, 255, 0.06);
+    --custom-card-border-hover: rgba(255, 255, 255, 0.3);
   }
 
   h1 {
@@ -99,11 +105,9 @@ body {
   }
 
   .custom-card {
-    /* ostatnia wartosc rgba jest jak border, odpowaida jego wyrazistosci, bo div custom-card-content przykrywa ten div poza 2px, co tworzy efekt jak border*/
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--custom-card);
     border-radius: 10px;
     cursor: pointer;
-    /* height: 500px; */
     height: 100%;
     width: 100%;
     position: relative;
@@ -112,7 +116,6 @@ body {
   .custom-card::before,
   .custom-card > .custom-card-border {
     border-radius: inherit;
-    /* aby efekt sie resetowal gdy uzytkownik wyjedzie myszka poza karte */
     opacity: 0;
     content: "";
     height: 100%;
@@ -126,7 +129,7 @@ body {
   .custom-card::before {
     background: radial-gradient(
       800px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.06),
+      var(--custom-card-hover),
       transparent 40%
     );
     z-index: 3;
@@ -139,7 +142,7 @@ body {
   .custom-card > .custom-card-border {
     background: radial-gradient(
       400px circle at var(--mouse-x) var(--mouse-y),
-      rgba(255, 255, 255, 0.3),
+      var(--custom-card-border-hover),
       transparent 40%
     );
     z-index: 1;
@@ -148,10 +151,10 @@ body {
   .custom-card > .custom-card-content {
     background-color: var(--card-color);
     border-radius: inherit;
-    height: calc(100% - 4px);
+    height: calc(100% - 2px);
     margin: 1px;
     position: relative;
-    width: calc(100% - 4px);
+    width: calc(100% - 2px);
     z-index: 2;
   }
 }

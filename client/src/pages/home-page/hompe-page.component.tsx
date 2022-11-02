@@ -15,24 +15,16 @@ const HomePage = () => {
       let x = event.clientX - rect.left;
       let y = event.clientY - rect.top;
       //@ts-ignore
-
       card.style.setProperty("--mouse-x", `${x}px`);
       //@ts-ignore
       card.style.setProperty("--mouse-y", `${y}px`);
     }
-    // const { currentTarget: target } = event;
-    // const rect = target.getBoundingClientRect();
-    // let x = event.clientX - rect.left;
-    // let y = event.clientY - rect.top;
-
-    // target.style.setProperty("--mouse-x", `${x}px`);
-    // target.style.setProperty("--mouse-y", `${y}px`);
   };
 
   return (
-    <section className=" relative z-0 pb-4">
+    <section className="relative z-0 pb-4">
       <HeaderExtension />
-      <main className="bg-[#141414] w-90vw m-auto screen-height p-4 rounded grid grid-cols-4 text-text custom-cards">
+      <main className="bg-secondary w-90vw m-auto screen-height p-4 rounded grid grid-cols-4 custom-cards">
         <figure className="col-start-1 col-end-4 mt-6 mr-2 pr-2 border-r-2">
           <h2 className="pb-4 ">Top collections</h2>
           <div className="custom-cards" ref={ref} onMouseMove={handleOnMouseMove}>
