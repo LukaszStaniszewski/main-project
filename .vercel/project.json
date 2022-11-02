@@ -1,0 +1,15 @@
+{
+  "projectId": "prj_BBCyk9UUYIbi5LcFJP5SE5RPgQvv",
+  "orgId": "oj7683p93pW3rE0HgcDXoSIP",
+  "settings": {
+    "createdAt": 1666728202779,
+    "framework": null,
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": "../sever/build",
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "16.x"
+  }
+}

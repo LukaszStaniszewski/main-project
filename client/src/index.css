@@ -3,89 +3,155 @@
 @tailwind utilities;
 
 @layer base {
-   html {
-      --color-primary: #0369a1;
-      --color-secondary: #0891b2;
-      --color-background-primary: #fafafa;
-      --color-background-secondary: #ffffff;
-      --color-border-primary: #94a3b8;
-      --color-border-primary-m: #e2e8f0;
-      --color-border-secondary: #4338ca;
-      --color-border-main: #0ea5e9;
-      --color-border-main-hover: #0284c7;
-      --color-text-primary: #fafafa;
-   }
+  html {
+    --color-primary: #0369a1;
+    --color-secondary: #0891b2;
+    --color-background-primary: #fafafa;
+    --color-background-secondary: #ffffff;
+    /* --color-background-secondary: rgb(20, 20, 20); */
+    --color-border-primary: #94a3b8;
+    --color-border-primary-m: #e2e8f0;
+    --color-border-secondary: #4338ca;
+    --color-border-main: #0ea5e9;
+    --color-border-main-hover: #0284c7;
+    --color-text-primary: #fafafa;
+    --color-text-primaryM: #a5adba;
+    --card-color: rgb(23, 23, 23);
+  }
 
-   html[data-theme="dark"] {
-      --color-primary: #219fd545;
-      --color-secondary: #0284c7;
-      --color-background-primary: #011627;
-      --color-background-secondary: #0b294a;
-   }
+  html[data-theme="dark"] {
+    --color-primary: #219fd545;
+    --color-secondary: #0284c7;
+    --color-background-primary: #011627;
+    --color-background-secondary: #0b294a;
+  }
 
-   h1 {
-      @apply text-2xl;
-      @apply font-bold;
-   }
-   h2 {
-      @apply text-xl;
-      @apply font-bold;
-   }
-   h3 {
-      @apply text-lg;
-      @apply font-semibold;
-   }
+  h1 {
+    @apply text-2xl;
+    @apply font-bold;
+  }
+  h2 {
+    @apply text-xl;
+    @apply font-bold;
+  }
+  h3 {
+    @apply text-lg;
+    @apply font-semibold;
+  }
 }
 
 @layer utilities {
-   .screen-height {
-      min-height: calc(100vh - 129px);
-   }
+  .screen-height {
+    min-height: calc(100vh - 129px);
+  }
 }
 body {
-   background-color: var(--color-background-primary);
+  background-color: var(--color-background-primary);
 }
 
 .loader-dots div {
-   animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .loader-dots div:nth-child(1) {
-   left: 8px;
-   animation: loader-dots1 0.6s infinite;
+  left: 8px;
+  animation: loader-dots1 0.6s infinite;
 }
 .loader-dots div:nth-child(2) {
-   left: 8px;
-   animation: loader-dots2 0.6s infinite;
+  left: 8px;
+  animation: loader-dots2 0.6s infinite;
 }
 .loader-dots div:nth-child(3) {
-   left: 32px;
-   animation: loader-dots2 0.6s infinite;
+  left: 32px;
+  animation: loader-dots2 0.6s infinite;
 }
 .loader-dots div:nth-child(4) {
-   left: 56px;
-   animation: loader-dots3 0.6s infinite;
+  left: 56px;
+  animation: loader-dots3 0.6s infinite;
 }
 @keyframes loader-dots1 {
-   0% {
-      transform: scale(0);
-   }
-   100% {
-      transform: scale(1);
-   }
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 @keyframes loader-dots3 {
-   0% {
-      transform: scale(1);
-   }
-   100% {
-      transform: scale(0);
-   }
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
 }
 @keyframes loader-dots2 {
-   0% {
-      transform: translate(0, 0);
-   }
-   100% {
-      transform: translate(24px, 0);
-   }
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+@layer components {
+  .custom-cards:hover > .custom-card > .custom-card-border {
+    opacity: 1;
+  }
+
+  .custom-card {
+    /* ostatnia wartosc rgba jest jak border, odpowaida jego wyrazistosci, bo div custom-card-content przykrywa ten div poza 2px, co tworzy efekt jak border*/
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    /* height: 500px; */
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+
+  .custom-card::before,
+  .custom-card > .custom-card-border {
+    border-radius: inherit;
+    /* aby efekt sie resetowal gdy uzytkownik wyjedzie myszka poza karte */
+    opacity: 0;
+    content: "";
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    position: absolute;
+    transition: opacity 500ms;
+  }
+
+  .custom-card::before {
+    background: radial-gradient(
+      800px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+    );
+    z-index: 3;
+  }
+
+  .custom-card:hover::before {
+    opacity: 1;
+  }
+
+  .custom-card > .custom-card-border {
+    background: radial-gradient(
+      400px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.3),
+      transparent 40%
+    );
+    z-index: 1;
+  }
+
+  .custom-card > .custom-card-content {
+    background-color: var(--card-color);
+    border-radius: inherit;
+    height: calc(100% - 4px);
+    margin: 1px;
+    position: relative;
+    width: calc(100% - 4px);
+    z-index: 2;
+  }
 }
